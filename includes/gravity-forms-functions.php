@@ -15,6 +15,9 @@ add_filter( 'gform_notification_12', 'get_dealer_email', 10, 3 );
 add_filter( 'gform_entry_meta', 'add_meta_to_entry', 10, 2);
 
 add_filter('gform_pre_render_15', 'add_readonly_script');
+
+add_filter( 'gform_replace_merge_tags', 'replace_dealer_notification', 10, 7 );
+
 add_action( 'gform_after_submission_15', 'update_report_entry_meta', 10, 2 );
 
 function add_readonly_script($form){
@@ -455,13 +458,6 @@ function build_dealer_yelp_output( $yelp_id ) {
 
 function get_business($business_id) {
 
-// $temp = get_transient('yelp_response_id_'.$business_id);
-// echo '<pre>';
-// print_r($temp);
-// echo '</pre>';
-// exit();
-
-	// echo 'Token: ' . YELP_TOKEN . ' Token Secret: ' . YELP_TOKEN_SECRET . '<br>';
 	$token = new OAuthToken( YELP_TOKEN, YELP_TOKEN_SECRET );
 
 	$consumer = new OAuthConsumer( YELP_CONSUMER_KEY, YELP_CONSUMER_SECRET );
@@ -550,7 +546,7 @@ function update_dealer_entry_meta( $key, $lead, $form ){
 // 	return $value;
 // }
 
-add_filter( 'gform_replace_merge_tags', 'replace_dealer_notification', 10, 7 );
+
 function replace_dealer_notification( $text, $form, $entry, $url_encode, $esc_html, $nl2br, $format ) {
 
     $custom_merge_tag = '{dealer_notification}';
@@ -1204,58 +1200,6 @@ function get_notification_product_data( $entry, $prod_string, $product_post_id )
 	$prod_data_output .= '</table>';
 
 	return $prod_data_output;
-}
-
-/**
- * to exclude field from notification add 'exclude[ID]' option to {all_fields} tag
- * 'include[ID]' option includes HTML field / Section Break field description / Signature image in notification
- * see http://www.gravityhelp.com/documentation/page/Merge_Tags for a list of standard options
- * example: {all_fields:exclude[2,3]}
- * example: {all_fields:include[6]}
- * example: {all_fields:include[6],exclude[2,3]}
- * source: https://gist.github.com/richardW8k/6947682
- */
-add_filter( 'gform_merge_tag_filter', 'all_fields_extra_options', 11, 5 );
-function all_fields_extra_options( $value, $merge_tag, $options, $field, $raw_value ) {
-    if ( $merge_tag != 'all_fields' ) {
-        return $value;
-    }
-
-    // usage: {all_fields:include[ID],exclude[ID,ID]}
-    $include = preg_match( "/include\[(.*?)\]/", $options , $include_match );
-    $include_array = explode( ',', rgar( $include_match, 1 ) );
-
-    $exclude = preg_match( "/exclude\[(.*?)\]/", $options , $exclude_match );
-    $exclude_array = explode( ',', rgar( $exclude_match, 1 ) );
-
-    $log = "all_fields_extra_options(): {$field['label']}({$field['id']} - {$field['type']}) - ";
-
-    if ( $include && in_array( $field['id'], $include_array ) ) {
-        switch ( $field['type'] ) {
-            case 'html' :
-                $value = $field['content'];
-                break;
-            case 'section' :
-                $value .= sprintf( '<tr bgcolor="#FFFFFF">
-                                                        <td width="20">&nbsp;</td>
-                                                        <td>
-                                                            <font style="font-family: sans-serif; font-size:12px;">%s</font>
-                                                        </td>
-                                                   </tr>
-                                                   ', $field['description'] );
-                break;
-            case 'signature' :
-                $url = GFSignature::get_signature_url( $raw_value );
-                $value = "<img alt='signature' src='{$url}'/>";
-                break;
-        }
-        GFCommon::log_debug( $log . 'included.' );
-    }
-    if ( $exclude && in_array( $field['id'], $exclude_array ) ) {
-        GFCommon::log_debug( $log . 'excluded.' );
-        return false;
-    }
-    return $value;
 }
 
 function update_report_entry_meta( $entry, $form ) {
