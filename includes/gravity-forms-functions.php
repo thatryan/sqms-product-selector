@@ -272,128 +272,13 @@ function build_dealer_list( $form ) {
 }
 
 function create_dynamic_seer_dropdown( $form ) {
+
 	$current_page = GFFormDisplay::get_current_page( $form['id'] );
 
-	// heat pump .5s
-	$heat_pump_5s = array (
-			array(
-				'text' => '14 SEER',
-				'value' => '14.0',
-			),
-			array(
-				'text' => '14.5 SEER',
-				'value' => '14.5',
-			),
-			array(
-				'text' => '15 SEER',
-				'value' => '15.0',
-			),
-		);
-
-	// heat pump 2 or 3
-	$heat_pump_2_3 = array (
-			array(
-				'text' => '14 SEER',
-				'value' => '14.0',
-			),
-			array(
-				'text' => '14.5 SEER',
-				'value' => '14.5',
-			),
-			array(
-				'text' => '15 SEER',
-				'value' => '15.0',
-			),
-			array(
-				'text' => '16 SEER',
-				'value' => '16.0',
-			),
-			array(
-				'text' => '17 SEER',
-				'value' => '17.0',
-			),
-		);
-
-	// heat pump 4 or 5
-	$heat_pump_4_5 = array (
-			array(
-				'text' => '14 SEER',
-				'value' => '14.0',
-			),
-			array(
-				'text' => '14.5 SEER',
-				'value' => '14.5',
-			),
-			array(
-				'text' => '15 SEER',
-				'value' => '15.0',
-			),
-			array(
-				'text' => '16 SEER',
-				'value' => '16.0',
-			),
-		);
-
-	// split gas vertical OR split gas horizontal 1.5,2,2.5,3,4
-	$split_vert_split_hor = array (
-			array(
-				'text' => '14 SEER',
-				'value' => '14.0-',
-			),
-			array(
-				'text' => '14.5 SEER',
-				'value' => '14.5-',
-			),
-			array(
-				'text' => '15 SEER',
-				'value' => '15.0-',
-			),
-			array(
-				'text' => '16 SEER',
-				'value' => '16.0-',
-			),
-		);
-
-	// split gas horizontal  3.5, 5
-	$split_hor_3_5_5 = array (
-			array(
-				'text' => '14 SEER',
-				'value' => '14.0-',
-			),
-			array(
-				'text' => '14.5 SEER',
-				'value' => '14.5-',
-			),
-			array(
-				'text' => '15 SEER',
-				'value' => '15.0-',
-			),
-		);
-	$cool_rep = array(
-	    array(
-	        'text' => '14 SEER',
-	        'value' => '14.0-',
-	    ),
-	    array(
-	        'text' => '14.5 SEER',
-	        'value' => '14.5-',
-	    ),
-	);
-	$packaged = array(
-	    array(
-	        'text' => '14 SEER',
-	        'value' => '14.0-',
-	    ),
-	);
-
-	$error_select = array (
-			array(
-				'text' => 'Error',
-				'value' => 'na'
-			),
-		);
-
 	if ( $current_page >= 6 ) {
+
+		include 'data/data-seer.php';
+
 		foreach ( $form['fields'] as &$field ) {
 
 		    if ( $field->type != 'select' || strpos( $field->cssClass, 'seer-rating-dynamic' ) === false ) {
@@ -463,38 +348,13 @@ function create_dynamic_seer_dropdown( $form ) {
 }
 
 function create_dynamic_eff_dropdown( $form ) {
+
 	$current_page = GFFormDisplay::get_current_page( $form['id'] );
 
-	$split_all = array(
-	    array(
-	        'text' => '80%',
-	        'value' => '80',
-	    ),
-	    array(
-	        'text' => '90%',
-	        'value' => '90',
-	    ),
-	);
-	$split_80 = array(
-		array(
-		    'text' => '80%',
-		    'value' => '80',
-		),
-	);
-	$split_90 = array(
-		array(
-		    'text' => '90%',
-		    'value' => '90',
-		),
-	);
-	$error_select = array (
-			array(
-				'text' => 'Error',
-				'value' => 'na'
-			),
-		);
-
 	if ( $current_page >= 7 ) {
+
+		include 'data/data-efficiency.php';
+
 		foreach ( $form['fields'] as &$field ) {
 
 		    if ( $field->type != 'select' || strpos( $field->cssClass, 'efficiency-dynamic' ) === false ) {
@@ -529,33 +389,13 @@ function create_dynamic_eff_dropdown( $form ) {
 }
 
 function create_dynamic_orientation_dropdown( $form ) {
+
 	$current_page = GFFormDisplay::get_current_page( $form['id'] );
 
-	$out_all = array(
-	    array(
-	        'text' => 'Horizontal',
-	        'value' => 'h',
-	    ),
-	    array(
-	        'text' => 'Vertical',
-	        'value' => 'v',
-	    ),
-	);
-	$out_v = array(
-	    array(
-	    	'text' => 'Vertical',
-	    	'value' => 'v',
-	    ),
-	);
-
-	$error_select = array (
-			array(
-				'text' => 'Error',
-				'value' => 'na'
-			),
-		);
-
 	if ( $current_page >= 7 ) {
+
+		include 'data/data-orientation.php';
+
 		foreach ( $form['fields'] as &$field ) {
 
 		    if ( $field->type != 'select' || strpos( $field->cssClass, 'orientation-dynamic' ) === false ) {
