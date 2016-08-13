@@ -618,3 +618,23 @@ function update_report_entry_meta( $entry, $form ) {
 	gform_update_meta( intval( $quote_id ), 'quote_reported', $reported, $quote_form_id );
 
 }
+
+function microf_payment_calc($amount_financed, $term){
+  /*MSRP*/
+  $estimated_payment = ROUND(($amount_financed/$term), 2) + ROUND(($amount_financed *(40/2400)), 2)
+  /*Admin Fee*/
+  + ROUND((200/$term), 2) + ROUND((200*(40/2400)), 2)
+  /*SECURITY DEPOSIT*/
+  + ROUND(((ROUND(($amount_financed/$term), 2) + ROUND(($amount_financed *(40/2400)), 2))/$term), 2)
+  + ROUND(((ROUND(($amount_financed/$term), 2) + ROUND(($amount_financed *(40/2400)), 2))*(40/2400)), 2)
+  /*LDW Fee*/
+  + 10;
+  /*SALES TAX
+  + ROUND(((
+  ROUND(($amount_financed/$term), 2) + ROUND(($amount_financed *(40/2400)), 2)
+  + ROUND((200/$term), 2) + ROUND((200*(40/2400)), 2)
+  + ROUND(((ROUND(($amount_financed/$term), 2) + ROUND(($amount_financed *(40/2400)), 2))/$term), 2)
+  ) * Sales_Tax__c), 2)
+  */
+  return $estimated_payment;
+}
