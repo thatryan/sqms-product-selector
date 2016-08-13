@@ -83,6 +83,8 @@ function display_choice_result( $form ) {
 	        $content_output .= '<h3>Your System Installation Estimate: $1,000.00 - $2,500.00</h3>';
 	        $content_output .= '<h4>Note: Proper Equipment Selection Will Be Verified On Installation Inspection</h4>';
 	        $content_output .= '</div>';
+	        $content_output .= '<h5 class="financing-box-title">Estimated Monthly Payments with <b>Microf Financing</b></h5>';
+	        $content_output .= '<div class="financing-box">' . get_finance_options( $system_price ) . '</div>';
 	        $content_output .= '<div class="col-wrapper">';
 	        $content_output .= '<div class="col-left">' . get_the_post_thumbnail( $product_post_id, 'full', array( 'class' => 'alignnone' ) ) . '</div>';
 	        $content_output .= '<div class="col-right">' . get_product_data( $product_post_id ) . '</div>';
@@ -617,6 +619,31 @@ function update_report_entry_meta( $entry, $form ) {
 
 	gform_update_meta( intval( $quote_id ), 'quote_reported', $reported, $quote_form_id );
 
+}
+
+function get_finance_options( $system_price ) {
+	$total_cost = esc_html( $system_price );
+
+	$term_options = array(
+			35,
+			47,
+			59
+		);
+
+		$finance_data = '';
+		$finance_data .= '<table><thead><tr><th>&nbsp;</th><th>35 monthly payments</th><th>47 monthly payments</th><th>59 monthly payments</th></tr></thead><tbody><tr><td>Payment Amount</td>';
+
+		foreach ($term_options as $term) {
+			$term_payment = microf_payment_calc($total_cost, $term);
+
+			$finance_data .= '<td><i class="fa fa-dollar"></i>' . $term_payment . '</td>';
+		}
+
+
+		$finance_data .= '</tr></tbody></table>';
+
+
+	return $finance_data;
 }
 
 function microf_payment_calc($amount_financed, $term){

@@ -52,6 +52,11 @@
 	background: #fafafa;
 	padding: 12px;
 	border: 1px solid #393939;
+	margin-bottom: 12px;
+}
+
+.financing-box-title {
+	margin-bottom: 12px;
 }
 
 .dynamic-dealer-select {
