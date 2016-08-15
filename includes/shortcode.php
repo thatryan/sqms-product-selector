@@ -34,15 +34,31 @@ function display_dealer_entries() {
 	$lead_list .= '<table>';
 	$lead_list .= '<thead>';
 	$lead_list .= '<tr>';
-	$lead_list .= '<th>Quote ID</th><th>Quote Date</th><th>System</th><th>Reported</th>';
+	$lead_list .= '<th>Quote ID</th><th>Quote Date</th><th>Client Name</th><th>Client Address</th><th>System</th><th>Reported</th>';
 	$lead_list .= '</tr>';
 	$lead_list .= '</thead>';
 	$lead_list .= '<tbody>';
 
 	foreach ($entries as $entry ) {
+
+		$prod_obj = get_page_by_path($entry['56'], OBJECT, 'sqms_prod_select');
+		$product_post_id = $prod_obj->ID;
+		$quoted_system_price = get_post_meta( $product_post_id, 'sqms-product-system-price', true );
+
+		$client_name = $entry['11.3'] . ' ' . $entry['11.6'];
+
+		$client_address_field = "47";
+		$client_address_street = $entry[$client_address_field . '.1'];
+		$client_address_street2 = $entry[$client_address_field . '.2'];
+		$client_address_city = $entry[$client_address_field . '.3'];
+		$client_address_state = $entry[$client_address_field . '.4'];
+		$client_address_zip = $entry[$client_address_field . '.5'];
+
+		$client_address = $client_address_street . ', ' . ( $client_address_street2 ? $client_address_street2 . ', ' : '') . $client_address_city . ', ' . $client_address_state . ' ' . $client_address_zip;
+
 		$reported = gform_get_meta( intval( $entry['id'] ), 'quote_reported' );
 		$lead_list .= '<tr>';
-		$lead_list .= '<td>' . $entry['id'] . '</td><td>' . $entry['date_created'] . '</td><td>' . $entry['56'] . '</td><td>' . ( $reported === "Yes" ? $reported : '<button id="gf_button_get_form_' . $entry['id'] . ' " class="open-report-form" data-entryid="' . $entry['id'] . '">Report</button>'  ). '</td>';
+		$lead_list .= '<td>' . $entry['id'] . '</td><td>' . $entry['date_created'] . '</td><td>' . $client_name . '</td><td>' . $client_address . '</td><td>' . $entry['56'] . '</td><td>' . ( $reported === "Yes" ? $reported : '<button id="gf_button_get_form_' . $entry['id'] . ' " class="open-report-form" data-entryid=" ' . $entry['id'] .' " data-quotecost=" ' . $quoted_system_price.' ">Report</button>'  ). '</td>';
 		$lead_list .= '</tr>';
 	}
 

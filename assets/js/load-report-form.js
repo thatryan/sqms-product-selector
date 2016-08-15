@@ -3,7 +3,8 @@
 	$(".open-report-form").on( "click", function(){
 		var button = $(this),
 			container = $("#gf_button_form_container"),
-			quoteId = button.attr("data-entryid");
+			quoteId = button.attr("data-entryid"),
+			quotecost = button.attr("data-quotecost");
 
 		if( button.hasClass("open-report-form") ) {
 			$.ajax({
@@ -14,6 +15,7 @@
 					'form_id':form_params.report_form_id,
 					'dealer_id':form_params.dealer_id,
 					'quote_id':quoteId,
+					'quoted_cost':quotecost,
 				},
 				// beforeSend: function (jqXHR, settings) {
 				//   console.log( settings );
