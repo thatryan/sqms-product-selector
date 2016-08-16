@@ -209,10 +209,12 @@ function build_dealer_list( $form ) {
 
 		    $posts = get_posts( 'post_type=sqms_payne_dealer&numberposts=-1' );
 		    $dealers_count = 0;
-		    $dealers_in_range_20 = array();
-		    $dealers_in_range_40 = array();
-
-		    foreach ( $posts as $post ) {
+		    $dealers_in_range = array();
+		    $i = 0;
+		    $range = 20;
+		    $max_range = 50;
+		    while ( $i < count($posts) ) {
+		    	$post = $posts[$i];
 		    	$post_id = $post->ID;
 
 		    	$map = get_post_meta( $post_id, 'sqms-product-location', true );
@@ -228,25 +230,27 @@ function build_dealer_list( $form ) {
 
 		    	$dealer_distance_from_customer = $response->rows[0]->elements[0]->distance->value;
 
-		    	// convert from returned meters to miles
-		    	// 1 meter = 0.000621371192 miles
-		    	// default = 20
-
 		    	$distance_miles = $dealer_distance_from_customer *  0.000621371192;
 
-		    	if( $distance_miles <= 20 ) {
-		    		$dealers_in_range_20[] = $post_id;
-		    		continue;
-		    	}
-		    	elseif( $distance_miles <= 50 ) {
-		    		$dealers_in_range_40[] = $post_id;
-		    		continue;
+		    	if ( $distance_miles <= $range ) {
+		    		$dealers_in_range[] = $post_id;
 		    	}
 
-		    } //end foreach posts loop
+		    	// increment our index
+		    	$i++;
 
+		    	// If we're on the last post, look to see if we've found any dealers yet
+		    	if ( $i == count($posts) && empty( $dealers_in_range ) ) {
 
-		$dealers_in_range = sizeof($dealers_in_range_20) ? $dealers_in_range_20 : $dealers_in_range_40;
+		    		if( $range == $max_range ) break;
+		    		// Reset our index
+		    		$i = 0;
+
+		    		// Increase the range
+		    		$range += 10; // or whatever distance you want to increase by
+		    	}
+		    }
+
 
 		$dealers_count = sizeof( $dealers_in_range );
 
@@ -281,6 +285,8 @@ function get_dealer_list_data( $dealers_in_range ) {
 	$dealers = array();
 
 	foreach ($dealers_in_range as $dealer_id ) {
+		// something here to update meta that dealer has been shown
+
 		$thumb = get_the_post_thumbnail( $dealer_id );
 		$dealer_name = get_the_title( $dealer_id );
 		$yelp_id = get_post_meta( $dealer_id, 'sqms-product-yelp', true );
