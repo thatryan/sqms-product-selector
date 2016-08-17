@@ -211,7 +211,7 @@ function build_dealer_list( $form ) {
 		    $dealers_count = 0;
 		    $dealers_in_range = array();
 		    $i = 0;
-		    $range = 220;
+		    $range = 20;
 		    $max_range = 50;
 		    while ( $i < count($posts) ) {
 		    	$post = $posts[$i];
