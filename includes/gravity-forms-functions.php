@@ -267,6 +267,12 @@ function build_dealer_list( $form ) {
 			return $form;
 		}
 
+		if( $dealers_count > 3 ) {
+			shuffle( $dealers_in_range );
+			$dealers_in_range_trimmed = array_slice( $dealers_in_range, 0, 3 );
+			$dealers_in_range = $dealers_in_range_trimmed;
+		}
+
 		// This is the select dealer field of radio buttons, placeholder for this dynamic update
 		foreach( $form['fields'] as &$field ) {
 			if ( $field->id != 55 ) {
