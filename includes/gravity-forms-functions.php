@@ -211,7 +211,7 @@ function build_dealer_list( $form ) {
 		    $dealers_count = 0;
 		    $dealers_in_range = array();
 		    $i = 0;
-		    $range = 20;
+		    $range = 220;
 		    $max_range = 50;
 		    while ( $i < count($posts) ) {
 		    	$post = $posts[$i];
@@ -283,9 +283,13 @@ function build_dealer_list( $form ) {
 function get_dealer_list_data( $dealers_in_range ) {
 
 	$dealers = array();
+	$dealer_view_count_key = 'sqms_dealer_view_count';
 
 	foreach ($dealers_in_range as $dealer_id ) {
-		// something here to update meta that dealer has been shown
+
+		$dealer_count = absint( get_post_meta( $dealer_id, $dealer_view_count_key, true ) );
+		$dealer_count++;
+		update_post_meta( $dealer_id, $dealer_view_count_key, $dealer_count );
 
 		$thumb = get_the_post_thumbnail( $dealer_id );
 		$dealer_name = get_the_title( $dealer_id );

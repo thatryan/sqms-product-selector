@@ -2,6 +2,20 @@
 
 add_action( 'cmb2_init', 'sqms_prodcut_selector_meta' );
 
+// render numbers
+add_action( 'cmb2_render_text_number', 'sm_cmb_render_text_number', 10, 5 );
+function sm_cmb_render_text_number( $field, $escaped_value, $object_id, $object_type, $field_type_object ) {
+    echo $field_type_object->input( array( 'class' => 'cmb2-text-small', 'type' => 'number' ) );
+}
+
+// sanitize the field
+add_filter( 'cmb2_sanitize_text_number', 'sm_cmb2_sanitize_text_number', 10, 2 );
+function sm_cmb2_sanitize_text_number( $null, $new ) {
+    $new = preg_replace( "/[^0-9]/", "", $new );
+
+    return $new;
+}
+
 function sqms_prodcut_selector_meta() {
 	// Prefix the meta
 	$prefix = 'sqms-product-';
@@ -61,6 +75,18 @@ function sqms_prodcut_selector_meta() {
 		'name'       => __( 'Yelp ID', 'sqmsprodsel' ),
 		'id'         => $prefix . 'yelp',
 		'type'       => 'text',
+	) );
+
+	$sqms_dealer_meta->add_field( array(
+		'name'        => 'Dealer Views',
+		'description' => 'The number of times this dealer has been shown on front end',
+		'id'          => 'sqms_dealer_view_count',
+		'type'        => 'text_number',
+		'default'   => 0,
+		'attributes'  => array(
+			'readonly' => 'readonly',
+			'disabled' => 'disabled',
+		),
 	) );
 
 	// Create metabox container for system overview
