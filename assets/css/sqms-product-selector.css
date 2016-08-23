@@ -21,6 +21,18 @@
 .gform_wrapper .system-selector .image-radio .gfield_radio li input[type=radio]:checked + label .product-choice-title {
 	background-position: 0 -23px;
 }
+
+.vex-content .gform_wrapper.gf_browser_chrome .gfield_checkbox li input[type=checkbox],
+.vex-content .gform_wrapper.gf_browser_chrome .gfield_radio li input[type=radio],
+.vex-content .gform_wrapper.gf_browser_chrome .gfield_checkbox li input {
+	margin: 0;
+}
+
+#top .vex-content .gform_wrapper .gfield_checkbox li label,
+#top .vex-content .gform_wrapper .gfield_radio li label {
+	margin: 0 0 0 4px;
+}
+
 .system-selector ul.gfield_radio li input[type="radio"]:checked + label {
 	background: #f0f0f0;
 }
