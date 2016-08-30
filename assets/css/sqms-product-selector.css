@@ -1,24 +1,24 @@
-.gform_wrapper .system-selector .gfield_radio li {
+.gform_wrapper .sqms-prod-sel-form .gfield_radio li {
 	margin-bottom: 18px;
 }
-.gform_wrapper .system-selector .gfield_radio li label:hover {
+.gform_wrapper .sqms-prod-sel-form .gfield_radio li label:hover {
 	cursor: pointer;
 }
-.gform_wrapper .system-selector .image-radio .gfield_radio li input[type=radio] {
+.gform_wrapper .sqms-prod-sel-form .image-radio .gfield_radio li input[type=radio] {
 	display: none;
 }
-.gform_wrapper .system-selector .image-radio .gfield_radio li input[type=radio] + label .product-choice-title {
+.gform_wrapper .sqms-prod-sel-form .image-radio .gfield_radio li input[type=radio] + label .product-choice-title {
 	display: block;
 	height: 24px;
 	line-height: 24px;
 	padding-left: 26px;
 	background: url(../img/checkbox-blue.png) 0 0 no-repeat;
 }
-#top .gform_wrapper .system-selector .image-radio .gfield_radio li input[type=radio] + label .product-choice-title {
+#top .gform_wrapper .sqms-prod-sel-form .image-radio .gfield_radio li input[type=radio] + label .product-choice-title {
 	font-weight: bold;
 	font-size: 15px;
 }
-.gform_wrapper .system-selector .image-radio .gfield_radio li input[type=radio]:checked + label .product-choice-title {
+.gform_wrapper .sqms-prod-sel-form .image-radio .gfield_radio li input[type=radio]:checked + label .product-choice-title {
 	background-position: 0 -23px;
 }
 
@@ -33,15 +33,15 @@
 	margin: 0 0 0 4px;
 }
 
-.system-selector ul.gfield_radio li input[type="radio"]:checked + label {
+.sqms-prod-sel-form ul.gfield_radio li input[type="radio"]:checked + label {
 	background: #f0f0f0;
 }
 
-.gform_wrapper .system-selector .gfield_radio li label {
+.gform_wrapper .sqms-prod-sel-form .gfield_radio li label {
 	padding: 8px;
 	margin: 0!important;
 }
-.gform_wrapper .system-selector  li.gfield.gf_list_2col ul.gfield_radio li label {
+.gform_wrapper .sqms-prod-sel-form  li.gfield.gf_list_2col ul.gfield_radio li label {
 	overflow: visible;
 	white-space: normal;
 }

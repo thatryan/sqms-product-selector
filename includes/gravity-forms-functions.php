@@ -7,10 +7,12 @@ add_filter( 'gform_pre_render_12', 'create_dynamic_eff_dropdown' );
 add_filter( 'gform_pre_render_12', 'create_dynamic_orientation_dropdown' );
 
 add_filter( 'gform_pre_render_12', 'build_dealer_list' );
+add_filter( 'gform_pre_render_16', 'build_dealer_list_photo' );
 
 add_filter( 'gform_pre_render_12', 'display_choice_result' );
 
 add_filter( 'gform_notification_12', 'get_dealer_email', 10, 3 );
+add_filter( 'gform_notification_16', 'get_dealer_email_photo', 10, 3 );
 
 add_filter( 'gform_entry_meta', 'add_meta_to_entry', 10, 2);
 
@@ -286,6 +288,99 @@ function build_dealer_list( $form ) {
 	return $form;
 }
 
+function build_dealer_list_photo( $form ) {
+	$current_page = GFFormDisplay::get_current_page( $form['id'] );
+
+	if ( $current_page == 2 ) {
+
+		require_once('OAuth.php');
+		include_once 'yelp-functions.php';
+
+		foreach ( $form['fields'] as &$field ) {
+			// This is the customer address field
+			if ( $field->id == 12  ) {
+				$user_location = build_user_location_string( $field );
+			}
+		} //end foreach fields loop
+
+		    $posts = get_posts( 'post_type=sqms_payne_dealer&numberposts=-1' );
+		    $dealers_count = 0;
+		    $dealers_in_range = array();
+		    $i = 0;
+		    $range = 20;
+		    $max_range = 50;
+		    while ( $i < count($posts) ) {
+		    	$post = $posts[$i];
+		    	$post_id = $post->ID;
+
+		    	$map = get_post_meta( $post_id, 'sqms-product-location', true );
+
+		    	$lat = $map['latitude'];
+		    	$long = $map['longitude'];
+
+		    	$distance_string_call = 'https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins='.$user_location.'&destinations='. $lat . ',' . $long.'&key='.GMAP_API_KEY;
+
+		    	$distance_data = wp_remote_get( $distance_string_call );
+
+		    	$response = json_decode( $distance_data['body'] );
+
+		    	$dealer_distance_from_customer = $response->rows[0]->elements[0]->distance->value;
+
+		    	$distance_miles = $dealer_distance_from_customer *  0.000621371192;
+
+		    	if ( $distance_miles <= $range ) {
+		    		$dealers_in_range[] = $post_id;
+		    	}
+
+		    	// increment our index
+		    	$i++;
+
+		    	// If we're on the last post, look to see if we've found any dealers yet
+		    	if ( $i == count($posts) && empty( $dealers_in_range ) ) {
+
+		    		if( $range == $max_range ) break;
+		    		// Reset our index
+		    		$i = 0;
+
+		    		// Increase the range
+		    		$range += 10; // or whatever distance you want to increase by
+		    	}
+		    }
+
+
+		$dealers_count = sizeof( $dealers_in_range );
+
+		// Tell the hidden field that is used for conditional logic check to hold the number that is the size of array built. Should be 0 if no dealers
+		foreach( $form['fields'] as &$field ) {
+			if ( $field->id != 16 ) {
+			    continue;
+			}
+			$field->defaultValue = $dealers_count;
+		}
+
+		// No dealers found, get out now
+		if( !$dealers_count ) {
+			return $form;
+		}
+
+		if( $dealers_count > 3 ) {
+			shuffle( $dealers_in_range );
+			$dealers_in_range_trimmed = array_slice( $dealers_in_range, 0, 3 );
+			$dealers_in_range = $dealers_in_range_trimmed;
+		}
+
+		// This is the select dealer field of radio buttons, placeholder for this dynamic update
+		foreach( $form['fields'] as &$field ) {
+			if ( $field->id != 15 ) {
+			    continue;
+			}
+			$field->choices = get_dealer_list_data( $dealers_in_range );
+		}
+
+	} // end page 2 check
+
+	return $form;
+}
 function get_dealer_list_data( $dealers_in_range ) {
 
 	$dealers = array();
@@ -548,6 +643,20 @@ function get_dealer_email( $notification, $form, $entry ) {
 	if ( $notification['name'] == 'Admin Notification' ) {
 
 	      $dealer_id = rgpost( 'input_55'  );
+	      $dealer_email = get_post_meta( $dealer_id, 'sqms-product-email', true );
+
+	      $notification['to'] = $dealer_email;
+
+	  }
+
+	return $notification;
+}
+
+function get_dealer_email_photo( $notification, $form, $entry ) {
+
+	if ( $notification['name'] == 'Admin Notification' ) {
+
+	      $dealer_id = rgpost( 'input_15'  );
 	      $dealer_email = get_post_meta( $dealer_id, 'sqms-product-email', true );
 
 	      $notification['to'] = $dealer_email;
