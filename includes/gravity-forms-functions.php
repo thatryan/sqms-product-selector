@@ -683,35 +683,27 @@ function add_meta_to_entry($entry_meta, $form_id){
         'is_default_column' => false
     );
 
-    // $entry_meta['reported'] = array(
-    //     'label' => 'Reported',
-    //     'is_numeric' => false,
-    //     'update_entry_meta_callback' => 'update_report_entry_meta',
-    //     'is_default_column' => false
-    // );
-
     return $entry_meta;
 }
 
 function update_dealer_entry_meta( $key, $lead, $form ){
 
-	$dealer_id = rgpost( 'input_55'  );
+	if( $form['id'] == 12 ) {
+		$dealer_id = rgpost( 'input_55'  );
+	}
+	elseif( $form['id'] == 16 ){
+		$dealer_id = rgpost( 'input_15'  );
+	}
+	else {
+		return '';
+	}
+
 	$dealer = get_post( $dealer_id );
 	$dealer_name = $dealer->post_name;
 	$value = $dealer_name;
 
 	return $value;
 }
-
-// function update_report_entry_meta( $key, $lead, $form ){
-
-// 	$dealer_id = rgpost( 'input_55'  );
-// 	$dealer = get_post( $dealer_id );
-// 	$dealer_name = $dealer->post_name;
-// 	$value = $dealer_name;
-
-// 	return $value;
-// }
 
 
 function replace_dealer_notification( $text, $form, $entry, $url_encode, $esc_html, $nl2br, $format ) {
