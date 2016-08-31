@@ -4,7 +4,7 @@
 	Plugin URI: https://github.com/thatryan
 	Description: Register product and handle logic for chooser
 	Author: Ryan Olson
-	Version: 1.0.4
+	Version: 1.0.5
 	Author URI: http://thatryan.com
  */
 
@@ -27,7 +27,7 @@ class Product_Selector {
 	 */
 	public $plugin_url = '';
 
-	public $plugin_version = '1.0.3';
+	public $plugin_version = '1.0.5';
 
 
 	/**
@@ -132,13 +132,13 @@ class Product_Selector {
 
 
 	public function header_assets() {
-		wp_register_style( 'vex', $this->plugin_url . 'assets/css/vex.css' );
-		wp_register_style( 'vex-theme', $this->plugin_url . 'assets/css/vex-theme-default.css' );
+		wp_register_style( 'vex', $this->plugin_url . 'assets/css/vex.css', array(), $this->plugin_version );
+		wp_register_style( 'vex-theme', $this->plugin_url . 'assets/css/vex-theme-default.css', array(), $this->plugin_version );
 
 		wp_register_script( 'vex-script', $this->plugin_url . 'assets/js/vex.combined.min.js', array ('jquery'), $this->plugin_version, false );
-		wp_register_script( 'load-report-form-script', $this->plugin_url . 'assets/js/load-report-form.js', array ('jquery'), false, false );
+		wp_register_script( 'load-report-form-script', $this->plugin_url . 'assets/js/load-report-form.js', array ('jquery'), $this->plugin_version, false );
 
-		wp_enqueue_style( 'sqms-prod-select', $this->plugin_url . 'assets/css/sqms-product-selector.css' );
+		wp_enqueue_style( 'sqms-prod-select', $this->plugin_url . 'assets/css/sqms-product-selector.css', array(), $this->plugin_version );
 		wp_enqueue_style( 'vex' );
 		wp_enqueue_style( 'vex-theme' );
 		wp_enqueue_script('vex-script');
