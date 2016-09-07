@@ -85,7 +85,7 @@ function display_choice_result( $form ) {
 	        $content_output .= '<h3>Your System Installation Estimate: $1,000.00 - $2,500.00</h3>';
 	        $content_output .= '<h4>Note: Proper Equipment Selection Will Be Verified On Installation Inspection</h4>';
 	        $content_output .= '</div>';
-	        $content_output .= '<h5 class="financing-box-title">Estimated Monthly Payments, including installation costs, with <b>Microf Financing</b></h5>';
+	        $content_output .= '<h5 class="financing-box-title">Estimated Monthly Payments, including installation costs, with <a href="https://hvacinstantquote.com/resources/appliance-financing/" target="_blank" title="Microf Financing">Microf Financing</a></h5>';
 	        $content_output .= '<div class="financing-box">' . get_finance_options( $system_price ) . '</div>';
 	        $content_output .= '<div class="col-wrapper">';
 	        $content_output .= '<div class="col-left">' . get_the_post_thumbnail( $product_post_id, 'full', array( 'class' => 'alignnone' ) ) . '</div>';
