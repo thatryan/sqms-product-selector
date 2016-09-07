@@ -4,7 +4,7 @@
 	Plugin URI: https://github.com/thatryan
 	Description: Register product and handle logic for chooser
 	Author: Ryan Olson
-	Version: 1.0.5
+	Version: 1.0.6
 	Author URI: http://thatryan.com
  */
 
@@ -27,7 +27,7 @@ class Product_Selector {
 	 */
 	public $plugin_url = '';
 
-	public $plugin_version = '1.0.5';
+	public $plugin_version = '1.0.6';
 
 
 	/**
@@ -110,7 +110,7 @@ class Product_Selector {
 			//check for dealers
 			if ( in_array( 'subscriber', $user->roles ) ) {
 				// redirect them to the dealer leads list
-				return get_permalink( 899 );
+				return get_permalink( 138 );
 			} else {
 				return $redirect_to;
 			}
