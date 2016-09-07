@@ -186,7 +186,7 @@ $disclaimer_html = <<<'DISCLAIMERS'
 </ul>
 </div>
 <div class="col-right">
-<img src="http://s9828.p59.sites.pressdns.com/wp-content/uploads/2016/07/hvac-installation.jpg" class="alignright" />
+<img src="https://hvacinstantquote.com/wp-content/uploads/2016/09/hvac-installation.jpg" class="alignright" />
 </div>
 </div>
 DISCLAIMERS;
