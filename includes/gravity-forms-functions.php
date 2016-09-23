@@ -97,7 +97,7 @@ function display_choice_result( $form ) {
 	        $content_output .= '<div class="financing-box">' . get_finance_options( $system_price ) . '</div>';
 
 	        $content_output .= '<div class="highlight-box">';
-	        $content_output .= '<p>Choose a <b>Payne Certified Dealer</b> & accept quote below to submit your contact information and schedule a <strong>No Cost Installation Inspection</strong> to verify the equipment selected is correct and provide an exact installation charge.</p>';
+	        $content_output .= '<p>Choose a <b>Payne Certified Dealer</b> & accept quote below to submit your contact information and schedule a <b>No Cost Installation Inspection</b> to verify the equipment selected is correct and provide an exact installation charge.</p>';
 	        $content_output .= '</div>';
 
 	        //loop back through form fields to get html field (id 14 on my form) that we are populating with the data gathered above
