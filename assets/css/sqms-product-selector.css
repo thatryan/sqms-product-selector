@@ -93,10 +93,14 @@
 }
 
 .highlight-box {
-	background: #fafafa;
+	background: #f05a1a;
 	padding: 12px;
-	border: 1px solid #393939;
 	margin-bottom: 12px;
+	color: #fff;
+}
+
+.highlight-box p {
+	color: #fff;
 }
 
 .financing-box-title {

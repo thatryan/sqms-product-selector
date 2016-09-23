@@ -79,20 +79,23 @@ function display_choice_result( $form ) {
 	        $cmb = cmb2_get_metabox( 'sqms-product-overview-meta', $product_post_id );
 	        $cmb_fields = $cmb->prop( 'fields' );
 
+	        $content_output .= '<p>Your total quote is the guaranteed price for your selected system, plus the estimated cost of installation. <a href="https://hvacinstantquote.com/resources/faqs#about-money" target="_blank" title="Factors about cost of installation">Click here for common factors that affect the cost of an installation</a>.</p>';
+	        $content_output .= '<p><b>Your System Selection &amp; Quote</b></p>';
+	        $content_output .= '<div class="col-wrapper">';
+	        $content_output .= '<div class="col-left">' . get_product_data( $product_post_id ) . '</div>';
+	        $content_output .= '<div class="col-right">';
 	        $content_output .= '<div class="highlight-box cost-wrapper">';
-	        $content_output .= '<p>Your total price will be the cost of HVAC equipment + cost of professional installation.</p>';
-	        $content_output .= '<h3>Your System Quote For The HVAC Equipment: ' .  esc_html( $system_price ) . '</h3>';
-	        $content_output .= '<h3>Your System Installation Estimate: $1,000.00 - $2,500.00</h3>';
-	        $content_output .= '<h4>Note: Proper Equipment Selection Will Be Verified On Installation Inspection</h4>';
+	        $content_output .= '<h3>Your HVAC System Equipment Quote: ' .  esc_html( $system_price ) . '</h3>';
+	        $content_output .= '<h3>Your HVAC System Installation Estimate: $1,000.00 - $2,500.00</h3>';
+	        $content_output .= '<p>Note: Proper Equipment Selection Will Be Verified On Installation Inspection</p>';
 	        $content_output .= '</div>';
+	        $content_output .= '</div>';
+	        $content_output .= '</div>';
+
+
 	        $content_output .= '<h5 class="financing-box-title">Estimated Monthly Payments, including installation costs, with <a href="https://hvacinstantquote.com/resources/appliance-financing/" target="_blank" title="Microf Financing">Microf Financing</a></h5>';
 	        $content_output .= '<div class="financing-box">' . get_finance_options( $system_price ) . '</div>';
-	        $content_output .= '<div class="col-wrapper">';
-	        $content_output .= '<div class="col-left">' . get_the_post_thumbnail( $product_post_id, 'full', array( 'class' => 'alignnone' ) ) . '</div>';
-	        $content_output .= '<div class="col-right">' . get_product_data( $product_post_id ) . '</div>';
-	        $content_output .= '</div>';
-	        $content_output .= '<div class="avia_message_box avia-color-blue avia-size-large avia-icon_select-no avia-border-solid "><span class="avia_message_box_title">Note</span><div class="avia_message_box_content"><p>Some Energy Star commentary on importance of a good installation</p></div></div>';
-	        $content_output .= '<div class="prod-disclaimers">' . build_disclaimer_html() . '</div>';
+
 	        $content_output .= '<div class="highlight-box">';
 	        $content_output .= '<p>Choose a <strong>Payne Certified Dealer</strong> & accept quote below to submit your contact information and schedule a <strong>No Cost Installation Inspection</strong> to verify the equipment selected is correct and provide an exact installation charge.</p>';
 	        $content_output .= '</div>';
