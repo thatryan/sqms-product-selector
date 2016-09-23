@@ -106,7 +106,7 @@
 }
 
 .dynamic-dealer-select label {
-	max-width: auto!important;
+	max-width: 95%!important;
 }
 
 .dynamic-dealer-select label .dealer-phone,
