@@ -561,7 +561,7 @@ function create_dynamic_orientation_dropdown( $form ) {
 
 		foreach ( $form['fields'] as &$field ) {
 
-		    if ( $field->type != 'select' || strpos( $field->cssClass, 'orientation-dynamic' ) === false ) {
+		    if ( $field->type != 'radio' || strpos( $field->cssClass, 'orientation-dynamic' ) === false ) {
 		        continue;
 		    }
 

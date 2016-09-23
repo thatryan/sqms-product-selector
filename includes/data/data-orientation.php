@@ -2,17 +2,17 @@
 
 $out_all = array(
     array(
-        'text' => 'Horizontal',
+        'text' => '<span class="product-choice-title">Horizontal Flow</span><br><img class="product-choice-image" src="http://hvacinstantquote.com/wp-content/plugins/sqms-product-selector/assets/img/horizontal-flow.png">',
         'value' => 'h',
     ),
     array(
-        'text' => 'Vertical',
+        'text' => '<span class="product-choice-title">Upflow</span><br><img class="product-choice-image" src="http://hvacinstantquote.com/wp-content/plugins/sqms-product-selector/assets/img/upflow.png">',
         'value' => 'v',
     ),
 );
 $out_v = array(
     array(
-    	'text' => 'Vertical',
+    	'text' => '<span class="product-choice-title">Upflow</span><br><img class="product-choice-image" src="http://hvacinstantquote.com/wp-content/plugins/sqms-product-selector/assets/img/upflow.png">',
     	'value' => 'v',
     ),
 );
