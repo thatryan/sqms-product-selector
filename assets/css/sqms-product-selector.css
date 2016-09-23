@@ -64,6 +64,26 @@
     clear:both;
 }
 
+.photo-quote-callout {
+	background: #f05a1a;
+	padding: 12px;
+}
+
+.photo-quote-callout p {
+	color: #fff;
+	margin: 0;
+}
+
+.photo-quote-callout a {
+	color: #0C4CB3;
+	font-weight: bold;
+	text-decoration: underline;
+}
+
+.photo-quote-callout a:hover {
+	text-decoration: none;
+}
+
 .col-left {
 	margin-bottom: 12px;
 }
