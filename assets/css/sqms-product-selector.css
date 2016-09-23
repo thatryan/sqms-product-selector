@@ -1,3 +1,7 @@
+#top .gform_wrapper .sqms-prod-sel-form label {
+	color: #f05a1a;
+}
+
 .gform_wrapper .sqms-prod-sel-form .gfield_radio li {
 	margin-bottom: 18px;
 }
@@ -13,6 +17,7 @@
 	line-height: 24px;
 	padding-left: 26px;
 	background: url(../img/checkbox-blue.png) 0 0 no-repeat;
+	color: #888888;
 }
 #top .gform_wrapper .sqms-prod-sel-form .image-radio .gfield_radio li input[type=radio] + label .product-choice-title {
 	font-weight: bold;
