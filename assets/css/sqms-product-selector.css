@@ -74,13 +74,13 @@
 	margin: 0;
 }
 
-.photo-quote-callout a {
+.main_color .photo-quote-callout a {
 	color: #0C4CB3;
 	font-weight: bold;
 	text-decoration: underline;
 }
 
-.photo-quote-callout a:hover {
+.main_color .photo-quote-callout a:hover {
 	text-decoration: none;
 }
 
