@@ -89,9 +89,9 @@
 	color: #fff;
 }
 
-.highlight-box b,
-.highlight-box p,
-.highlight-box h3 {
+.main_color .highlight-box b,
+.main_color .highlight-box p,
+.main_color .highlight-box h3 {
 	color: #fff;
 }
 
