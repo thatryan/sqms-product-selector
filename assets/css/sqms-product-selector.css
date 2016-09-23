@@ -1,4 +1,4 @@
-#top .gform_wrapper .sqms-prod-sel-form label {
+#top .gform_wrapper .sqms-prod-sel-form label.gfield_label {
 	color: #f05a1a;
 }
 #top label span.product-choice-title {
