@@ -64,16 +64,6 @@
     clear:both;
 }
 
-.photo-quote-callout {
-	background: #f05a1a;
-	padding: 12px;
-}
-
-.photo-quote-callout p {
-	color: #fff;
-	margin: 0;
-}
-
 .main_color .photo-quote-callout a {
 	color: #0C4CB3;
 	font-weight: bold;
@@ -99,7 +89,9 @@
 	color: #fff;
 }
 
-.highlight-box p {
+.highlight-box b,
+.highlight-box p,
+.highlight-box h3 {
 	color: #fff;
 }
 
