@@ -417,15 +417,15 @@ function get_dealer_list_data( $dealers_in_range ) {
 
 		$display = '<span class="product-choice-title">' . $dealer_name . '</span>';
 		$display .= $thumb;
-		$display .= '<h5>' . $phone . '</h5>';
+		$display .= '<h5>' . $phone . '</h5><p>';
 		$display .= esc_html( $address['address-1'] );
 		if( $address['address-2'] ) {
-			$display .= esc_html( $address['address-2'] );
+			$display .= ', ' . esc_html( $address['address-2'] );
 		}
-		$display .= esc_html( $address['city'] );
-		$display .= esc_html( $address['state'] );
-		$display .= esc_html( $address['zip'] );
-		$display .= '<br><img src="//maps.googleapis.com/maps/api/staticmap?center=' . $lat . ',' . $long . '&size=400x220&markers=' . $lat . ',' . $long  . '&key=' . GMAP_API_KEY . ' " class="dealer-map" />';
+		$display .= '<br>' . esc_html( $address['city'] );
+		$display .= ' ' . esc_html( $address['state'] );
+		$display .= ', ' . esc_html( $address['zip'] );
+		$display .= '</p><br><img src="//maps.googleapis.com/maps/api/staticmap?center=' . $lat . ',' . $long . '&size=400x220&markers=' . $lat . ',' . $long  . '&key=' . GMAP_API_KEY . ' " class="dealer-map" />';
 		$display .= build_dealer_yelp_output( $yelp_id );
 
 		$dealers[] = array( 'text' => $display, 'value' => $dealer_id );
