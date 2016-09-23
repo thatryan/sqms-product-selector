@@ -109,6 +109,10 @@
 	max-width: auto!important;
 }
 
+.dynamic-dealer-select label .dealer-address {
+	margin: 4px 0!important;
+}
+
 .seer-image {
 	width: 70%;
 }
