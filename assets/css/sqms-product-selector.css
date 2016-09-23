@@ -109,8 +109,13 @@
 	max-width: auto!important;
 }
 
+.dynamic-dealer-select label .dealer-phone,
 .dynamic-dealer-select label .dealer-address {
 	margin: 4px 0!important;
+}
+
+.dynamic-dealer-select label .dealer-phone {
+	font-weight: bold;
 }
 
 .seer-image {
