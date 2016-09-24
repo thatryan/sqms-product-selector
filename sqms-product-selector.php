@@ -137,10 +137,12 @@ class Product_Selector {
 
 		wp_register_script( 'vex-script', $this->plugin_url . 'assets/js/vex.combined.min.js', array ('jquery'), $this->plugin_version, false );
 		wp_register_script( 'load-report-form-script', $this->plugin_url . 'assets/js/load-report-form.js', array ('jquery'), $this->plugin_version, false );
+		wp_register_script( 'sqms-prod-select-script', $this->plugin_url . 'assets/js/sqms-product-selector.js', array ('jquery'), $this->plugin_version, false );
 
 		wp_enqueue_style( 'sqms-prod-select', $this->plugin_url . 'assets/css/sqms-product-selector.css', array(), $this->plugin_version );
 		wp_enqueue_style( 'vex' );
 		wp_enqueue_style( 'vex-theme' );
+		wp_enqueue_script('sqms-prod-select-script');
 		wp_enqueue_script('vex-script');
 	}
 
