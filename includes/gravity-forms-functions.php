@@ -1,6 +1,6 @@
 <?php
 
-// add_filter( 'gform_confirmation_anchor', '__return_false' );
+add_filter( 'gform_confirmation_anchor', '__return_false' );
 
 add_filter( 'gform_pre_render_12', 'create_dynamic_seer_dropdown' );
 add_filter( 'gform_pre_render_12', 'create_dynamic_eff_dropdown' );
