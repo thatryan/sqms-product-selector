@@ -74,6 +74,11 @@
 	text-decoration: none;
 }
 
+.cost-wrapper span {
+	font-size: 26px;
+	line-height: 1.35;
+}
+
 .text-center {
 	text-align: center;
 }

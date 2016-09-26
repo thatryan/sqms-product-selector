@@ -88,8 +88,8 @@ function display_choice_result( $form ) {
 	        $content_output .= '<div class="col-left">' . get_product_data( $product_post_id ) . '</div>';
 	        $content_output .= '<div class="col-right">';
 	        $content_output .= '<div class="highlight-box cost-wrapper">';
-	        $content_output .= '<h3>Your HVAC System Equipment Quote: ' .  esc_html( $system_price ) . '</h3>';
-	        $content_output .= '<h3>Your HVAC System Installation Estimate: $1,000.00 - $2,500.00</h3>';
+	        $content_output .= '<h3>Your HVAC System Equipment Quote: <span>' .  esc_html( $system_price ) . '</span></h3>';
+	        $content_output .= '<h3>Your HVAC System Installation Estimate: <span>$1,000.00 - $2,500.00</span></h3>';
 	        $content_output .= '<p>Note: Proper Equipment Selection Will Be Verified On Installation Inspection</p>';
 	        $content_output .= '</div>';
 	        $content_output .= '</div>';
