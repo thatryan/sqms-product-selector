@@ -1,6 +1,9 @@
 <?php
 
 // add_filter( 'gform_confirmation_anchor', '__return_false' );
+add_filter( 'gform_confirmation_anchor_12', function() {
+    return 0;
+} );
 
 add_filter( 'gform_pre_render_12', 'create_dynamic_seer_dropdown' );
 add_filter( 'gform_pre_render_12', 'create_dynamic_eff_dropdown' );
@@ -43,7 +46,7 @@ function display_choice_result( $form ) {
     $html_content = "";
     $prod_string = "";
 
-    if ( $current_page == 10 ) {
+    if ( $current_page == 11 ) {
         foreach ( $form['fields'] as &$field ) {
         	if ( strpos( $field->cssClass, 'product-builder-item' ) === false ) {
         	    continue;
