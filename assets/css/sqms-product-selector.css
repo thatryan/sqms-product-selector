@@ -5,6 +5,11 @@
 	color: #888888;
 }
 
+#top input#choice_12_67_3 {
+	display: inline-block;
+	width: auto;
+}
+
 .gform_wrapper .sqms-prod-sel-form .gfield_radio li {
 	margin-bottom: 18px;
 }
