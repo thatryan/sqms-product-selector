@@ -607,9 +607,13 @@ function build_user_location_string( $field ) {
 
 function build_dealer_yelp_output( $yelp_id ) {
 
-	$yelp_data = get_business( $yelp_id );
-
 	$output = '';
+
+	if( $yelp_id  == '' ) {
+		return $output;
+	}
+
+	$yelp_data = get_business( $yelp_id );
 
 	$output .= '	<br /><img class="rating" src=" ' . esc_attr( $yelp_data->rating_img_url ) . ' " alt=" ' . esc_attr( $yelp_data->name ) .  ' " title="' . esc_attr( $yelp_data->name )  . '" /><br />';
 
