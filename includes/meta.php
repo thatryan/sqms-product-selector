@@ -354,6 +354,13 @@ function sqms_prodcut_selector_meta() {
 		'type'       => 'text',
 		'default'       => '0',
 	) );
+
+	$sqms_prod_overview_meta->add_field( array(
+		'name'       => __( 'Optional Warranty Price', 'sqmsprodsel' ),
+		'id'         => $prefix . 'warranty-price',
+		'type'       => 'text',
+		'default'       => '0',
+	) );
 }
 
 
