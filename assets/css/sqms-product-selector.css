@@ -10,6 +10,9 @@
 	width: auto;
 }
 
+.gform_wrapper .sqms-prod-sel-form li.gfield.gf_list_3col ul.gfield_radio li label {
+	white-space: normal;
+}
 .gform_wrapper .sqms-prod-sel-form .gfield_radio li {
 	margin-bottom: 18px;
 }

@@ -91,15 +91,11 @@ function display_choice_result( $form ) {
 	        $content_output .= '<div class="highlight-box cost-wrapper">';
 	        $content_output .= '<h3>Your HVAC System Equipment Quote: <span>' .  esc_html( $system_price ) . '</span></h3>';
 	        $content_output .= '<h3>Your HVAC System Installation Estimate: <span>$1,000.00 - $2,500.00</span></h3>';
-	        $content_output .= '<p>HVAC Equipment Optional Warranty: <span>' .  esc_html( $warranty_price ) . '</span></p>';
 	        $content_output .= '<p><small>Note: Proper Equipment Selection Will Be Verified On Installation Inspection</small></p>';
 	        $content_output .= '</div>';
 	        $content_output .= '</div>';
 	        $content_output .= '</div>';
-
-
-	        $content_output .= '<h5 class="financing-box-title">Estimated Monthly Payments, including installation costs, with <a href="https://hvacinstantquote.com/resources/appliance-financing/" target="_blank" title="Microf Financing">Microf Financing</a></h5>';
-	        $content_output .= '<div class="financing-box">' . get_finance_options( $system_price ) . '</div>';
+	        $content_output .= '<div class="financing-box">' . get_finance_options( $system_price, $warranty_price ) . '</div>';
 
 	        $content_output .= '<div class="highlight-box">';
 	        $content_output .= '<p>Choose a <b>Payne Certified Dealer</b> & accept quote below to submit your contact information and schedule a <b>No Cost Installation Inspection</b> to verify the equipment selected is correct and provide an exact installation charge.</p>';
@@ -790,11 +786,13 @@ function update_report_entry_meta( $entry, $form ) {
 
 }
 
-function get_finance_options( $system_price ) {
+function get_finance_options( $system_price, $warranty_price ) {
 
 	$equip_cost = str_replace( ',', '', ltrim( $system_price, '$' ) );
-	$install_cost = 2500.00;
-	$total_cost = $equip_cost + $install_cost;
+	$install_cost_min = 1000.00;
+	$install_cost_max = 2500.00;
+	$total_cost_min = $equip_cost + $install_cost_min;
+	$total_cost_max = $equip_cost + $install_cost_max;
 
 	$term_options = array(
 			35,
@@ -803,16 +801,26 @@ function get_finance_options( $system_price ) {
 		);
 
 		$finance_data = '';
-		$finance_data .= '<table><thead><tr><th>&nbsp;</th><th>35 monthly payments</th><th>47 monthly payments</th><th>59 monthly payments</th></tr></thead><tbody><tr><td>Payment Amount</td>';
+		$finance_data .= '<p>Estimated Monthly Payments, including installation costs, with <a href="https://hvacinstantquote.com/resources/appliance-financing/" target="_blank" title="Microf Financing">Microf Financing</a></p>';
+		$finance_data .= '<table><thead><tr><th>Payment Amount</th><th>35 monthly payments</th><th>47 monthly payments</th><th>59 monthly payments</th></tr></thead><tbody><tr><td>$1,000.00 Install Cost</td>';
 
 		foreach ($term_options as $term) {
-			$term_payment = microf_payment_calc($total_cost, $term);
+			$term_payment = microf_payment_calc($total_cost_min, $term);
 
-			$finance_data .= '<td><i class="fa fa-dollar"></i>' . $term_payment . '</td>';
+			$finance_data .= '<td><b>$</b>' . $term_payment . '</td>';
 		}
 
 
+		$finance_data .= '</tr><tr><td>$2,500.00 Install Cost</td>';
+		foreach ($term_options as $term) {
+			$term_payment = microf_payment_calc($total_cost_max, $term);
+
+			$finance_data .= '<td><b>$</b>' . $term_payment . '</td>';
+		}
 		$finance_data .= '</tr></tbody></table>';
+		$finance_data .= '<p><small>Note: Actual monthly payment based upon actual installation cost provided by your dealer.</small></p>';
+		$finance_data .= '<p>Optional Warranty Cost: <b>$'.$warranty_price.'</b></p>';
+		$finance_data .= '<p><small>Note: Warranty cost not included in finance projections.</small></p>';
 
 
 	return $finance_data;
