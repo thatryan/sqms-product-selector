@@ -78,6 +78,7 @@ function display_choice_result( $form ) {
 	        $cat = get_the_terms ( $product_post_id, 'system_type' );
 
 	        $system_price = get_post_meta( $product_post_id, 'sqms-product-system-price', true );
+	        $warranty_price = get_post_meta( $product_post_id, 'sqms-product-warranty-price', true );
 
 	        $cmb = cmb2_get_metabox( 'sqms-product-overview-meta', $product_post_id );
 	        $cmb_fields = $cmb->prop( 'fields' );
@@ -90,7 +91,8 @@ function display_choice_result( $form ) {
 	        $content_output .= '<div class="highlight-box cost-wrapper">';
 	        $content_output .= '<h3>Your HVAC System Equipment Quote: <span>' .  esc_html( $system_price ) . '</span></h3>';
 	        $content_output .= '<h3>Your HVAC System Installation Estimate: <span>$1,000.00 - $2,500.00</span></h3>';
-	        $content_output .= '<p>Note: Proper Equipment Selection Will Be Verified On Installation Inspection</p>';
+	        $content_output .= '<p>HVAC Equipment Optional Warranty: <span>' .  esc_html( $warranty_price ) . '</span></p>';
+	        $content_output .= '<p><small>Note: Proper Equipment Selection Will Be Verified On Installation Inspection</small></p>';
 	        $content_output .= '</div>';
 	        $content_output .= '</div>';
 	        $content_output .= '</div>';
