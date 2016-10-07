@@ -819,7 +819,7 @@ function get_finance_options( $system_price, $warranty_price ) {
 		}
 		$finance_data .= '</tr></tbody></table>';
 		$finance_data .= '<p><small>Note: Actual monthly payment based upon actual installation cost provided by your dealer.</small></p>';
-		$finance_data .= '<p>Optional Warranty Cost: <b>$'.$warranty_price.'</b></p>';
+		$finance_data .= '<p>Optional Warranty Cost: <b>'.$warranty_price.'</b></p>';
 		$finance_data .= '<p><small>Note: Warranty cost not included in finance projections.</small></p>';
 
 
