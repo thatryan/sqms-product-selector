@@ -807,7 +807,7 @@ function get_finance_options( $system_price, $warranty_price ) {
 		foreach ($term_options as $term) {
 			$term_payment = microf_payment_calc($total_cost_min, $term);
 
-			$finance_data .= '<td><b>$</b>' . $term_payment . '</td>';
+			$finance_data .= '<td>$' . $term_payment . '</td>';
 		}
 
 
@@ -815,7 +815,7 @@ function get_finance_options( $system_price, $warranty_price ) {
 		foreach ($term_options as $term) {
 			$term_payment = microf_payment_calc($total_cost_max, $term);
 
-			$finance_data .= '<td><b>$</b>' . $term_payment . '</td>';
+			$finance_data .= '<td>$' . $term_payment . '</td>';
 		}
 		$finance_data .= '</tr></tbody></table>';
 		$finance_data .= '<p><small>Note: Actual monthly payment based upon actual installation cost provided by your dealer.</small></p>';
