@@ -188,13 +188,6 @@ function sqms_prodcut_selector_meta() {
 		'default'       => 'NA',
 	) );
 
-	// Create metabox container for system breakdown
-	// $sqms_prod_breakdown_meta = new_cmb2_box( array(
-	// 	'id'            => $prefix . 'breadkdown-meta',
-	// 	'title'         => __( 'System Breakdown', 'sqmsprodsel' ),
-	// 	'object_types'  => array( 'sqms_prod_select', ),
-	// 	'closed'     => true,
-	// ) );
 
 	// Add fields to breakdown container
 	$sqms_prod_overview_meta->add_field( array(
@@ -308,15 +301,6 @@ function sqms_prodcut_selector_meta() {
 		'type'       => 'text',
 		'default'       => 'NA',
 	) );
-
-	// Create metabox container for pricing
-	// $sqms_prod_pricing_meta = new_cmb2_box( array(
-	// 	'id'            => $prefix . 'cost-meta',
-	// 	'title'         => __( 'System Pricing', 'sqmsprodsel' ),
-	// 	'object_types'  => array( 'sqms_prod_select', ),
-	// 	'context' => 'side',
-	// 	'priority' => 'low',
-	// ) );
 
 	// Add fields to pricing container
 	$sqms_prod_overview_meta->add_field( array(
