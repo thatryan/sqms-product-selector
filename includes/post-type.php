@@ -1,7 +1,6 @@
 <?php
 
 add_action( 'init', 'sqms_register_productselector_post_type', 0 );
-add_action( 'init', 'sqms_register_productselector_tax', 0 );
 add_action( 'init', 'sqms_register_payne_dealer', 0 );
 
 // Register Products Post Type
@@ -45,7 +44,6 @@ function sqms_register_productselector_post_type() {
 		'description'           => __( 'Post type for custom products in chooser', 'sqms-prod-selector' ),
 		'labels'                => $labels,
 		'supports'              => array( 'title', 'thumbnail'),
-		'taxonomies'            => array( 'system_type' ),
 		'hierarchical'          => true,
 		'public'                => true,
 		'show_ui'               => true,
@@ -62,44 +60,6 @@ function sqms_register_productselector_post_type() {
 		'capability_type'       => 'page',
 	);
 	register_post_type( 'sqms_prod_select', $args );
-
-}
-
-// Register Products Taxonomy
-function sqms_register_productselector_tax() {
-
-	$labels = array(
-		'name'                       => _x( 'System Types', 'Taxonomy General Name', 'sqms-prod-selector' ),
-		'singular_name'              => _x( 'System Type', 'Taxonomy Singular Name', 'sqms-prod-selector' ),
-		'menu_name'                  => __( 'System Types', 'sqms-prod-selector' ),
-		'all_items'                  => __( 'All System Types', 'sqms-prod-selector' ),
-		'parent_item'                => __( 'Parent Item', 'sqms-prod-selector' ),
-		'parent_item_colon'          => __( 'Parent Item:', 'sqms-prod-selector' ),
-		'new_item_name'              => __( 'New System Type Name', 'sqms-prod-selector' ),
-		'add_new_item'               => __( 'Add New System Type', 'sqms-prod-selector' ),
-		'edit_item'                  => __( 'Edit System Type', 'sqms-prod-selector' ),
-		'update_item'                => __( 'Update System Type', 'sqms-prod-selector' ),
-		'view_item'                  => __( 'View System Type', 'sqms-prod-selector' ),
-		'separate_items_with_commas' => __( 'Separate system types with commas', 'sqms-prod-selector' ),
-		'add_or_remove_items'        => __( 'Add or remove system types', 'sqms-prod-selector' ),
-		'choose_from_most_used'      => __( 'Choose from the most used', 'sqms-prod-selector' ),
-		'popular_items'              => __( 'Popular System Types', 'sqms-prod-selector' ),
-		'search_items'               => __( 'Search System Types', 'sqms-prod-selector' ),
-		'not_found'                  => __( 'Not Found', 'sqms-prod-selector' ),
-		'no_terms'                   => __( 'No items', 'sqms-prod-selector' ),
-		'items_list'                 => __( 'Items list', 'sqms-prod-selector' ),
-		'items_list_navigation'      => __( 'Items list navigation', 'sqms-prod-selector' ),
-	);
-	$args = array(
-		'labels'                     => $labels,
-		'hierarchical'               => true,
-		'public'                     => true,
-		'show_ui'                    => true,
-		'show_admin_column'          => true,
-		'show_in_nav_menus'          => true,
-		'show_tagcloud'              => false,
-	);
-	register_taxonomy( 'system_type', array( 'sqms_prod_select' ), $args );
 
 }
 
