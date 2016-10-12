@@ -204,8 +204,8 @@ function build_dealer_list( $form ) {
 	if( $form['id'] == 12 ) {
 		if ( $current_page == 10 ) {
 
-			require_once('OAuth.php');
-			include_once 'yelp-functions.php';
+			// require_once('OAuth.php');
+			// include_once 'yelp-functions.php';
 
 			foreach ( $form['fields'] as &$field ) {
 				// This is the customer address field
@@ -295,8 +295,8 @@ function build_dealer_list( $form ) {
 
 		if ( $current_page == 2 ) {
 
-			require_once('OAuth.php');
-			include_once 'yelp-functions.php';
+			// require_once('OAuth.php');
+			// include_once 'yelp-functions.php';
 
 			foreach ( $form['fields'] as &$field ) {
 				// This is the customer address field
@@ -427,7 +427,7 @@ function get_dealer_list_data( $dealers_in_range ) {
 		$display .= ' ' . esc_html( $address['state'] );
 		$display .= ', ' . esc_html( $address['zip'] );
 		$display .= '</p><img src="//maps.googleapis.com/maps/api/staticmap?center=' . $lat . ',' . $long . '&size=400x220&markers=' . $lat . ',' . $long  . '&key=' . GMAP_API_KEY . ' " class="dealer-map" />';
-		$display .= build_dealer_yelp_output( $yelp_id );
+		// $display .= build_dealer_yelp_output( $yelp_id );
 
 		$dealers[] = array( 'text' => $display, 'value' => $dealer_id );
 	}
