@@ -104,15 +104,13 @@ class Product_Selector {
 
 	public function dealer_login_redirect( $redirect_to, $request, $user  ) {
 
-		print_r($user);
-		exit();
-
-		if( $current_user->user_login == 'preview' ) {
-			return home_url();
-		}
+		// if( $current_user->user_login == 'preview' ) {
+		// 	return home_url();
+		// }
 		//is there a user to check?
 		if ( isset( $user->roles ) && is_array( $user->roles ) ) {
-
+		print_r($user);
+		exit();
 			//check for dealers
 			if ( in_array( 'subscriber', $user->roles ) ) {
 				// redirect them to the dealer leads list
