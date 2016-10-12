@@ -529,9 +529,7 @@ function create_dynamic_eff_dropdown( $form ) {
 		    if( $string === 'sgh-2.5-14.0-' || $string === 'sgv-3.5-16.0-' ) {
 		    	$field->choices = $split_80;
 		    }
-		    elseif( $string === 'sgh-3.0-14.5-' ) {
-		    	$field->choices = $split_90;
-		    }
+
 		    else {
 		    	$field->choices = $split_all;
 		    }
