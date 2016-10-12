@@ -89,6 +89,7 @@ class Product_Selector {
 		add_filter( 'the_content', array ( $this, 'get_custom_post_type_template' ) );
 
 		add_filter( 'login_redirect', array( $this, 'dealer_login_redirect' ), 10, 3 );
+		add_filter('avf_builder_boxes', 'add_builder_to_posttype');
 
 	}
 
