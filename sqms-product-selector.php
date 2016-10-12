@@ -89,22 +89,9 @@ class Product_Selector {
 		add_filter( 'the_content', array ( $this, 'get_custom_post_type_template' ) );
 
 		add_filter( 'login_redirect', array( $this, 'dealer_login_redirect' ), 10, 3 );
-		add_filter('avf_builder_boxes', 'add_builder_to_posttype');
 
 	}
 
-	public function add_builder_to_posttype($metabox)
-	{
-		foreach($metabox as &$meta)
-		{
-			if($meta['id'] == 'avia_builder' || $meta['id'] == 'layout')
-			{
-				$meta['page'][] = 'sqms_payne_dealer';
-			}
-		}
-
-		return $metabox;
-	}
 
 	public function get_custom_post_type_template($content) {
 
