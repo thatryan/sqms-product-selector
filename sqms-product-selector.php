@@ -104,7 +104,8 @@ class Product_Selector {
 
 	public function dealer_login_redirect( $redirect_to, $request, $user  ) {
 
-		$current_user = wp_get_current_user();
+		print_r($user);
+		exit();
 
 		if( $current_user->user_login == 'preview' ) {
 			return home_url();
