@@ -92,6 +92,19 @@ class Product_Selector {
 
 	}
 
+	public function add_builder_to_posttype($metabox)
+	{
+		foreach($metabox as &$meta)
+		{
+			if($meta['id'] == 'avia_builder' || $meta['id'] == 'layout')
+			{
+				$meta['page'][] = 'sqms_payne_dealer';
+			}
+		}
+
+		return $metabox;
+	}
+
 	public function get_custom_post_type_template($content) {
 
 		     if( is_singular( 'sqms_prod_select' ) && is_main_query() ) {
