@@ -463,22 +463,14 @@ function create_dynamic_seer_dropdown( $form ) {
 		    				$field->choices = $split_vert_split_hor;
 		    				break;
 		    			case 'gh-':
-		    				if ( $tonnage == '3.5-' || $tonnage == '5.0-' ) {
-		    					$field->choices = $split_hor_3_5_5;
-		    				}
-		    				else {
-		    					$field->choices = $split_vert_split_hor;
-		    				}
-		    				break;
+			    			$field->choices = $split_vert_split_hor;
+			    			break;
 		    			case 'hp-':
-		    				if ( $tonnage == '1.5-' || $tonnage == '2.5-' || $tonnage == '3.5-') {
-		    					$field->choices = $heat_pump_5s;
+		    				if ( $tonnage == '1.5-' || $tonnage == '3.5-') {
+		    					$field->choices = $hp_1_5_3_5;
 		    				}
-		    				elseif ( $tonnage == '2.0-' || $tonnage == '3.0-' ) {
-		    					$field->choices = $heat_pump_2_3;
-		    				}
-		    				elseif ( $tonnage == '4.0-' || $tonnage == '5.0-' ) {
-		    					$field->choices = $heat_pump_4_5;
+		    				else{
+		    					$field->choices = $hp_all;
 		    				}
 		    				break;
 
