@@ -145,7 +145,7 @@ class Product_Selector {
 		wp_enqueue_style( 'sqms-prod-select', $this->plugin_url . 'assets/css/sqms-product-selector.css', array(), $this->plugin_version );
 		wp_enqueue_style( 'vex' );
 		wp_enqueue_style( 'vex-theme' );
-		wp_enqueue_script('sqms-prod-select-script');
+		// wp_enqueue_script('sqms-prod-select-script');
 		wp_enqueue_script('vex-script');
 	}
 
