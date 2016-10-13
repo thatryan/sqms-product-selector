@@ -46,7 +46,7 @@ function display_choice_result( $form ) {
     $html_content = "";
     $prod_string = "";
 
-    if ( $current_page == 10 ) {
+    if ( $current_page >= 10 ) {
         foreach ( $form['fields'] as &$field ) {
         	if ( strpos( $field->cssClass, 'product-builder-item' ) === false ) {
         	    continue;
