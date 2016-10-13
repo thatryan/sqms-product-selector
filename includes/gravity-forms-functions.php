@@ -427,6 +427,7 @@ function get_dealer_list_data( $dealers_in_range ) {
 
 		$display = '<span class="product-choice-title">' . $dealer_name . '</span>';
 		$display .= $thumb;
+		$display .= get_permalink($dealer_id);
 		$display .= '<p class="dealer-phone">' . $phone . '</p><p class="dealer-address">';
 		$display .= esc_html( $address['address-1'] );
 		if( $address['address-2'] ) {
