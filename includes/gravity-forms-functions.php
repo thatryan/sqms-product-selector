@@ -9,7 +9,7 @@ add_filter( 'gform_pre_render_12', 'create_dynamic_seer_dropdown' );
 add_filter( 'gform_pre_render_12', 'create_dynamic_eff_dropdown' );
 add_filter( 'gform_pre_render_12', 'create_dynamic_orientation_dropdown' );
 
-add_filter( 'gform_field_choice_markup_pre_render_12_55', 'alter_radio_markup', 10, 4 );
+// add_filter( 'gform_field_choice_markup_pre_render_12_55', 'alter_radio_markup', 10, 4 );
 
 add_filter( 'gform_pre_render_12', 'build_dealer_list' );
 add_filter( 'gform_pre_render_16', 'build_dealer_list' );
