@@ -9,7 +9,7 @@ add_filter( 'gform_pre_render_12', 'create_dynamic_seer_dropdown' );
 add_filter( 'gform_pre_render_12', 'create_dynamic_eff_dropdown' );
 add_filter( 'gform_pre_render_12', 'create_dynamic_orientation_dropdown' );
 
-add_filter( 'gform_field_choice_markup_pre_render_12', 'alter_radio_markup', 10, 4 );
+add_filter( 'gform_field_choice_markup_pre_render_12_55', 'alter_radio_markup', 10, 4 );
 
 add_filter( 'gform_pre_render_12', 'build_dealer_list' );
 add_filter( 'gform_pre_render_16', 'build_dealer_list' );
@@ -201,7 +201,7 @@ return $disclaimer_html;
 }
 
 function alter_radio_markup( $choice_markup, $choice, $field, $value ) {
-	if ( $field->get_input_type() == 'radio' && $field->id == 15  ) {
+	if ( $field->get_input_type() == 'radio' && $field->id == 55  ) {
 	    return str_replace( "</li>", "</li><p>link</p>", $choice_markup );
 	}
 
