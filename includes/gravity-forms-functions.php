@@ -411,6 +411,7 @@ function get_dealer_list_data( $dealers_in_range ) {
 
 		$thumb = get_the_post_thumbnail( $dealer_id );
 		$dealer_name = get_the_title( $dealer_id );
+		$dealer_link = get_permalink($dealer_id);
 		$yelp_id = get_post_meta( $dealer_id, 'sqms-product-yelp', true );
 		$phone = get_post_meta( $dealer_id, 'sqms-product-phone', true );
 		$address = get_post_meta( $dealer_id, 'sqms-product-address', 1 );
@@ -427,7 +428,7 @@ function get_dealer_list_data( $dealers_in_range ) {
 
 		$display = '<span class="product-choice-title">' . $dealer_name . '</span>';
 		$display .= $thumb;
-		$display .= get_permalink($dealer_id);
+		$display .= '<a href="'.$dealer_link.'">View This Dealer</a>';
 		$display .= '<p class="dealer-phone">' . $phone . '</p><p class="dealer-address">';
 		$display .= esc_html( $address['address-1'] );
 		if( $address['address-2'] ) {
