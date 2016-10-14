@@ -47,6 +47,10 @@ function display_choice_result( $form ) {
     $prod_string = "";
 
     if ( $current_page >= 10 ) {
+    	echo '<pre>';
+    	print_r($_POST);
+    	echo  '</pre>';
+    	// exit();
         foreach ( $form['fields'] as &$field ) {
         	if ( strpos( $field->cssClass, 'product-builder-item' ) === false ) {
         	    continue;
