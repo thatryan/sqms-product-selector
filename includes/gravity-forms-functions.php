@@ -739,29 +739,12 @@ function replace_dealer_notification( $text, $form, $entry, $url_encode, $esc_ht
     }
     $formatted_address_value = $formatted_street . '<br>' . $city_value . ', ' . $state_value . ' ' . $zip_value;
 
-    // contact day data
-    $contact_field_id      = 49;
-    $contact_count 		= 7;
-    $contact_string		= '';
+// accessories data
+$accessory_string       = '';
 
-    for( $i=1; $i <= 7; $i++ ) {
-    	$contact_val = rgar( $entry, $contact_field_id . '.' . $i );
-    	if( $contact_val ) {
-    		$contact_string .= $contact_val . '<br>';
-    	}
-    }
-
-    // accessories data
-    $accessory_field_id      = 57;
-    $accessory_count 		= 7;
-    $accessory_string		= '';
-
-    for( $i=1; $i <= 7; $i++ ) {
-    	$acc_val = rgar( $entry, $accessory_field_id . '.' . $i );
-    	if( $acc_val ) {
-    		$accessory_string .= $acc_val . '<br>';
-    	}
-    }
+foreach($form_data['field']['57.Are you interested in any accessories?'] as $acc_val){
+    $accessory_string .= $acc_val . '<br>';
+}
 
     include 'template/template-merge-tag.php';
 
