@@ -102,7 +102,7 @@ function display_choice_result( $form ) {
 	        $content_output .= '<div class="financing-box">' . get_finance_options( $system_price, $warranty_price ) . '</div>';
 
 	        $content_output .= '<div class="highlight-box">';
-	        $content_output .= '<p>Upon accepting and submitting your quote request, a <b>Payne Certified Dealer</b> will contact you within 24 hours to schedule a <b>No Cost Installation Inspection</b> to verify the equipment selected is correct and provide an exact installation charge.</p>';
+	        $content_output .= '<p>Once you accept this quote, you will be contacted by an HVACInstantQuote Certified professional HVAC specialist to set up a time for installation.</p>';
 	        $content_output .= '</div>';
 
 	        //loop back through form fields to get html field (id 14 on my form) that we are populating with the data gathered above
