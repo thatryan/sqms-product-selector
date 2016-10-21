@@ -1,3 +1,7 @@
+.sqms-prod-sel-form h3 b,
+.sqms-prod-sel-form h3 a {
+	color: #f05a1a!important;
+}
 #top .gform_wrapper .sqms-prod-sel-form label.gfield_label {
 	font-size: 1.5em;
 }
@@ -82,11 +86,6 @@
 	text-decoration: none;
 }
 
-.cost-wrapper span {
-	font-size: 26px;
-	line-height: 1.35;
-}
-
 .text-center {
 	text-align: center;
 }
@@ -110,6 +109,22 @@
 
 .financing-box-title {
 	margin-bottom: 12px;
+}
+
+.cost-wrapper {
+	text-align: center;
+	padding: 36px 12px;
+}
+
+.cost-wrapper p{
+	margin: 0;
+}
+
+.cost-wrapper span {
+	font-size: 30px;
+	line-height: 1.75;
+	display: block;
+	text-decoration: underline;
 }
 
 .dynamic-dealer-select {

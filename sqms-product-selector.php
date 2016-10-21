@@ -4,7 +4,7 @@
 	Plugin URI: https://github.com/thatryan
 	Description: Register product and handle logic for chooser
 	Author: Ryan Olson
-	Version: 1.0.12
+	Version: 1.0.13
 	Author URI: http://thatryan.com
  */
 
@@ -27,7 +27,7 @@ class Product_Selector {
 	 */
 	public $plugin_url = '';
 
-	public $plugin_version = '1.0.12';
+	public $plugin_version = '1.0.13';
 
 
 	/**
@@ -161,7 +161,6 @@ class Product_Selector {
 
 		require_once( 'includes/post-type.php' );
 		sqms_register_productselector_post_type();
-		sqms_register_productselector_tax();
 
 		flush_rewrite_rules();
 
