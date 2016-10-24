@@ -11,20 +11,24 @@ function display_dealer_entries() {
 	gravity_form_enqueue_scripts( $report_form_id, true );
 
 	$current_user = wp_get_current_user();
-	$dealer_id = get_user_meta( $current_user->ID, 'sqms-product-dealer-id', true );
+	$dealer_slug = get_user_meta( $current_user->ID, 'sqms-product-dealer-id', true );
 
-	$page_path = 'sqms_payne_dealer/' . $dealer_id;
+	$page_path = 'sqms_payne_dealer/' . $dealer_slug;
 	$dealer_page = get_page_by_path( basename( untrailingslashit( $page_path ) ), OBJECT, 'sqms_payne_dealer');
 
-	$dealer_name = get_the_title( $dealer_page->ID );
+	$dealer_id = $dealer_page->ID;
 
-	$search_criteria['field_filters'][] = array( 'key' => 'dealer', 'value' => $dealer_id );
+	$dealer_name = get_the_title( $dealer_id );
+
+	$search_criteria['field_filters'][] = array( 'key' => 'dealer', 'value' => $dealer_slug );
 	$entries         = GFAPI::get_entries( $quote_form_id, $search_criteria );
 
 	$form_params = array(
 		'ajaxurl' => admin_url( 'admin-ajax.php' ),
 		'report_form_id' => $report_form_id,
-		'dealer_id' => $dealer_name,
+		'dealer_slug' => $dealer_slug,
+		'dealer_name' => $dealer_name,
+		'dealer_id' => $dealer_id,
 		);
 
 	wp_localize_script( 'load-report-form-script', 'form_params', $form_params );
@@ -46,6 +50,7 @@ function display_dealer_entries() {
 		$quoted_system_price = get_post_meta( $product_post_id, 'sqms-product-system-price', true );
 
 		$client_name = $entry['11.3'] . ' ' . $entry['11.6'];
+		$client_email = $entry['12'];
 
 		$client_address_field = "47";
 		$client_address_street = $entry[$client_address_field . '.1'];
@@ -58,7 +63,7 @@ function display_dealer_entries() {
 
 		$reported = gform_get_meta( intval( $entry['id'] ), 'quote_reported' );
 		$lead_list .= '<tr>';
-		$lead_list .= '<td>' . $entry['id'] . '</td><td>' . $entry['date_created'] . '</td><td>' . $client_name . '</td><td>' . $client_address . '</td><td>' . $entry['56'] . '</td><td>' . ( $reported === "Yes" ? $reported : '<button id="gf_button_get_form_' . $entry['id'] . ' " class="open-report-form" data-entryid=" ' . $entry['id'] .' " data-quotecost=" ' . $quoted_system_price.' ">Report</button>'  ). '</td>';
+		$lead_list .= '<td>' . $entry['id'] . '</td><td>' . $entry['date_created'] . '</td><td>' . $client_name . '</td><td>' . $client_address . '</td><td>' . $entry['56'] . '</td><td>' . ( $reported === "Yes" ? $reported : '<button id="gf_button_get_form_' . $entry['id'] . ' " class="open-report-form" data-client_email=" ' . $client_email .'" data-entryid=" ' . $entry['id'] .' " data-quotecost=" ' . $quoted_system_price.' ">Report</button>'  ). '</td>';
 		$lead_list .= '</tr>';
 	}
 

@@ -12,6 +12,8 @@ add_filter( 'gform_pre_render_12', 'create_dynamic_orientation_dropdown' );
 // add_filter( 'gform_pre_render_12', 'build_dealer_list' );
 add_filter( 'gform_pre_render_16', 'build_dealer_list' );
 
+add_filter( 'gform_pre_render_20', 'dealer_review_id' );
+
 add_filter( 'gform_pre_render_12', 'display_choice_result' );
 
 // add_filter( 'gform_notification_12', 'get_dealer_email', 10, 3 );
@@ -645,6 +647,23 @@ function get_business($business_id) {
 	}
 
 	return $response;
+}
+
+function dealer_review_id( $form ) {
+	$dealer_id = $_GET['dealer_id'];
+	$dealer_name = get_the_title( $dealer_id );
+	$title_content = '';
+	$title_content .= '<h3>You Are Reviewing: ' . $dealer_name . '</h3>';
+
+	foreach( $form['fields'] as &$field ) {
+	    //get html field
+	    if ( $field->id == 9 ) {
+	        //set the field content to the html
+	        $field->content = $title_content;
+	    }
+	}
+
+	return $form;
 }
 
 function get_dealer_email( $notification, $form, $entry ) {
