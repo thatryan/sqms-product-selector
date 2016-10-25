@@ -49,10 +49,7 @@ function display_choice_result( $form ) {
     $prod_string = "";
 
     if ( $current_page >= 10 ) {
-    	// echo '<pre>';
-    	// print_r($_POST);
-    	// echo  '</pre>';
-    	// exit();
+
         foreach ( $form['fields'] as &$field ) {
         	if ( strpos( $field->cssClass, 'product-builder-item' ) === false ) {
         	    continue;
@@ -91,21 +88,18 @@ function display_choice_result( $form ) {
 
 	        $content_output .= '<p>Your total quote is the guaranteed price for your selected system, plus the estimated cost of installation. <a href="https://hvacinstantquote.com/resources/faqs#about-money" target="_blank" title="Factors about cost of installation">Click here for common factors that affect the cost of an installation</a>.</p>';
 	        $content_output .= '<h3>Your System Selection &amp; Quote</h3>';
-	        $content_output .= '<div class="col-wrapper">';
-	        $content_output .= '<div class="col-left">';
 	        $content_output .= '<div class="highlight-box cost-wrapper">';
-	        $content_output .= '<h3>Your HVAC System Equipment Quote: <span>' .  esc_html( $system_price ) . '</span></h3>';
-	        $content_output .= '<h3>Your HVAC System Installation Estimate: <span>$1,000.00 - $2,500.00</span></h3>';
+	        $content_output .= '<h2>Your New HVAC System Equipment Quote is <span>' .  esc_html( $system_price ) . '</span></h2>';
+	        $content_output .= '<h3>And Your Installation Estimate is Between <span>$1,000.00 - $2,500.00</span></h3>';
 	        $content_output .= '<p><small>Note: Proper Equipment Selection Will Be Verified On Installation Inspection</small></p>';
 	        $content_output .= '</div>';
-	        $content_output .= '</div>';
-	        $content_output .= '<div class="col-right">' . get_product_data( $product_post_id ) . '</div>';
-	        $content_output .= '</div>';
+	        $content_output .= get_product_data( $product_post_id );
 	        $content_output .= '<div class="financing-box">' . get_finance_options( $system_price, $warranty_price ) . '</div>';
 
-	        $content_output .= '<div class="highlight-box">';
-	        $content_output .= '<p>Once you accept this quote, you will be contacted by an HVACInstantQuote Certified professional HVAC specialist to set up a time for installation.</p>';
+	        $content_output .= '<div class="highlight-box cost-wrapper">';
+	        $content_output .= '<h2>Accept your guaranteed system quote.</h2>';
 	        $content_output .= '</div>';
+	        $content_output .= '<p>Once you accept this quote, you will be contacted by an HVACInstantQuote Certified professional HVAC specialist to set up a time for installation.</p>';
 
 	        //loop back through form fields to get html field (id 14 on my form) that we are populating with the data gathered above
 	        foreach( $form['fields'] as &$field ) {

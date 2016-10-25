@@ -83,7 +83,9 @@ class Product_Selector {
 		require_once( 'cmb2/init.php' );
 		require_once( 'includes/meta.php' );
 
+		require_once( ABSPATH . 'wp-admin/includes/template.php' );
 		require_once( 'includes/gravity-forms-functions.php' );
+		require_once( 'includes/gravity-view-functions.php' );
 		require_once( 'includes/shortcode.php' );
 
 		add_filter( 'the_content', array ( $this, 'get_custom_post_type_template' ) );
@@ -149,6 +151,7 @@ class Product_Selector {
 		wp_enqueue_style( 'vex-theme' );
 		// wp_enqueue_script('sqms-prod-select-script');
 		wp_enqueue_script('vex-script');
+		wp_enqueue_style( 'dashicons' );
 	}
 
 	/**

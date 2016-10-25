@@ -103,8 +103,12 @@
 
 .main_color .highlight-box b,
 .main_color .highlight-box p,
+.main_color .highlight-box h1,
+.main_color .highlight-box h2,
 .main_color .highlight-box h3 {
 	color: #fff;
+	text-transform: none!important;
+	margin: 0;
 }
 
 .financing-box-title {
@@ -120,11 +124,10 @@
 	margin: 0;
 }
 
-.cost-wrapper span {
+.cost-wrapper h2 span {
 	font-size: 30px;
 	line-height: 1.75;
 	display: block;
-	text-decoration: underline;
 }
 
 .dynamic-dealer-select {
@@ -156,6 +159,47 @@
 	margin: 0 auto;
 }
 
+@font-face {
+font-family: "dashicons";
+src: url("fonts/dashicons.eot");
+}
+
+@font-face {
+font-family: "dashicons";
+src: url(data:application/x-font-woff;charset=utf-8;base64,/* !! Large amount of data removed, see wp-includes/css/dashicons.css for complete data !! */) format("woff"),
+url("fonts/dashicons.ttf") format("truetype"),
+url("fonts/dashicons.svg#dashicons") format("svg");
+font-weight: normal;
+font-style: normal;
+}
+
+.star-rating .star-full:before {
+content: "\f155";
+}
+
+.star-rating .star-half:before {
+content: "\f459";
+}
+
+.star-rating .star-empty:before {
+content: "\f154";
+}
+
+.star-rating .star {
+color: #0074A2;
+display: inline-block;
+font-family: dashicons;
+font-size: 20px;
+font-style: normal;
+font-weight: 400;
+height: 20px;
+line-height: 1;
+text-align: center;
+text-decoration: inherit;
+vertical-align: top;
+width: 20px;
+}
+
 @media only screen and (min-width: 768px) {
 	.col-wrapper {
 		margin: 18px 0;
@@ -171,4 +215,33 @@
 		width: 49%;
 		float: right;
 	}
+}
+
+/* Text meant only for screen readers. */
+.screen-reader-text {
+	clip: rect(1px, 1px, 1px, 1px);
+	position: absolute !important;
+	height: 1px;
+	width: 1px;
+	overflow: hidden;
+}
+
+.screen-reader-text:focus {
+	background-color: #f1f1f1;
+	border-radius: 3px;
+	box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.6);
+	clip: auto !important;
+	color: #21759b;
+	display: block;
+	font-size: 14px;
+	font-size: 0.875rem;
+	font-weight: bold;
+	height: auto;
+	left: 5px;
+	line-height: normal;
+	padding: 15px 23px 14px;
+	text-decoration: none;
+	top: 5px;
+	width: auto;
+	z-index: 100000; /* Above WP toolbar. */
 }
