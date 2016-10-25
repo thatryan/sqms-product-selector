@@ -1,5 +1,10 @@
 <?php
 
+// https://www.gravityhelp.com/documentation/article/gform_after_submission/
+// Refer to link above to work out new funciton method of finding dealers
+// after the forms have been submitted
+// TODO: do this for photo form as well.
+
 // add_filter( 'gform_confirmation_anchor', '__return_false' );
 add_filter( 'gform_confirmation_anchor_12', function() {
     return 0;

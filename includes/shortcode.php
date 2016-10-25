@@ -1,5 +1,9 @@
 <?php
 
+// https://www.gravityhelp.com/documentation/article/using-dynamic-population/
+// Above link for parameters on dynamic population
+// used for sending data from lead list to form for auto notification to get review
+
 add_action( 'wp_ajax_nopriv_gf_button_get_form', 'gf_button_ajax_get_form' );
 add_action( 'wp_ajax_gf_button_get_form', 'gf_button_ajax_get_form' );
 
