@@ -90,3 +90,39 @@ function gf_button_ajax_get_form(){
 
 	die();
 }
+
+
+function display_dealer_reviews_register_shortcode() {
+	add_shortcode( 'dealer-reviews', 'display_dealer_reviews' );
+}
+add_action( 'init', 'display_dealer_reviews_register_shortcode' );
+
+function display_dealer_reviews() {
+	$dealer_id = get_the_ID();
+	$review_form_id = 20;
+	$ratings = array();
+
+	$search_criteria['field_filters'][] = array( 'key' => '3', 'value' => $dealer_id );
+	$entries         = GFAPI::get_entries( $review_form_id, $search_criteria );
+
+
+	foreach ($entries as $entry ) {
+
+		$ratings[] = $entry['1'];
+	}
+
+	$ratings_total = count($ratings);
+	$average = array_sum($ratings) / $ratings_total;
+	$rating_average = round($average, 1, PHP_ROUND_HALF_ODD);
+	$args = array(
+	   'rating' => $rating_average,
+	   'type' => 'rating',
+	   'number' => $ratings_total,
+	   'echo' => false,
+	);
+
+	$rating_stars = wp_star_rating($args);
+
+
+	return $rating_stars;
+}

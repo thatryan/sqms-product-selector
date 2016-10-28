@@ -86,6 +86,7 @@ class Product_Selector {
 		require_once( ABSPATH . 'wp-admin/includes/template.php' );
 		require_once( 'includes/gravity-forms-functions.php' );
 		require_once( 'includes/gravity-view-functions.php' );
+		// require_once( 'includes/capabilities.php' );
 		require_once( 'includes/shortcode.php' );
 
 		add_filter( 'the_content', array ( $this, 'get_custom_post_type_template' ) );
@@ -116,8 +117,8 @@ class Product_Selector {
 			//check for dealers
 			if ( in_array( 'subscriber', $user->roles ) ) {
 				// redirect them to the dealer leads list
-				// return get_permalink( 138 ); LIVE SITE
-				return get_permalink( 899 ); // LOCAL SITE
+				return get_permalink( 138 ); LIVE SITE
+				// return get_permalink( 899 ); // LOCAL SITE
 			} else {
 				return $redirect_to;
 			}
