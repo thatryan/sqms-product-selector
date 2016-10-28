@@ -117,7 +117,7 @@ class Product_Selector {
 			//check for dealers
 			if ( in_array( 'subscriber', $user->roles ) ) {
 				// redirect them to the dealer leads list
-				return get_permalink( 138 ); LIVE SITE
+				return get_permalink( 138 ); //LIVE SITE
 				// return get_permalink( 899 ); // LOCAL SITE
 			} else {
 				return $redirect_to;
