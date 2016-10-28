@@ -104,7 +104,7 @@ function sqms_register_payne_dealer() {
 		'label'                 => __( 'Payne Dealer', 'sqms-prod-selector' ),
 		'description'           => __( 'Post Type Description', 'sqms-prod-selector' ),
 		'labels'                => $labels,
-		'supports'              => array( 'title', 'editor', 'thumbnail', 'page-attributes', 'comments' ),
+		'supports'              => array( 'title', 'editor', 'thumbnail', 'page-attributes' ),
 		'hierarchical'          => false,
 		'public'                => true,
 		'show_ui'               => true,
