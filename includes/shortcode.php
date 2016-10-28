@@ -98,6 +98,7 @@ function display_dealer_reviews_register_shortcode() {
 add_action( 'init', 'display_dealer_reviews_register_shortcode' );
 
 function display_dealer_reviews() {
+
 	$dealer_id = get_the_ID();
 	$review_form_id = 20;
 	$ratings = array();
@@ -125,4 +126,13 @@ function display_dealer_reviews() {
 
 
 	return $rating_stars;
+}
+
+add_filter( 'gform_replace_merge_tags', 'gv_grab_post_id',10, 7 );
+function gv_grab_post_id ( $text, $form, $entry, $url_encode, $esc_html, $nl2br, $format ) {
+    $merge_tag = '{current_post_id}';
+    if ( strpos( $text, $merge_tag ) === false ) {
+        return $text;
+    }
+    return get_the_ID();
 }

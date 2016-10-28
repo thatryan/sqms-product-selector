@@ -1,29 +1,28 @@
 <?php
-add_filter( 'map_meta_cap', 'dealer_add_notes', 10, 4 );
+add_filter( 'user_has_cap', 'jt_user_has_cap_filter', 10, 4 );
 
-function dealer_add_notes( $caps, $cap, $user_id, $args ) {
+function jt_user_has_cap_filter( $allcaps, $caps, $args, $user ) {
 
-	// This is meta from a dropdown of CPT that is added to user profield via CMB2
-	$dealer_slug = get_user_meta( $user_id, 'sqms-product-dealer-id', true );
+    if ( ! is_page() )
+        return $allcaps;
 
-	// This is the only (ugly ass) way I found to get the CPT ID via the page slug
-	$page_path = 'sqms_payne_dealer/' . $dealer_slug;
-	$dealer_page = get_page_by_path( basename( untrailingslashit( $page_path ) ), OBJECT, 'sqms_payne_dealer');
-	$dealer_page_id = $dealer_page->ID;
+    // This is meta from a dropdown of CPT that is added to user profield via CMB2
+    $dealer_slug = get_user_meta( $user_id, 'sqms-product-dealer-id', true );
 
-	// Need to get ID of current page to see if it matches the ID of the CPT grabbed above
-	$current_page_id = get_queried_object_id();
+    if ( ! is_singular( 'sqms_payne_dealer' ) ) {
 
-	$needed_caps = array( 'gravityforms_view_entry_notes', 'gravityview_add_entry_notes', 'gravityview_view_entry_notes', 'gravityforms_edit_entry_notes' );
+        // This is the only (ugly ass) way I found to get the CPT ID via the page slug
+        $page_path = 'sqms_payne_dealer/' . $dealer_slug;
+        $dealer_page = get_page_by_path( basename( untrailingslashit( $page_path ) ), OBJECT, 'sqms_payne_dealer');
 
-	if( $dealer_page_id == $current_page_id ) {
-		$new_caps = array();
+        if ( $dealer_page->ID === get_queried_object_id() ) {
 
-		foreach ($needed_caps as $new_cap) {
-			$new_caps[] = $new_cap;
-		}
-	}
+            $needed_caps = array( 'gravityforms_view_entry_notes', 'gravityview_add_entry_notes', 'gravityview_view_entry_notes', 'gravityforms_edit_entry_notes' );
 
-	return $caps;
+            foreach ( $needed_caps as $cap )
+                $allcaps[ $cap ] = true;
+        }
+    }
 
+    return $allcaps;
 }
