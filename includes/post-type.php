@@ -3,6 +3,7 @@
 add_action( 'init', 'sqms_register_productselector_post_type', 0 );
 add_action( 'init', 'sqms_register_payne_dealer', 0 );
 add_filter('avf_builder_boxes', 'add_builder_to_posttype');
+add_filter('avia_post_nav_entries','no_post_nav');
 
 // Register Products Post Type
 function sqms_register_productselector_post_type() {
@@ -136,3 +137,9 @@ function add_builder_to_posttype($metabox)
 
 	return $metabox;
 }
+
+  function no_post_nav($entries)
+  {
+      if(get_post_type() == 'sqms_payne_dealer') $entries = array();
+      return $entries;
+  }
