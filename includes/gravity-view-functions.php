@@ -22,3 +22,11 @@ function get_stars( $output, $entry, $field_settings, $current_field ) {
 	return $rating_stars;
 
 }
+
+add_filter( 'gravitview_no_entries_text', 'gv_no_dealers', 10, 4 );
+
+function gv_no_dealers( $output, $is_search ) {
+	$dealer_id = get_the_ID();
+
+	return 'No reviews yet! Would you like to <a href="http://payne.dev/submit-dealer-review/?dealer_id='.$dealer_id.'" target="_blank">leave a review</a> for this dealer?';
+}
