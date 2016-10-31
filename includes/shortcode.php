@@ -106,6 +106,10 @@ function display_dealer_reviews() {
 	$search_criteria['field_filters'][] = array( 'key' => '3', 'value' => $dealer_id );
 	$entries         = GFAPI::get_entries( $review_form_id, $search_criteria );
 
+	if( empty( $entries ) ) {
+		return;
+	}
+
 
 	foreach ($entries as $entry ) {
 
