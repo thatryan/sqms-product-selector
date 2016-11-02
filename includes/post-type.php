@@ -2,7 +2,7 @@
 
 add_action( 'init', 'sqms_register_productselector_post_type', 0 );
 add_action( 'init', 'sqms_register_payne_dealer', 0 );
-add_action( 'init', 'sqms_register_dealer_zip', 0 );
+// add_action( 'init', 'sqms_register_dealer_zip', 0 );
 add_action( 'init', 'sqms_register_dealer_zone', 0 );
 add_filter('avf_builder_boxes', 'add_builder_to_posttype');
 add_filter('avia_post_nav_entries','no_post_nav');
