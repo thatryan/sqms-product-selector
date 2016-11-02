@@ -201,7 +201,7 @@ function sqms_register_dealer_zone() {
 	$rewrite = array(
 		'slug'                       => 'zone',
 		'with_front'                 => false,
-		'hierarchical'               => false,
+		'hierarchical'               => true,
 	);
 	$args = array(
 		'labels'                     => $labels,
