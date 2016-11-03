@@ -30,6 +30,8 @@ add_filter('gform_pre_render_15', 'add_readonly_script');
 
 add_filter( 'gform_replace_merge_tags', 'replace_dealer_notification', 10, 7 );
 
+add_action( 'gform_pre_submission_12', 'choose_new_dealer' );
+
 add_action( 'gform_after_submission_15', 'update_report_entry_meta', 10, 2 );
 
 function add_readonly_script($form){
@@ -601,6 +603,37 @@ function build_user_location_string( $field ) {
 	return $location_string;
 }
 
+function choose_new_dealer( $form ) {
+	$zone = '';
+	$address_field = '47_5';
+	$client_zip_code = $_POST['input_'.$address_field];
+
+	$term = get_term_by( 'slug', $client_zip_code, 'zone' );
+	$parent = get_term_by( 'id', $term->parent, 'zone' );
+	if( $parent ) {
+		$zone = $parent->slug;
+	}
+
+	$args = array(
+	    'post_type' => 'sqms_payne_dealer',
+	                'posts_per_page' => 1,
+	                'orderby'        => 'rand',
+	    'tax_query' => array(
+	        array(
+	            'taxonomy' => 'zone',
+	            'field'    => 'slug',
+	            'terms'    =>  $zone,
+	        ),
+	    ),
+	);
+
+	// the query
+	$dealer_array = get_posts( $args );
+
+	$_POST['input_69'] = $dealer_array[0]->ID;
+
+}
+
 function build_dealer_yelp_output( $yelp_id ) {
 
 	$output = '';
@@ -670,7 +703,7 @@ function get_dealer_email( $notification, $form, $entry ) {
 	if ( $notification['name'] == 'Admin Notification' ) {
 
 		if( $form['id'] == 12 ) {
-			$dealer_id = rgpost( 'input_55'  );
+			$dealer_id = rgpost( 'input_69'  );
 		}
 		elseif( $form['id'] == 16 ){
 			$dealer_id = rgpost( 'input_15'  );
@@ -691,7 +724,7 @@ function get_dealer_email( $notification, $form, $entry ) {
 
 function get_dealer_name( $entry ) {
 
-	$dealer_id = rgar( $entry, '55' );
+	$dealer_id = rgar( $entry, '69' );
 	$dealer_name = get_the_title( $dealer_id );
 
 	return $dealer_name;
@@ -712,7 +745,7 @@ function add_meta_to_entry($entry_meta, $form_id){
 function update_dealer_entry_meta( $key, $lead, $form ){
 
 	if( $form['id'] == 12 ) {
-		$dealer_id = rgpost( 'input_55'  );
+		$dealer_id = rgpost( 'input_69'  );
 	}
 	elseif( $form['id'] == 16 ){
 		$dealer_id = rgpost( 'input_15'  );

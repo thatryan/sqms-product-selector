@@ -172,6 +172,9 @@ url("fonts/dashicons.svg#dashicons") format("svg");
 font-weight: normal;
 font-style: normal;
 }
+tr.gv-notes-no-notes { display: none!important; }
+#top .gv-no-notes form,
+.gv-notes.gv-no-notes {margin: 0;}
 
 .star-rating .star-full:before {
 content: "\f155";
