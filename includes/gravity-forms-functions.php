@@ -345,6 +345,7 @@ function choose_new_dealer( $form ) {
 	$zone = '';
 	$address_field = '';
 	$dealer_id_field = '';
+	$dealer_view_count_key = 'sqms_dealer_view_count';
 
 	if( $form['id'] == 12 ) {
 		$address_field = '47_5';
@@ -379,10 +380,14 @@ function choose_new_dealer( $form ) {
 	    ),
 	);
 
-	// the query
 	$dealer_array = get_posts( $args );
+	$selected_dealer_id = $dealer_array[0]->ID;
 
-	$_POST[$dealer_id_field] = $dealer_array[0]->ID;
+	$dealer_count = absint( get_post_meta( $selected_dealer_id, $dealer_view_count_key, true ) );
+	$dealer_count++;
+	update_post_meta( $selected_dealer_id, $dealer_view_count_key, $dealer_count );
+
+	$_POST[$dealer_id_field] = $selected_dealer_id;
 
 }
 

@@ -78,14 +78,28 @@ function sqms_prodcut_selector_meta() {
 	) );
 
 	$sqms_dealer_meta->add_field( array(
-		'name'        => 'Dealer Views',
-		'description' => 'The number of times this dealer has been shown on front end',
+		'name'        => 'Dealer Selections',
+		'description' => 'The number of times this dealer has selected',
 		'id'          => 'sqms_dealer_view_count',
 		'type'        => 'text_number',
 		'default'   => 0,
+		'column' => array(
+		    'position' => 3,
+		),
 		'attributes'  => array(
 			'readonly' => 'readonly',
 			'disabled' => 'disabled',
+		),
+	) );
+
+	$sqms_dealer_meta->add_field( array(
+		'name'        => 'Dealer Weight',
+		'description' => 'The selection multiplier for this dealer',
+		'id'          => 'sqms_dealer_weight',
+		'type'        => 'text_number',
+		'default'   => 1,
+		'column' => array(
+		    'position' => 4,
 		),
 	) );
 
