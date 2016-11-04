@@ -1,10 +1,5 @@
 <?php
 
-// https://www.gravityhelp.com/documentation/article/gform_after_submission/
-// Refer to link above to work out new funciton method of finding dealers
-// after the forms have been submitted
-// TODO: do this for photo form as well.
-
 // add_filter( 'gform_confirmation_anchor', '__return_false' );
 add_filter( 'gform_confirmation_anchor_12', function() {
     return 0;
@@ -13,9 +8,6 @@ add_filter( 'gform_confirmation_anchor_12', function() {
 add_filter( 'gform_pre_render_12', 'create_dynamic_seer_dropdown' );
 add_filter( 'gform_pre_render_12', 'create_dynamic_eff_dropdown' );
 add_filter( 'gform_pre_render_12', 'create_dynamic_orientation_dropdown' );
-
-// add_filter( 'gform_pre_render_12', 'build_dealer_list' );
-// add_filter( 'gform_pre_render_16', 'build_dealer_list' );
 
 add_filter( 'gform_pre_render_20', 'dealer_review_id' );
 
@@ -206,246 +198,6 @@ DISCLAIMERS;
 return $disclaimer_html;
 }
 
-
-function build_dealer_list( $form ) {
-	$current_page = GFFormDisplay::get_current_page( $form['id'] );
-
-	if( $form['id'] == 12 ) {
-		if ( $current_page == 10 ) {
-
-			// require_once('OAuth.php');
-			// include_once 'yelp-functions.php';
-
-			foreach ( $form['fields'] as &$field ) {
-				// This is the customer address field
-				if ( $field->id == 47  ) {
-					$user_location = build_user_location_string( $field );
-				}
-			} //end foreach fields loop
-
-			    $posts = get_posts( 'post_type=sqms_payne_dealer&numberposts=-1' );
-			    $dealers_count = 0;
-			    $dealers_in_range = array();
-			    $i = 0;
-			    $range = 20;
-			    $max_range = 50;
-			    while ( $i < count($posts) ) {
-			    	$post = $posts[$i];
-			    	$post_id = $post->ID;
-
-			    	$map = get_post_meta( $post_id, 'sqms-product-location', true );
-
-			    	$lat = $map['latitude'];
-			    	$long = $map['longitude'];
-
-			    	$distance_string_call = 'https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins='.$user_location.'&destinations='. $lat . ',' . $long.'&key='.GMAP_API_KEY;
-
-			    	$distance_data = wp_remote_get( $distance_string_call );
-
-			    	$response = json_decode( $distance_data['body'] );
-
-			    	$dealer_distance_from_customer = $response->rows[0]->elements[0]->distance->value;
-
-			    	$distance_miles = $dealer_distance_from_customer *  0.000621371192;
-
-			    	if ( $distance_miles <= $range ) {
-			    		$dealers_in_range[] = $post_id;
-			    	}
-
-			    	// increment our index
-			    	$i++;
-
-			    	// If we're on the last post, look to see if we've found any dealers yet
-			    	if ( $i == count($posts) && empty( $dealers_in_range ) ) {
-
-			    		if( $range == $max_range ) break;
-			    		// Reset our index
-			    		$i = 0;
-
-			    		// Increase the range
-			    		$range += 10; // or whatever distance you want to increase by
-			    	}
-			    }
-
-
-			$dealers_count = sizeof( $dealers_in_range );
-
-			// Tell the hidden field that is used for conditional logic check to hold the number that is the size of array built. Should be 0 if no dealers
-			foreach( $form['fields'] as &$field ) {
-				if ( $field->id != 60 ) {
-				    continue;
-				}
-				$field->defaultValue = $dealers_count;
-			}
-
-			// No dealers found, get out now
-			if( !$dealers_count ) {
-				return $form;
-			}
-
-			if( $dealers_count > 3 ) {
-				shuffle( $dealers_in_range );
-				$dealers_in_range_trimmed = array_slice( $dealers_in_range, 0, 3 );
-				$dealers_in_range = $dealers_in_range_trimmed;
-			}
-
-			// This is the select dealer field of radio buttons, placeholder for this dynamic update
-			foreach( $form['fields'] as &$field ) {
-				if ( $field->id != 55 ) {
-				    continue;
-				}
-				$field->choices = get_dealer_list_data( $dealers_in_range );
-			}
-
-		} // end page 10 check
-	}
-
-	elseif( $form['id'] == 16 ){
-
-		if ( $current_page == 2 ) {
-
-			// require_once('OAuth.php');
-			// include_once 'yelp-functions.php';
-
-			foreach ( $form['fields'] as &$field ) {
-				// This is the customer address field
-				if ( $field->id == 12  ) {
-					$user_location = build_user_location_string( $field );
-				}
-			} //end foreach fields loop
-
-			    $posts = get_posts( 'post_type=sqms_payne_dealer&numberposts=-1' );
-			    $dealers_count = 0;
-			    $dealers_in_range = array();
-			    $i = 0;
-			    $range = 20;
-			    $max_range = 50;
-			    while ( $i < count($posts) ) {
-			    	$post = $posts[$i];
-			    	$post_id = $post->ID;
-
-			    	$map = get_post_meta( $post_id, 'sqms-product-location', true );
-
-			    	$lat = $map['latitude'];
-			    	$long = $map['longitude'];
-
-			    	$distance_string_call = 'https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins='.$user_location.'&destinations='. $lat . ',' . $long.'&key='.GMAP_API_KEY;
-
-			    	$distance_data = wp_remote_get( $distance_string_call );
-
-			    	$response = json_decode( $distance_data['body'] );
-
-			    	$dealer_distance_from_customer = $response->rows[0]->elements[0]->distance->value;
-
-			    	$distance_miles = $dealer_distance_from_customer *  0.000621371192;
-
-			    	if ( $distance_miles <= $range ) {
-			    		$dealers_in_range[] = $post_id;
-			    	}
-
-			    	// increment our index
-			    	$i++;
-
-			    	// If we're on the last post, look to see if we've found any dealers yet
-			    	if ( $i == count($posts) && empty( $dealers_in_range ) ) {
-
-			    		if( $range == $max_range ) break;
-			    		// Reset our index
-			    		$i = 0;
-
-			    		// Increase the range
-			    		$range += 10; // or whatever distance you want to increase by
-			    	}
-			    }
-
-
-			$dealers_count = sizeof( $dealers_in_range );
-
-			// Tell the hidden field that is used for conditional logic check to hold the number that is the size of array built. Should be 0 if no dealers
-			foreach( $form['fields'] as &$field ) {
-				if ( $field->id != 16 ) {
-				    continue;
-				}
-				$field->defaultValue = $dealers_count;
-			}
-
-			// No dealers found, get out now
-			if( !$dealers_count ) {
-				return $form;
-			}
-
-			if( $dealers_count > 3 ) {
-				shuffle( $dealers_in_range );
-				$dealers_in_range_trimmed = array_slice( $dealers_in_range, 0, 3 );
-				$dealers_in_range = $dealers_in_range_trimmed;
-			}
-
-			// This is the select dealer field of radio buttons, placeholder for this dynamic update
-			foreach( $form['fields'] as &$field ) {
-				if ( $field->id != 15 ) {
-				    continue;
-				}
-				$field->choices = get_dealer_list_data( $dealers_in_range );
-			}
-
-		} // end page 2 check
-	}
-	else {
-		return $form;
-	}
-
-
-	return $form;
-}
-
-function get_dealer_list_data( $dealers_in_range ) {
-
-	$dealers = array();
-	$dealer_view_count_key = 'sqms_dealer_view_count';
-
-	foreach ($dealers_in_range as $dealer_id ) {
-
-		$dealer_count = absint( get_post_meta( $dealer_id, $dealer_view_count_key, true ) );
-		$dealer_count++;
-		update_post_meta( $dealer_id, $dealer_view_count_key, $dealer_count );
-
-		$thumb = get_the_post_thumbnail( $dealer_id );
-		$dealer_name = get_the_title( $dealer_id );
-		$dealer_link = get_permalink($dealer_id);
-		$yelp_id = get_post_meta( $dealer_id, 'sqms-product-yelp', true );
-		$phone = get_post_meta( $dealer_id, 'sqms-product-phone', true );
-		$address = get_post_meta( $dealer_id, 'sqms-product-address', 1 );
-		$address = wp_parse_args( $address, array(
-		    'address-1' => '',
-		    'address-2' => '',
-		    'city'      => '',
-		    'state'     => '',
-		    'zip'       => '',
-		) );
-		$map = get_post_meta( $dealer_id, 'sqms-product-location', true );
-		$lat = $map['latitude'];
-		$long = $map['longitude'];
-
-		$display = '<span class="product-choice-title">' . $dealer_name . '</span>';
-		$display .= $thumb;
-		// $display .= '<a href="'.$dealer_link.'" target="_blank">Learn More About This Dealer</a>';
-		$display .= '<p class="dealer-phone">' . $phone . '</p><p class="dealer-address">';
-		$display .= esc_html( $address['address-1'] );
-		if( $address['address-2'] ) {
-			$display .= ', ' . esc_html( $address['address-2'] );
-		}
-		$display .= '<br>' . esc_html( $address['city'] );
-		$display .= ' ' . esc_html( $address['state'] );
-		$display .= ', ' . esc_html( $address['zip'] );
-		$display .= '</p><img src="//maps.googleapis.com/maps/api/staticmap?center=' . $lat . ',' . $long . '&size=400x220&markers=' . $lat . ',' . $long  . '&key=' . GMAP_API_KEY . ' " class="dealer-map" />';
-		// $display .= build_dealer_yelp_output( $yelp_id );
-
-		$dealers[] = array( 'text' => $display, 'value' => $dealer_id );
-	}
-
-	return $dealers;
-}
-
 function create_dynamic_seer_dropdown( $form ) {
 
 	$current_page = GFFormDisplay::get_current_page( $form['id'] );
@@ -587,22 +339,6 @@ function create_dynamic_orientation_dropdown( $form ) {
 
     return $form;
 }
-function build_user_location_string( $field ) {
-
-	foreach ( $field->inputs as $input ) {
-	    $input_name = 'input_' . str_replace( '.', '_', $input['id'] );
-	    $value = rgpost( $input_name );
-	    if( $value ) {
-	    	$address_string .= $value . ' ';
-	    }
-	}
-
-	$address_clean = rtrim( $address_string );
-
-	$location_string = urlencode($address_clean);
-
-	return $location_string;
-}
 
 function choose_new_dealer( $form ) {
 
@@ -648,53 +384,6 @@ function choose_new_dealer( $form ) {
 
 	$_POST[$dealer_id_field] = $dealer_array[0]->ID;
 
-}
-
-function build_dealer_yelp_output( $yelp_id ) {
-
-	$output = '';
-
-	if( $yelp_id  == '' ) {
-		return $output;
-	}
-
-	$yelp_data = get_business( $yelp_id );
-
-	$output .= '	<br /><img class="rating" src=" ' . esc_attr( $yelp_data->rating_img_url ) . ' " alt=" ' . esc_attr( $yelp_data->name ) .  ' " title="' . esc_attr( $yelp_data->name )  . '" /><br />';
-
-	$output .= '<a class="yelp-branding" href=" ' . esc_attr( $yelp_data->url ) . ' " target="_blank"><img src=" ' . SQMS_PROD_SEL_URL . '/assets/img/yelp.png' . ' " alt="Powered by Yelp" /></a>';
-
-	return $output;
-}
-
-
-function get_business($business_id) {
-
-	$token = new OAuthToken( YELP_TOKEN, YELP_TOKEN_SECRET );
-
-	$consumer = new OAuthConsumer( YELP_CONSUMER_KEY, YELP_CONSUMER_SECRET );
-
-	$signature_method = new OAuthSignatureMethod_HMAC_SHA1();
-
-	$unsigned_url = YELP_UNSIGNED_URL . $business_id;
-
-	$oauthrequest = OAuthRequest::from_consumer_and_token( $consumer, $token, 'GET', $unsigned_url );
-
-	$oauthrequest->sign_request( $signature_method, $consumer, $token );
-
-	$signed_url = $oauthrequest->to_url();
-
-	$transient = 'yelp_response_id_' . $business_id;
-
-	if ( ( $response = get_transient( $transient ) ) == false ) {
-		$expiration = 60 * 60 * 24;
-
-		// Cache data wasn't there, so regenerate the data and save the transient
-		$response = yelp_curl( $signed_url );
-		set_transient( $transient, $response, $expiration );
-	}
-
-	return $response;
 }
 
 function dealer_review_id( $form ) {
@@ -806,12 +495,12 @@ function replace_dealer_notification( $text, $form, $entry, $url_encode, $esc_ht
     }
     $formatted_address_value = $formatted_street . '<br>' . $city_value . ', ' . $state_value . ' ' . $zip_value;
 
-// accessories data
-$accessory_string       = '';
+	// accessories data
+	$accessory_string       = '';
 
-foreach($form_data['field']['57.Are you interested in any accessories?'] as $acc_val){
-    $accessory_string .= $acc_val . '<br>';
-}
+	foreach($form_data['field']['57.Are you interested in any accessories?'] as $acc_val){
+	    $accessory_string .= $acc_val . '<br>';
+	}
 
     include 'template/template-merge-tag.php';
 
