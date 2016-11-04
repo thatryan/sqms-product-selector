@@ -15,13 +15,13 @@ add_filter( 'gform_pre_render_12', 'create_dynamic_eff_dropdown' );
 add_filter( 'gform_pre_render_12', 'create_dynamic_orientation_dropdown' );
 
 // add_filter( 'gform_pre_render_12', 'build_dealer_list' );
-add_filter( 'gform_pre_render_16', 'build_dealer_list' );
+// add_filter( 'gform_pre_render_16', 'build_dealer_list' );
 
 add_filter( 'gform_pre_render_20', 'dealer_review_id' );
 
 add_filter( 'gform_pre_render_12', 'display_choice_result' );
 
-// add_filter( 'gform_notification_12', 'get_dealer_email', 10, 3 );
+add_filter( 'gform_notification_12', 'get_dealer_email', 10, 3 );
 add_filter( 'gform_notification_16', 'get_dealer_email', 10, 3 );
 
 // add_filter( 'gform_entry_meta', 'add_meta_to_entry', 10, 2);
@@ -31,6 +31,7 @@ add_filter('gform_pre_render_15', 'add_readonly_script');
 add_filter( 'gform_replace_merge_tags', 'replace_dealer_notification', 10, 7 );
 
 add_action( 'gform_pre_submission_12', 'choose_new_dealer' );
+add_action( 'gform_pre_submission_16', 'choose_new_dealer' );
 
 add_action( 'gform_after_submission_15', 'update_report_entry_meta', 10, 2 );
 
@@ -604,12 +605,27 @@ function build_user_location_string( $field ) {
 }
 
 function choose_new_dealer( $form ) {
-	$zone = '';
-	$address_field = '47_5';
-	$client_zip_code = $_POST['input_'.$address_field];
 
+	$zone = '';
+	$address_field = '';
+	$dealer_id_field = '';
+
+	if( $form['id'] == 12 ) {
+		$address_field = '47_5';
+		$dealer_id_field = 'input_69';
+	}
+	elseif( $form['id'] == 16 ) {
+		$address_field = '12_5';
+		$dealer_id_field = 'input_18';
+	}
+	else {
+		return;
+	}
+
+	$client_zip_code = $_POST['input_'.$address_field];
 	$term = get_term_by( 'slug', $client_zip_code, 'zone' );
 	$parent = get_term_by( 'id', $term->parent, 'zone' );
+
 	if( $parent ) {
 		$zone = $parent->slug;
 	}
@@ -630,7 +646,7 @@ function choose_new_dealer( $form ) {
 	// the query
 	$dealer_array = get_posts( $args );
 
-	$_POST['input_69'] = $dealer_array[0]->ID;
+	$_POST[$dealer_id_field] = $dealer_array[0]->ID;
 
 }
 
@@ -706,7 +722,7 @@ function get_dealer_email( $notification, $form, $entry ) {
 			$dealer_id = rgpost( 'input_69'  );
 		}
 		elseif( $form['id'] == 16 ){
-			$dealer_id = rgpost( 'input_15'  );
+			$dealer_id = rgpost( 'input_18'  );
 		}
 		else {
 			return $notification;
@@ -748,7 +764,7 @@ function update_dealer_entry_meta( $key, $lead, $form ){
 		$dealer_id = rgpost( 'input_69'  );
 	}
 	elseif( $form['id'] == 16 ){
-		$dealer_id = rgpost( 'input_15'  );
+		$dealer_id = rgpost( 'input_18'  );
 	}
 	else {
 		return '';
