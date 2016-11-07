@@ -71,40 +71,18 @@ class Product_Selector {
 		define( 'SQMS_PROD_SEL_PATH', WP_PLUGIN_DIR . '/' . SQMS_PLUGIN_NAME );
 		define( 'SQMS_PROD_SEL_URL', WP_PLUGIN_URL . '/' . SQMS_PLUGIN_NAME );
 
-		define('YELP_CONSUMER_KEY', 'VIPD3IeOb4UFDyVZ5Ya7sg');
-		define('YELP_CONSUMER_SECRET', 'J1VBNuDIyyW55i7MbvAbs_Q0X3E');
-		define('YELP_TOKEN', 'Uf2eTzI4L4pl6vmQQD2xBMAIUex-UhC6');
-		define('YELP_TOKEN_SECRET', 'uwcT8oNwrpsL47XWNcmsZCsQvaA');
-		define('YELP_UNSIGNED_URL', "http://api.yelp.com/v2/business/");
-		define('GMAP_API_KEY', "AIzaSyCf10fd47UiQeQNY1joeeFKdTgT2FOXNiY");
-
 		require_once( 'includes/post-type.php' );
-
 		require_once( 'cmb2/init.php' );
 		require_once( 'includes/meta.php' );
-
 		require_once( ABSPATH . 'wp-admin/includes/template.php' );
 		require_once( 'includes/gravity-forms-functions.php' );
 		require_once( 'includes/gravity-view-functions.php' );
 		require_once( 'includes/capabilities.php' );
 		require_once( 'includes/shortcode.php' );
 
-		add_filter( 'the_content', array ( $this, 'get_custom_post_type_template' ) );
-
 		add_filter( 'login_redirect', array( $this, 'dealer_login_redirect' ), 10, 3 );
 
 	}
-
-
-	public function get_custom_post_type_template($content) {
-
-		     if( is_singular( 'sqms_prod_select' ) && is_main_query() ) {
-		     	$single_template = dirname( __FILE__ ) . '/includes/cpt-template.php';
-		     		$content = include $single_template;
-		     	}
-		     	return $content;
-	}
-
 
 	public function dealer_login_redirect( $redirect_to, $request, $user  ) {
 
