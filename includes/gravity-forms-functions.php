@@ -25,7 +25,33 @@ add_filter( 'gform_replace_merge_tags', 'replace_dealer_notification', 10, 7 );
 add_action( 'gform_pre_submission_12', 'choose_new_dealer' );
 add_action( 'gform_pre_submission_16', 'choose_new_dealer' );
 
+add_filter( 'gform_confirmation', 'custom_confirmation', 10, 4 );
+
 add_action( 'gform_after_submission_15', 'update_report_entry_meta', 10, 2 );
+
+function custom_confirmation( $confirmation, $form, $entry, $ajax ) {
+
+	if( $form['id'] == 12 ) {
+		$dealer_id = $entry['69'];
+	}
+	elseif( $form['id'] == 16 ) {
+		$dealer_id = $entry['18'];
+	}
+	else {
+		return $confirmation;
+	}
+
+	$confirmation = '';
+	$dealer_name = get_the_title( $dealer_id );
+	$dealer_link =  get_permalink( $dealer_id );
+
+	$confirmation .= '<h4>Thank you!</h4><p>Your certfied Payne dealer, <a href=" ' . $dealer_link . ' " target="_blank">' . $dealer_name . '</a>, will be in contact to schedule your home visit within 24 hours.</p><p>A copy of your quote information has been emailed to you. You may also download a PDF copy below.</p>';
+
+	$confirmation .= do_shortcode( '[gravitypdf name="Client Copy" id="57a03bc2e0cc7" entry='.$entry['id'].' text="Download PDF"]' );
+
+    return $confirmation;
+}
+
 
 function add_readonly_script($form){
 	if( !$_POST ) : ?>
