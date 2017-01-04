@@ -5,8 +5,8 @@ add_filter( 'gform_confirmation_anchor_12', function() {
     return 0;
 } );
 
-add_filter( 'gform_pre_render_12', 'create_dynamic_seer_dropdown' );
-add_filter( 'gform_pre_render_12', 'create_dynamic_eff_dropdown' );
+// add_filter( 'gform_pre_render_12', 'create_dynamic_seer_dropdown' );
+// add_filter( 'gform_pre_render_12', 'create_dynamic_eff_dropdown' );
 add_filter( 'gform_pre_render_12', 'create_dynamic_orientation_dropdown' );
 
 add_filter( 'gform_pre_render_20', 'dealer_review_id' );
@@ -74,7 +74,7 @@ function display_choice_result( $form ) {
     $html_content = "";
     $prod_string = "";
 
-    if ( $current_page >= 9 ) {
+    if ( $current_page >= 7 ) {
 
         foreach ( $form['fields'] as &$field ) {
         	if ( strpos( $field->cssClass, 'product-builder-item' ) === false ) {
@@ -335,7 +335,7 @@ function create_dynamic_orientation_dropdown( $form ) {
 
 	$current_page = GFFormDisplay::get_current_page( $form['id'] );
 
-	if ( $current_page >= 7 ) {
+	if ( $current_page >= 6 ) {
 
 		include 'data/data-orientation.php';
 
