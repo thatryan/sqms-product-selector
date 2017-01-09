@@ -118,6 +118,7 @@
 .cost-wrapper {
 	text-align: center;
 	padding: 36px 12px;
+	margin-bottom: 48px;
 }
 
 .cost-wrapper p{
@@ -125,9 +126,23 @@
 }
 
 .cost-wrapper h2 span {
-	font-size: 30px;
-	line-height: 1.75;
+	font-size: 34px;
+	line-height: 2.25;
 	display: block;
+	font-weight: bold;
+}
+
+.cost-wrapper h3 span {
+	font-weight: bold;
+}
+
+.financing-box {
+	margin-bottom: 48px;
+}
+
+.financing-box table,
+.financing-box h3 {
+	margin: 0;
 }
 
 .dynamic-dealer-select {

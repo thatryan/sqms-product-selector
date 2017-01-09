@@ -119,13 +119,10 @@ function display_choice_result( $form ) {
 	        $content_output .= '<h3>And Your Installation Estimate is Between <span>$1,000.00 - $2,500.00</span></h3>';
 	        $content_output .= '<p><small>Note: Proper Equipment Selection Will Be Verified On Installation Inspection</small></p>';
 	        $content_output .= '</div>';
-	        $content_output .= get_product_data( $product_post_id );
 	        $content_output .= '<div class="financing-box">' . get_finance_options( $system_price, $warranty_price ) . '</div>';
-
-	        $content_output .= '<div class="highlight-box cost-wrapper">';
-	        $content_output .= '<h2>Accept your guaranteed system quote.</h2>';
-	        $content_output .= '</div>';
-	        $content_output .= '<p>Once you accept this quote, you will be contacted by an HVACInstantQuote Certified professional HVAC specialist to set up a time for installation.</p>';
+	        $content_output .= '<h3>Your Equipment Specifications:</h3>';
+	        $content_output .= get_product_data( $product_post_id );
+	        $content_output .= '<p>By accepting this quote, you will be connected with a local dealer who will schedule a visit to your home for inspection. You are not committing to a purchase.</p>';
 
 	        //loop back through form fields to get html field (id 14 on my form) that we are populating with the data gathered above
 	        foreach( $form['fields'] as &$field ) {
@@ -587,7 +584,7 @@ function get_finance_options( $system_price, $warranty_price ) {
 		$finance_data .= '</tr></tbody></table>';
 		$finance_data .= '<p><small>Note: Actual monthly payment based upon actual installation cost provided by your dealer.</small></p>';
 		$finance_data .= '<h3>Optional Warranty Cost: <b>'.$warranty_price.'</b></h3>';
-		$finance_data .= '<p><small>Note: Warranty cost not included in finance projections.</small></p>';
+		$finance_data .= '<p><small>Note: Warranty cost not included in finance projections. Extended warranties are optional and can be added after accepting the final quote below.</small></p>';
 
 
 	return $finance_data;
