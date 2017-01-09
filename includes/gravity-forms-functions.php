@@ -436,7 +436,8 @@ function get_dealer_email( $notification, $form, $entry ) {
 	if ( $notification['name'] == 'Admin Notification' ) {
 
 		if( $form['id'] == 12 ) {
-			$dealer_id = rgpost( 'input_69'  );
+			// $dealer_id = rgpost( 'input_69'  );
+			$testing_email = rgpost( 'input_12'  );
 		}
 		elseif( $form['id'] == 16 ){
 			$dealer_id = rgpost( 'input_18'  );
@@ -445,9 +446,10 @@ function get_dealer_email( $notification, $form, $entry ) {
 			return $notification;
 		}
 
-	      $dealer_email = get_post_meta( $dealer_id, 'sqms-product-email', true );
+	      // $dealer_email = get_post_meta( $dealer_id, 'sqms-product-email', true );
 
-	      $notification['to'] = $dealer_email;
+	      // $notification['to'] = $dealer_email;
+	      $notification['to'] = $testing_email;
 
 	  }
 
