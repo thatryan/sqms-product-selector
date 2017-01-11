@@ -37,6 +37,9 @@ function custom_confirmation( $confirmation, $form, $entry, $ajax ) {
 	elseif( $form['id'] == 16 ) {
 		$dealer_id = $entry['18'];
 	}
+	elseif( $form['id'] == 23 ) {
+		$dealer_id = $entry['1'];
+	}
 	else {
 		return $confirmation;
 	}

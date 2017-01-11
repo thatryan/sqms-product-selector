@@ -7,6 +7,9 @@ add_action( 'init', 'sqms_register_dealer_zone', 0 );
 add_filter('avf_builder_boxes', 'add_builder_to_posttype');
 add_filter('avia_post_nav_entries','no_post_nav');
 
+add_filter('manage_edit-sqms_payne_dealer_columns', 'ssla_add_id_column');
+add_action('manage_sqms_payne_dealer_posts_custom_column', 'ssla_add_id_column_content', 10, 2);
+
 // Register Products Post Type
 function sqms_register_productselector_post_type() {
 
@@ -235,4 +238,21 @@ function add_builder_to_posttype($metabox)
   {
       if(get_post_type() == 'sqms_payne_dealer') $entries = array();
       return $entries;
+  }
+
+
+  function ssla_add_id_column( $columns ) {
+  	$checkbox = array_slice( $columns , 0, 1 );
+  	$columns = array_slice( $columns , 1 );
+
+  	$id['revealid_id'] = 'ID';
+
+  	$columns = array_merge( $checkbox, $id, $columns );
+  	return $columns;
+  }
+
+  function ssla_add_id_column_content( $column, $id ) {
+    if( 'revealid_id' == $column ) {
+      echo $id;
+    }
   }
