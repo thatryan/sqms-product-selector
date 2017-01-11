@@ -64,7 +64,7 @@ function custom_confirmation( $confirmation, $form, $entry, $ajax ) {
 	    'zip'       => '',
 	) );
 
-	$confirmation .= '<div class="dealer-conf-wrapper">';
+	$confirmation .= '<div class="dealer-conf-wrapper clearfix">';
 	$confirmation .= '<h3>Thank you!</h3><p>Your certfied Payne dealer is <a href=" ' . $dealer_link . ' " target="_blank">' . $dealer_name . '</a> and they will be in contact to schedule your home visit within 24 hours.</p>';
 
 	$confirmation .= '<h2 class="dealer-conf-title"><a href=" ' . $dealer_link . ' " target="_blank">' . $dealer_name . '</a></h2>';
@@ -76,7 +76,7 @@ function custom_confirmation( $confirmation, $form, $entry, $ajax ) {
 	$confirmation .= ' | ' . esc_html( $address['city'] ) . ' | ' . esc_html( $address['state'] ) . ' | ' . esc_html( $address['zip'] ) . '</p>';
 	$confirmation .= '<p class="dealer-conf-phone">' . $dealer_phone . '</p>';
 	$confirmation .= '<div class="dealer-conf-headshot">' . $dealer_headshot . '</div>';
-	$confirmation .= '<div class="dealer-conf-snippet">' . $dealer_snippet . '</div>';
+	$confirmation .= '<div class="dealer-conf-snippet clearfix">' . $dealer_snippet . '</div>';
 	if( $dealer_logos ) :
 	$confirmation .= '<h4>We our proud of our hard earned accredidations</h4>';
 	$confirmation .= '<ul class="dealer-conf-icons">';
