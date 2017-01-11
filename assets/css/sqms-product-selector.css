@@ -224,8 +224,9 @@ width: 20px;
 
 .dealer-conf-snippet {
 	background: #f9f9f9;
-	padding: 24px 0;
-	margin: 24px 0;
+	padding: 24px 50px;
+	margin: 24px -50px 24px -50px;
+	text-align: left;
 }
 
 .dealer-conf-icons {
@@ -235,8 +236,9 @@ width: 20px;
 }
 
 .dealer-conf-icons .dealer-conf-icon {
-	display: inline-block;
-	max-width: 24%;
+	display: table-cell;
+	vertical-align: middle;
+	padding: 0 8px;
 }
 
 a.dealer-pdf {
