@@ -44,10 +44,48 @@ function custom_confirmation( $confirmation, $form, $entry, $ajax ) {
 	$confirmation = '';
 	$dealer_name = get_the_title( $dealer_id );
 	$dealer_link =  get_permalink( $dealer_id );
+	$dealer_phone = get_post_meta( $dealer_id, 'sqms-product-phone', true );
+	$dealer_address = get_post_meta( $dealer_id, 'sqms-product-address', true );
+	$dealer_snippet = wpautop( get_post_meta( $dealer_id, 'sqms-product-snippet', true ) );
 
-	$confirmation .= '<h4>Thank you!</h4><p>Your certfied Payne dealer, <a href=" ' . $dealer_link . ' " target="_blank">' . $dealer_name . '</a>, will be in contact to schedule your home visit within 24 hours.</p><p>A copy of your quote information has been emailed to you. You may also download a PDF copy below.</p>';
+	$dealer_headshot = wp_get_attachment_image( get_post_meta( $dealer_id, 'sqms-product-headshot_id', 1 ), 'medium' );
 
-	$confirmation .= do_shortcode( '[gravitypdf name="Client Copy" id="57a03bc2e0cc7" entry='.$entry['id'].' text="Download PDF"]' );
+	$dealer_logos = get_post_meta( $dealer_id, 'sqms-product-logos', 1 );
+
+
+	$address = wp_parse_args( $dealer_address, array(
+	    'address-1' => '',
+	    'address-2' => '',
+	    'city'      => '',
+	    'state'     => '',
+	    'zip'       => '',
+	) );
+
+	$confirmation .= '<div class="dealer-conf-wrapper">';
+	$confirmation .= '<h3>Thank you!</h3><p>Your certfied Payne dealer is <a href=" ' . $dealer_link . ' " target="_blank">' . $dealer_name . '</a> and they will be in contact to schedule your home visit within 24 hours.</p>';
+
+	$confirmation .= '<h2 class="dealer-conf-title"><a href=" ' . $dealer_link . ' " target="_blank">' . $dealer_name . '</a></h2>';
+
+	$confirmation .= '<p class="dealer-conf-address">' . esc_html( $address['address-1'] );
+	if ( $address['address-2'] ) :
+	$confirmation .= ' | ' . esc_html( $address['address-2'] );
+	endif;
+	$confirmation .= ' | ' . esc_html( $address['city'] ) . ' | ' . esc_html( $address['state'] ) . ' | ' . esc_html( $address['zip'] ) . '</p>';
+	$confirmation .= '<p class="dealer-conf-phone">' . $dealer_phone . '</p>';
+	$confirmation .= '<div class="dealer-conf-headshot">' . $dealer_headshot . '</div>';
+	$confirmation .= $dealer_snippet;
+	if( $dealer_logos ) :
+	$confirmation .= '<ul class="dealer-conf-icons">';
+	foreach ( (array) $dealer_logos as $attachment_id => $attachment_url ) {
+	    $confirmation .= '<li class="dealer-conf-icon">';
+	    $confirmation .= wp_get_attachment_image( $attachment_id, 'medium' );
+	    $confirmation .= '</li>';
+	}
+	$confirmation .= '</ul>';
+	endif;
+	$confirmation .= '<p>A copy of your quote information has been emailed to you. You may also download a PDF copy below.</p>';
+	$confirmation .= do_shortcode( '[gravitypdf name="Client Copy" id="57a03bc2e0cc7" class="button" entry='.$entry['id'].' text="Download PDF"]' );
+	$confirmation .= '</div>';
 
     return $confirmation;
 }

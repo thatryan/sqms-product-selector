@@ -218,6 +218,21 @@ vertical-align: top;
 width: 20px;
 }
 
+.dealer-conf-wrapper {
+	text-align: center;
+}
+
+.dealer-conf-icons {
+	margin: 24px auto;
+	list-style: none;
+	text-align: center;
+}
+
+.dealer-conf-icons .dealer-conf-icon {
+	display: inline-block;
+	max-width: 29%;
+}
+
 @media only screen and (min-width: 768px) {
 	.col-wrapper {
 		margin: 18px 0;

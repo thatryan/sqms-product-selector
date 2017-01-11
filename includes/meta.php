@@ -78,6 +78,33 @@ function sqms_prodcut_selector_meta() {
 	) );
 
 	$sqms_dealer_meta->add_field( array(
+		'name'       => __( 'Snippet', 'sqmsprodsel' ),
+		'id'         => $prefix . 'snippet',
+		'type'       => 'wysiwyg',
+		'options' => array(),
+	) );
+	$sqms_dealer_meta->add_field( array(
+		'name'       => __( 'Headshot', 'sqmsprodsel' ),
+		'id'         => $prefix . 'headshot',
+		'type'       => 'file',
+		// Optional:
+		'options' => array(
+		    'url' => false, // Hide the text input for the url
+		),
+		'text'    => array(
+		    'add_upload_file_text' => 'Add File' // Change upload button text. Default: "Add or Upload File"
+		),
+	) );
+	$sqms_dealer_meta->add_field( array(
+		'name'       => __( 'Logos', 'sqmsprodsel' ),
+		'id'         => $prefix . 'logos',
+		'type'       => 'file_list',
+	) );
+
+
+
+
+	$sqms_dealer_meta->add_field( array(
 		'name'        => 'Dealer Selections',
 		'description' => 'The number of times this dealer has selected',
 		'id'          => 'sqms_dealer_view_count',
