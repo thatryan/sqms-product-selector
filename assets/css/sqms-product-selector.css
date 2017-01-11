@@ -241,6 +241,10 @@ width: 20px;
 	padding: 0 8px;
 }
 
+.dealer-conf-icon img{
+	max-width: 150px;
+}
+
 a.dealer-pdf {
 	display: block;
 }
