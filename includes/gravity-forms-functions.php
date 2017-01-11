@@ -73,8 +73,9 @@ function custom_confirmation( $confirmation, $form, $entry, $ajax ) {
 	$confirmation .= ' | ' . esc_html( $address['city'] ) . ' | ' . esc_html( $address['state'] ) . ' | ' . esc_html( $address['zip'] ) . '</p>';
 	$confirmation .= '<p class="dealer-conf-phone">' . $dealer_phone . '</p>';
 	$confirmation .= '<div class="dealer-conf-headshot">' . $dealer_headshot . '</div>';
-	$confirmation .= $dealer_snippet;
+	$confirmation .= '<div class="dealer-conf-snippet">' . $dealer_snippet . '</div>';
 	if( $dealer_logos ) :
+	$confirmation .= '<h4>We our proud of our hard earned accredidations</h4>';
 	$confirmation .= '<ul class="dealer-conf-icons">';
 	foreach ( (array) $dealer_logos as $attachment_id => $attachment_url ) {
 	    $confirmation .= '<li class="dealer-conf-icon">';
@@ -84,7 +85,7 @@ function custom_confirmation( $confirmation, $form, $entry, $ajax ) {
 	$confirmation .= '</ul>';
 	endif;
 	$confirmation .= '<p>A copy of your quote information has been emailed to you. You may also download a PDF copy below.</p>';
-	$confirmation .= do_shortcode( '[gravitypdf name="Client Copy" id="57a03bc2e0cc7" class="button" entry='.$entry['id'].' text="Download PDF"]' );
+	$confirmation .= do_shortcode( '[gravitypdf name="Client Copy" id="57a03bc2e0cc7" class="button dealer-pdf" entry='.$entry['id'].' text="Download PDF"]' );
 	$confirmation .= '</div>';
 
     return $confirmation;

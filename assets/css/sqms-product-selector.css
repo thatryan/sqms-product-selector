@@ -222,6 +222,12 @@ width: 20px;
 	text-align: center;
 }
 
+.dealer-conf-snippet {
+	background: #f9f9f9;
+	padding: 24px 0;
+	margin: 24px 0;
+}
+
 .dealer-conf-icons {
 	margin: 24px auto;
 	list-style: none;
@@ -230,9 +236,12 @@ width: 20px;
 
 .dealer-conf-icons .dealer-conf-icon {
 	display: inline-block;
-	max-width: 29%;
+	max-width: 24%;
 }
 
+a.dealer-pdf {
+	display: block;
+}
 @media only screen and (min-width: 768px) {
 	.col-wrapper {
 		margin: 18px 0;
