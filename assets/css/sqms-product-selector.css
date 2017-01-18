@@ -140,6 +140,11 @@
 	margin-bottom: 48px;
 }
 
+.financing-box h3 {
+	margin-bottom: 18px;
+	font-size: 18px;
+}
+
 .financing-box table,
 .financing-box h3 {
 	margin: 0;
