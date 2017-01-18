@@ -188,11 +188,9 @@ function display_choice_result( $form ) {
 function get_product_data( $product_post_id ) {
 
 	$data_points = array(
-				"sqms-product-ahri",
 				"sqms-product-tonnage",
 				"sqms-product-odu-voltage",
 				"sqms-product-odu-model",
-				"sqms-product-coil-model",
 				"sqms-product-furnace-model",
 				"sqms-product-cooling-btu",
 				"sqms-product-seer",
