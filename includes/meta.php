@@ -83,6 +83,19 @@ function sqms_prodcut_selector_meta() {
 		'type'       => 'wysiwyg',
 		'options' => array(),
 	) );
+
+	$sqms_dealer_meta->add_field( array(
+		'name'       => __( 'Years in Business', 'sqmsprodsel' ),
+		'id'         => $prefix . 'years',
+		'type'       => 'text',
+	) );
+
+	$sqms_dealer_meta->add_field( array(
+		'name'       => __( 'ROC', 'sqmsprodsel' ),
+		'id'         => $prefix . 'license',
+		'type'       => 'text',
+	) );
+
 	$sqms_dealer_meta->add_field( array(
 		'name'       => __( 'Headshot', 'sqmsprodsel' ),
 		'id'         => $prefix . 'headshot',

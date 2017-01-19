@@ -145,8 +145,7 @@
 	font-size: 18px;
 }
 
-.financing-box table,
-.financing-box h3 {
+.financing-box table{
 	margin: 0;
 }
 
@@ -223,15 +222,37 @@ vertical-align: top;
 width: 20px;
 }
 
-.dealer-conf-wrapper {
+#top h1.dealer-conf-title {
 	text-align: center;
+	margin-bottom: 32px;
 }
 
+#top h1.dealer-conf-title,
+#top .dealer-conf-footer h2 {
+	text-transform: none;
+	letter-spacing: normal;
+}
+
+#top h1.dealer-conf-title a:hover {
+	color: #f05a1a;
+}
+
+.dealer-conf-meta p {
+	margin: 0 0 0.74em 0;
+	font-size: 18px;
+}
+
+.dealer-conf-meta p span {
+	color: #f05a1a;
+}
 .dealer-conf-snippet {
 	background: #f9f9f9;
 	padding: 24px 50px;
 	margin: 24px -50px 24px -50px;
-	text-align: left;
+}
+
+.dealer-conf-footer {
+	text-align: center;
 }
 
 .dealer-conf-icons {
