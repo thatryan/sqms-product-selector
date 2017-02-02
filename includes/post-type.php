@@ -2,7 +2,6 @@
 
 add_action( 'init', 'sqms_register_productselector_post_type', 0 );
 add_action( 'init', 'sqms_register_payne_dealer', 0 );
-// add_action( 'init', 'sqms_register_dealer_zip', 0 );
 add_action( 'init', 'sqms_register_dealer_zone', 0 );
 add_filter('avf_builder_boxes', 'add_builder_to_posttype');
 add_filter('avia_post_nav_entries','no_post_nav');
@@ -51,6 +50,7 @@ function sqms_register_productselector_post_type() {
 		'description'           => __( 'Post type for custom products in chooser', 'sqms-prod-selector' ),
 		'labels'                => $labels,
 		'supports'              => array( 'title', 'thumbnail'),
+		'taxonomies'		=> array( 'market' ),
 		'hierarchical'          => true,
 		'public'                => true,
 		'show_ui'               => true,
@@ -130,51 +130,6 @@ function sqms_register_payne_dealer() {
 	register_post_type( 'sqms_payne_dealer', $args );
 
 }
-
-// Register Custom Taxonomy for dealer zip codes
-function sqms_register_dealer_zip() {
-
-	$labels = array(
-		'name'                       => _x( 'Zip Codes', 'Taxonomy General Name', 'sqms-prod-selector' ),
-		'singular_name'              => _x( 'Zip Code', 'Taxonomy Singular Name', 'sqms-prod-selector' ),
-		'menu_name'                  => __( 'Zip Codes', 'sqms-prod-selector' ),
-		'all_items'                  => __( 'All Zip Codes', 'sqms-prod-selector' ),
-		'parent_item'                => __( 'Parent Zip Code', 'sqms-prod-selector' ),
-		'parent_item_colon'          => __( 'Parent Zip Code:', 'sqms-prod-selector' ),
-		'new_item_name'              => __( 'New Item Zip Code', 'sqms-prod-selector' ),
-		'add_new_item'               => __( 'Add New Zip Code', 'sqms-prod-selector' ),
-		'edit_item'                  => __( 'Edit Zip Code', 'sqms-prod-selector' ),
-		'update_item'                => __( 'Update Zip Code', 'sqms-prod-selector' ),
-		'view_item'                  => __( 'View Zip Code', 'sqms-prod-selector' ),
-		'separate_items_with_commas' => __( 'Separate zip codes with commas', 'sqms-prod-selector' ),
-		'add_or_remove_items'        => __( 'Add or remove zip codes', 'sqms-prod-selector' ),
-		'choose_from_most_used'      => __( 'Choose from the most used', 'sqms-prod-selector' ),
-		'popular_items'              => __( 'Popular zip codes', 'sqms-prod-selector' ),
-		'search_items'               => __( 'Search Zip Codes', 'sqms-prod-selector' ),
-		'not_found'                  => __( 'Not Found', 'sqms-prod-selector' ),
-		'no_terms'                   => __( 'No zip codes', 'sqms-prod-selector' ),
-		'items_list'                 => __( 'Zip Codes list', 'sqms-prod-selector' ),
-		'items_list_navigation'      => __( 'Zip Codes list navigation', 'sqms-prod-selector' ),
-	);
-	$rewrite = array(
-		'slug'                       => 'zip-code',
-		'with_front'                 => false,
-		'hierarchical'               => false,
-	);
-	$args = array(
-		'labels'                     => $labels,
-		'hierarchical'               => false,
-		'public'                     => true,
-		'show_ui'                    => true,
-		'show_admin_column'          => true,
-		'show_in_nav_menus'          => true,
-		'show_tagcloud'              => false,
-		'rewrite'                    => $rewrite,
-	);
-	register_taxonomy( 'zip_code', array( 'sqms_payne_dealer' ), $args );
-
-}
-
 
 // Register Custom Taxonomy for dealer zones
 function sqms_register_dealer_zone() {
