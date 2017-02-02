@@ -9,6 +9,7 @@ function check_zip_code_register_shortcode() {
 	add_shortcode( 'check-zip-code-form', 'get_check_zip_form' );
 }
 
+// [check-zip-code-form]
 function get_check_zip_form() {
 
 	$zip_form_params = array(
@@ -22,7 +23,7 @@ function get_check_zip_form() {
 	wp_localize_script( 'load-zip-form', 'zip_form_params', $zip_form_params );
 	wp_enqueue_script('load-zip-form');
 
-	$check_zip_form = '<form action="#" id="get_gravity_form" class="avia_ajax_form av-form-labels-visible avia-builder-el-0 avia-builder-el-no-sibling" ><fieldset><h3>Enter Your Zip Code</h3><p class=" first_form  form_element form_element_three_fourth av-last-visible-form-element" id="element_avia_1_1"><label for="avia_1_1">Name <abbr class="required" title="required">*</abbr></label><input name="avia_1_1" class="text_input is_empty" type="text" id="zip-check-input" value=""></p><p class="form_element form_element_fourth modified_width"><input type="button" value="Submit" class="gf-test-zip-code button" data-sending-label="Sending"></p></fieldset></form>';
+	$check_zip_form = '<form action="" id="get_gravity_form" class="avia_ajax_form av-form-labels-visible avia-builder-el-0 avia-builder-el-no-sibling" ><p class=" first_form  form_element form_element_three_fourth av-last-visible-form-element" id="element_avia_1_1"><label for="avia_1_1">Please Enter Your Zip Code <abbr class="required" title="required">*</abbr></label><input name="avia_1_1" class="text_input is_empty" type="text" id="zip-check-input" value=""></p><p class="form_element form_element_fourth modified_width"><input type="button" value="Check Your Area" class="gf-test-zip-code button" data-sending-label="Sending"></p></form>';
 
 	return $check_zip_form;
 }
