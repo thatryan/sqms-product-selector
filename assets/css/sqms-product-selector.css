@@ -1,3 +1,51 @@
+#top form.sqms-zip-search-form {
+	margin: 0;
+}
+#top .sqms-zip-search-form input[type="text"] {
+	margin-bottom: 0;
+	font-size: 54px;
+	padding: 10px 24px;
+	border-right:none;
+}
+#top .sqms-zip-search-form input[type="text"].error {
+	border-color: #a94442;
+	color:#a94442;
+}
+#top .sqms-zip-search-form input[type="text"].valid {
+	border-color: #2b542c;
+	color:#2b542c;
+}
+#top .sqms-zip-search-form label.error {
+	color: #a94442;
+	font-weight: normal;
+	font-size: 16px;
+}
+#top .sqms-zip-search-form input[type="submit"] {
+	width: 100%;
+	font-size: 24px;
+	padding: 0;
+	line-height: 87px;
+}
+/*#top .sqms-zip-search-form input[type="submit"]:disabled {
+	cursor: not-allowed;
+}*/
+#top .sqms-zip-search-form p {
+	float: left;
+	margin: 0;
+}
+#top .sqms-zip-search-form .zip-input-wrap {
+	width: 70%;
+}
+#top .sqms-zip-search-form .zip-button-wrap {
+	margin-top: 26px;
+	width: 30%;
+}
+.zip-error-refresh {
+	width: 50%;
+	display: block;
+	font-size: 24px;
+	margin: 24px auto;
+}
 .sqms-prod-sel-form h3 b,
 .sqms-prod-sel-form h3 a {
 	color: #f05a1a!important;

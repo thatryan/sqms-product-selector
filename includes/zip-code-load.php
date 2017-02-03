@@ -21,10 +21,11 @@ function get_check_zip_form() {
 	gravity_form_enqueue_scripts( $zip_form_id, true );
 
 	wp_localize_script( 'load-zip-form', 'zip_form_params', $zip_form_params );
-	// wp_enqueue_script('jquery-validate');
+	wp_enqueue_script('jquery-validate');
 	wp_enqueue_script('load-zip-form');
 
-	$check_zip_form = '<form action="" id="get_gravity_form" class="av-form-labels-visible avia-builder-el-0 avia-builder-el-no-sibling" ><p class=" first_form  form_element form_element_three_fourth av-last-visible-form-element" id="element_avia_1_1"><label for="zip_code_input">Please Enter Your Zip Code <abbr class="required" title="required">*</abbr></label><input name="zip_code_input" class="text_input is_empty" type="number" required id="zip-check-input" value=""></p><p class="form_element form_element_fourth modified_width"><input type="submit" value="Check Your Area" class="gf-test-zip-code button" data-sending-label="Sending"></p></form>';
+	// $check_zip_form = '<form action="" id="get_gravity_form" class="av-form-labels-visible avia-builder-el-0 avia-builder-el-no-sibling" ><p class=" first_form  form_element form_element_three_fourth av-last-visible-form-element" id="element_avia_1_1"><label for="zip_code_input">Please Enter Your Zip Code <abbr class="required" title="required">*</abbr></label><input name="zip_code_input" class="text_input is_empty" type="number" required id="zip-check-input" value=""></p><p class="form_element form_element_fourth modified_width"><input type="submit" value="Check Your Area" class="gf-test-zip-code button"></p></form>';
+	$check_zip_form = '<form action="" id="get_gravity_form" class="sqms-zip-search-form clearfix"><p class="zip-input-wrap"><label>Please Enter Your Zip Code<input name="zip_code_input" class="text_input" type="text" id="zip-check-input" value="" placeholder="enter zip code..."></label></p><p class="zip-button-wrap"><input type="submit"  value="Check Your Area" class="gf-test-zip-code button"></p></form>';
 
 	return $check_zip_form;
 }
@@ -61,7 +62,8 @@ function gf_zip_load_form(){
 	    }
 	}
 	else {
-		echo '<div class="avia_message_box avia-color-red avia-size-large avia-icon_select-yes avia-border-solid  avia-builder-el-1  el_after_av_textblock  avia-builder-el-last  "><span class="avia_message_box_title">Invalid Zip Code!</span><div class="avia_message_box_content"><p style="text-transform:none;font-size:16px;">Please enter a valid US Zip Code</p></div></div>';
+		echo '<div class="avia_message_box avia-color-red avia-size-large avia-icon_select-yes avia-border-solid  avia-builder-el-1  el_after_av_textblock  avia-builder-el-last  "><span class="avia_message_box_title">Invalid Zip Code!</span><div class="avia_message_box_content"><p style="text-transform:none;font-size:16px;">Please enter a valid US Zip Code</p></div></div><input type="button" class="zip-error-refresh button" value="Try Again?" onClick="window.location.reload()">
+';
 		die();
 	}
 
