@@ -1,7 +1,16 @@
 (function (ZipFormLoader, $) {
 
-	$(".gf-test-zip-code").on( "click", function(){
+	// $("#get_gravity_form").validate({
+	// 	rules: {
+	// 		'zip_code_input' : {
+	// 			zipcode: true,
+	// 		}
+	// 	}
+	// });
 
+	$("#get_gravity_form").submit( function( e ){
+		e.preventDefault();
+		var $this = $(this);
 		var zipEntered = $("#zip-check-input").val(),
 			formWrapper = $(".sqms-form-chooser-wrapper");
 
@@ -10,11 +19,11 @@
 			type: 'get',
 			data: {
 				'action':'get_gravity_form',
-				'zipValue' : zipEntered,
+				'zip_value' : zipEntered,
 			},
-			// beforeSend: function (jqXHR, settings) {
-			//   console.log( settings );
-			// },
+			beforeSend: function (jqXHR, settings) {
+			  // console.log( settings );
+			},
 			success: function( response ) {
 				formWrapper.empty().html( response );
 				// console.log( response );
@@ -22,5 +31,9 @@
 		}); // close ajax call
 
 	});
+
+	// jQuery.validator.addMethod("zipcode", function(value, element) {
+	//   return this.optional(element) || /^\d{5}$/.test(value);
+	// }, "Please provide a valid zipcode.");
 
 }(window.ZipFormLoader = window.ZipFormLoader || {}, jQuery));

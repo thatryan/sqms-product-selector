@@ -4,7 +4,7 @@
 	Plugin URI: https://github.com/thatryan
 	Description: Register product and handle logic for chooser
 	Author: Ryan Olson
-	Version: 1.1.1
+	Version: 1.1.2
 	Author URI: http://thatryan.com
  */
 
@@ -27,7 +27,7 @@ class Product_Selector {
 	 */
 	public $plugin_url = '';
 
-	public $plugin_version = '1.1.1';
+	public $plugin_version = '1.1.2';
 
 
 	/**
@@ -125,6 +125,7 @@ class Product_Selector {
 		wp_register_script( 'vex-script', $this->plugin_url . 'assets/js/vex.combined.min.js', array ('jquery'), $this->plugin_version, false );
 		wp_register_script( 'load-report-form-script', $this->plugin_url . 'assets/js/load-report-form.js', array ('jquery'), $this->plugin_version, false );
 		wp_register_script( 'load-zip-form', $this->plugin_url . 'assets/js/load-zip-form.js', array ('jquery'), $this->plugin_version, false );
+		wp_register_script( 'jquery-validate', $this->plugin_url . 'assets/js/jquery.validate.min.js', array ('jquery'), $this->plugin_version, false );
 		wp_register_script( 'sqms-prod-select-script', $this->plugin_url . 'assets/js/sqms-product-selector.js', array ('jquery'), $this->plugin_version, false );
 
 		wp_enqueue_style( 'sqms-prod-select', $this->plugin_url . 'assets/css/sqms-product-selector.css', array(), $this->plugin_version );
