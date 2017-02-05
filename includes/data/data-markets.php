@@ -3,7 +3,7 @@
 $market_list = array(
 
 	$market_1 = array(
-			'label' => 'm1',
+			'label' => 'PHX-',
 			'zones' => array (
 				'zone-1',
 				'zone-2',

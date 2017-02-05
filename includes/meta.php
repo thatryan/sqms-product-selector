@@ -150,14 +150,6 @@ function sqms_prodcut_selector_meta() {
 		'object_types'  => array( 'sqms_prod_select', ),
 	) );
 
-	// Add fields to overview container
-	$sqms_prod_overview_meta->add_field( array(
-		'name'       => __( 'AHRI', 'sqmsprodsel' ),
-		'id'         => $prefix . 'ahri',
-		'type'       => 'text',
-		'default'       => 'NA',
-		'column'       => true,
-	) );
 	$sqms_prod_overview_meta->add_field( array(
 		'name'       => __( 'Tonnage', 'sqmsprodsel' ),
 		'id'         => $prefix . 'tonnage',
