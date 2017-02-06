@@ -39,6 +39,9 @@ function display_dealer_entries() {
 	wp_enqueue_script( 'load-report-form-script' );
 
 	$lead_list = '';
+	$lead_list .= '<h3>Dealer Name: '.$dealer_name.'</h3>';
+	$lead_list .= '<h3>Dealer Slug: '.$dealer_slug.'</h3>';
+	$lead_list .= '<h3>Dealer ID: '.$dealer_id.'</h3>';
 	$lead_list .= '<table>';
 	$lead_list .= '<thead>';
 	$lead_list .= '<tr>';
