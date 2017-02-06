@@ -567,7 +567,7 @@ function add_meta_to_entry($entry_meta, $form_id){
     $entry_meta['dealer'] = array(
         'label' => 'Dealer',
         'is_numeric' => false,
-        'update_entry_meta_callback' => 'update_dealer_entry_meta',
+        // 'update_entry_meta_callback' => 'update_dealer_entry_meta',
         'is_default_column' => false
     );
 

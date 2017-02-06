@@ -24,7 +24,7 @@ function display_dealer_entries() {
 
 	$dealer_name = get_the_title( $dealer_id );
 
-	$search_criteria['field_filters'][] = array( 'key' => 'dealer', 'value' => $dealer_slug );
+	$search_criteria['field_filters'][] = array( 'key' => '69', 'value' => $dealer_id );
 	$entries         = GFAPI::get_entries( $quote_form_id, $search_criteria );
 
 	$form_params = array(
@@ -39,9 +39,7 @@ function display_dealer_entries() {
 	wp_enqueue_script( 'load-report-form-script' );
 
 	$lead_list = '';
-	$lead_list .= '<h3>Dealer Name: '.$dealer_name.'</h3>';
-	$lead_list .= '<h3>Dealer Slug: '.$dealer_slug.'</h3>';
-	$lead_list .= '<h3>Dealer ID: '.$dealer_id.'</h3>';
+	$lead_list .= '<h3>Lead List For: '.$dealer_name.'</h3>';
 	$lead_list .= '<table>';
 	$lead_list .= '<thead>';
 	$lead_list .= '<tr>';
