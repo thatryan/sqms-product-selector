@@ -1,5 +1,9 @@
 #top form.sqms-zip-search-form {
+	display: none;
 	margin: 0;
+}
+.js_active #top form.sqms-zip-search-form {
+	display: block;
 }
 #top .sqms-zip-search-form input[type="text"] {
 	margin-bottom: 0;
@@ -45,6 +49,10 @@
 	display: block;
 	font-size: 24px;
 	margin: 24px auto;
+	text-align: center;
+}
+.product-error-button:hover {
+	text-decoration: none;
 }
 .sqms-prod-sel-form h3 b,
 .sqms-prod-sel-form h3 a {

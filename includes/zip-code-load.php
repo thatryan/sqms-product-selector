@@ -24,10 +24,11 @@ function get_check_zip_form() {
 	wp_enqueue_script('jquery-validate');
 	wp_enqueue_script('load-zip-form');
 
-	// $check_zip_form = '<form action="" id="get_gravity_form" class="av-form-labels-visible avia-builder-el-0 avia-builder-el-no-sibling" ><p class=" first_form  form_element form_element_three_fourth av-last-visible-form-element" id="element_avia_1_1"><label for="zip_code_input">Please Enter Your Zip Code <abbr class="required" title="required">*</abbr></label><input name="zip_code_input" class="text_input is_empty" type="number" required id="zip-check-input" value=""></p><p class="form_element form_element_fourth modified_width"><input type="submit" value="Check Your Area" class="gf-test-zip-code button"></p></form>';
+	$no_script_message = '<noscript><div class="avia_message_box avia-color-red avia-size-large avia-icon_select-yes avia-border-solid  avia-builder-el-1  el_after_av_textblock  avia-builder-el-last  "><span class="avia_message_box_title">Enable JavaScript!</span><div class="avia_message_box_content"><p style="text-transform:none;font-size:16px;">For full functionality of this site it is necessary to enable JavaScript. Here are the <a href="http://www.enable-javascript.com/" target="_blank"> instructions how to enable JavaScript in your web browser</a>.</p></div></div></noscript>';
+
 	$check_zip_form = '<form action="" id="get_gravity_form" class="sqms-zip-search-form clearfix"><p class="zip-input-wrap"><label>Please Enter Your Zip Code<input name="zip_code_input" class="text_input" type="text" id="zip-check-input" value="" placeholder="enter zip code..."></label></p><p class="zip-button-wrap"><input type="submit"  value="Check Your Area" class="gf-test-zip-code button"></p></form>';
 
-	return $check_zip_form;
+	return $no_script_message . $check_zip_form;
 }
 
 function gf_zip_load_form(){
