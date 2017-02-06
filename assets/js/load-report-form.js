@@ -4,7 +4,7 @@
 		var button = $(this),
 			container = $("#gf_button_form_container"),
 			quoteId = button.attr("data-entryid"),
-			quotecost = button.attr("data-quotecost");
+			quotecost = button.attr("data-quotecost"),
 			client_email = button.attr("data-client_email");
 
 		if( button.hasClass("open-report-form") ) {

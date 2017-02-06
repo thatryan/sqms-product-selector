@@ -29,6 +29,9 @@ add_filter( 'gform_confirmation', 'custom_confirmation', 10, 4 );
 
 add_action( 'gform_after_submission_15', 'update_report_entry_meta', 10, 2 );
 
+add_action( 'wp_ajax_nopriv_gf_get_error_report_form', 'gf_load_error_report_form' );
+add_action( 'wp_ajax_gf_get_error_report_form', 'gf_load_error_report_form' );
+
 function custom_confirmation( $confirmation, $form, $entry, $ajax ) {
 
 	if( $form['id'] == 12 ) {
@@ -131,8 +134,15 @@ function display_choice_result( $form ) {
     $content_output = "";
     $html_content = "";
     $prod_string = "";
+    $market_key_field = rgpost( 'input_74' );
+
+
+    $error_form_id = 25;
+    gravity_form_enqueue_scripts( $error_form_id, true );
 
     if ( $current_page >= 7 ) {
+
+    	$prod_string .= $market_key_field;
 
         foreach ( $form['fields'] as &$field ) {
         	if ( strpos( $field->cssClass, 'product-builder-item' ) === false ) {
@@ -152,8 +162,32 @@ function display_choice_result( $form ) {
         }
 
 
-        // Get the chosen product object
-        $prod_obj = get_page_by_path($prod_string, OBJECT, 'sqms_prod_select');
+        	// Get the chosen product object
+        	$prod_obj = get_page_by_path($prod_string, OBJECT, 'sqms_prod_select');
+
+        	if( $prod_obj === NULL ) {
+
+        		// Send error message with selection info
+        		$to = 'rolson@sequoiaims.com';
+        		$subject = 'HIQ Product Selection Error';
+        		$body = 'The following product was selected but not available<br>' . $prod_string;
+        		$headers = array('Content-Type: text/html; charset=UTF-8');
+
+        		wp_mail( $to, $subject, $body, $headers );
+
+        		$photo_page_link = 'https://hvacinstantquote.com/heating-and-cooling-estimate/get-your-quote-by-photo/';
+
+        		$no_product_message = '<div class="avia_message_box avia-color-orange avia-size-large avia-icon_select-yes avia-border-solid  avia-builder-el-1  el_after_av_textblock  avia-builder-el-last "><span class="avia_message_box_title">Oops!</span><div class="avia_message_box_content"><span class="avia_message_box_icon" aria-hidden="true" data-av_icon="" data-av_iconfont="entypo-fontello"></span><p style="text-transform:none;font-size:16px;">We are so sorry, you appear to have found a bug in our system. An error message has been sent, but you can still get your quote by photo!</p></div></div><a href=" ' . $photo_page_link . ' " class="product-error-button button">Get Your Quote by Photo</a>';
+        		foreach( $form['fields'] as &$field ) {
+        		    //get html field
+        		    if ( $field->id == 14 ) {
+        		        //set the field content to the html
+        		        $field->content = $no_product_message;
+        		    }
+        		}
+
+        		return $form;
+        	}
 
 	        // Get link to single product page
 	        $prod_link = esc_url( get_permalink( $prod_obj->ID ) );
@@ -199,6 +233,13 @@ function display_choice_result( $form ) {
 
     //return altered form so changes are displayed
     return $form;
+}
+
+function gf_load_error_report_form(){
+
+	gravity_form( $error_form_id, false, false, false, array('chosen_string'=>$chosen_string), 1, true );
+
+	die();
 }
 
 function get_product_data( $product_post_id ) {
