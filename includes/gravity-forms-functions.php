@@ -1,12 +1,9 @@
 <?php
 
-// add_filter( 'gform_confirmation_anchor', '__return_false' );
 add_filter( 'gform_confirmation_anchor_12', function() {
     return 0;
 } );
 
-// add_filter( 'gform_pre_render_12', 'create_dynamic_seer_dropdown' );
-// add_filter( 'gform_pre_render_12', 'create_dynamic_eff_dropdown' );
 add_filter( 'gform_pre_render_12', 'create_dynamic_orientation_dropdown' );
 
 add_filter( 'gform_pre_render_20', 'dealer_review_id' );
@@ -314,113 +311,6 @@ $disclaimer_html = <<<'DISCLAIMERS'
 DISCLAIMERS;
 
 return $disclaimer_html;
-}
-
-function create_dynamic_seer_dropdown( $form ) {
-
-	$current_page = GFFormDisplay::get_current_page( $form['id'] );
-
-	if ( $current_page >= 6 ) {
-
-		include 'data/data-seer.php';
-
-		foreach ( $form['fields'] as &$field ) {
-
-		    if ( $field->type != 'select' || strpos( $field->cssClass, 'seer-rating-dynamic' ) === false ) {
-		        continue;
-		    }
-
-		    $system_choice = rgpost( 'input_3' );
-
-		    // Square foot select
-		    $tonnage = rgpost( 'input_4' );
-
-		    switch ( $system_choice ) {
-		    	case 's':
-		    		$split_choice = rgpost( 'input_21' );
-
-		    		switch ( $split_choice ) {
-		    			case 'gv-':
-		    				$field->choices = $split_vert_split_hor;
-		    				break;
-		    			case 'gh-':
-			    			$field->choices = $split_vert_split_hor;
-			    			break;
-		    			case 'hp-':
-		    				if ( $tonnage == '1.5-' || $tonnage == '3.5-') {
-		    					$field->choices = $hp_1_5_3_5;
-		    				}
-		    				else{
-		    					$field->choices = $hp_all;
-		    				}
-		    				break;
-
-		    			default:
-		    				$field->choices = $error_select;
-		    				break;
-		    		}
-
-
-		    		break;
-
-		    	case 'our-':
-		    		$field->choices = $cool_rep;
-		    		break;
-
-		    	case 'spp':
-		    		$field->choices = $packaged;
-		    		break;
-
-		    	default:
-		    		$field->choices = $error_select;
-		    		break;
-		    }
-
-		    $field->placeholder = 'Select a SEER';
-
-		}
-	}
-
-    return $form;
-}
-
-function create_dynamic_eff_dropdown( $form ) {
-
-	$current_page = GFFormDisplay::get_current_page( $form['id'] );
-
-	if ( $current_page >= 7 ) {
-
-		include 'data/data-efficiency.php';
-
-		foreach ( $form['fields'] as &$field ) {
-
-		    if ( $field->type != 'select' || strpos( $field->cssClass, 'efficiency-dynamic' ) === false ) {
-		        continue;
-		    }
-
-		    $system_choice = rgpost( 'input_3' );
-		    $system_type = rgpost( 'input_21' );
-
-		    // Square foot select
-		    $tonnage = rgpost( 'input_4' );
-		    $seer = rgpost( 'input_37' );
-
-		    $string = $system_choice . $system_type . $tonnage . $seer;
-
-		    if( $string === 'sgh-2.5-14.0-' || $string === 'sgv-3.5-16.0-' ) {
-		    	$field->choices = $split_80;
-		    }
-
-		    else {
-		    	$field->choices = $split_all;
-		    }
-
-		    $field->placeholder = 'Choose Efficiency Rating';
-
-		}
-	}
-
-    return $form;
 }
 
 function create_dynamic_orientation_dropdown( $form ) {
