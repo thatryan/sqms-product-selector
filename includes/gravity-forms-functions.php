@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * Remove anchor on selector form, messes with positioning on
+ * page changes
+ */
 add_filter( 'gform_confirmation_anchor_12', function() {
     return 0;
 } );
@@ -122,112 +125,109 @@ function add_readonly_script($form){
     <?php endif;
     return $form;
 }
-
+/**
+ * Builds an HTML structure to show the data for the selected product based
+ * on inputs from user combined to make selection string
+ * @param  object $form the gravity forms $form object
+ * @return   object       returns the filtered $form with altered fields
+ */
 function display_choice_result( $form ) {
+	$current_page 		= GFFormDisplay::get_current_page( $form['id'] );
+	$content_output 		= "";
+	$html_content 			= "";
+	$prod_string 			= "";
+	$market_key_field 	= rgpost( 'input_74' );
 
-    $current_page = GFFormDisplay::get_current_page( $form['id'] );
-    $content_output = "";
-    $html_content = "";
-    $prod_string = "";
-    $market_key_field = rgpost( 'input_74' );
+	// After page 7 we have the data to build the string
+	if ( $current_page >= 7 ) {
+		$prod_string .= $market_key_field;
 
+		// Iterate through each field used for building product string and grab its value
+		foreach ( $form['fields'] as &$field ) {
 
-    $error_form_id = 25;
-    gravity_form_enqueue_scripts( $error_form_id, true );
+			if ( strpos( $field->cssClass, 'product-builder-item' ) === false ) {
+				continue;
+			}
+			//gather form data to save into html field, exclude page break
+			if ( $field->id != 14 && $field->type != 'page' ) {
+				$is_hidden 	= RGFormsModel::is_field_hidden( $form, $field, array() );
+				$populated 	= rgpost( 'input_' . $field->id );
 
-    if ( $current_page >= 7 ) {
+				if ( !$is_hidden && $populated !='' ) {
+					$html_content 	.= '<li>' . $field->label . ': ' . rgpost( 'input_' . $field->id ) . '</li>';
+					$prod_string 	.= rgpost( 'input_' . $field->id );
+				}
+			}
+		}
 
-    	$prod_string .= $market_key_field;
+		// Get the chosen product object
+		$prod_obj = get_page_by_path($prod_string, OBJECT, 'sqms_prod_select');
 
-        foreach ( $form['fields'] as &$field ) {
-        	if ( strpos( $field->cssClass, 'product-builder-item' ) === false ) {
-        	    continue;
-        	}
+		// Somehow the builder strung together a product string that does not exist, send me a message so I can look into it
+		if( $prod_obj === NULL ) {
 
-            //gather form data to save into html field (id 14 on my form), exclude page break
-            if ( $field->id != 14 && $field->type != 'page' ) {
-                	$is_hidden = RGFormsModel::is_field_hidden( $form, $field, array() );
-                	$populated = rgpost( 'input_' . $field->id );
+			// Send error message with selection info
+			$to 		= 'rolson@sequoiaims.com';
+			$subject 	= 'HIQ Product Selection Error';
+			$body 		= 'The following product was selected but not available<br>' . $prod_string;
+			$headers 	= array('Content-Type: text/html; charset=UTF-8');
 
-                    if ( !$is_hidden && $populated !='' ) {
-                    	$html_content .= '<li>' . $field->label . ': ' . rgpost( 'input_' . $field->id ) . '</li>';
-                    	$prod_string .= rgpost( 'input_' . $field->id );
-                    }
-            }
-        }
+			wp_mail( $to, $subject, $body, $headers );
 
+			$photo_page_link 		 = 'https://hvacinstantquote.com/heating-and-cooling-estimate/get-your-quote-by-photo/';
+			$no_product_message = '<div class="avia_message_box avia-color-orange avia-size-large avia-icon_select-yes avia-border-solid  avia-builder-el-1  el_after_av_textblock  avia-builder-el-last "><span class="avia_message_box_title">Oops!</span><div class="avia_message_box_content"><span class="avia_message_box_icon" aria-hidden="true" data-av_icon="" data-av_iconfont="entypo-fontello"></span><p style="text-transform:none;font-size:16px;">We are so sorry, you appear to have found a bug in our system. An error message has been sent, but you can still get your quote by photo!</p></div></div><a href=" ' . $photo_page_link . ' " class="product-error-button button">Get Your Quote by Photo</a>';
 
-        	// Get the chosen product object
-        	$prod_obj = get_page_by_path($prod_string, OBJECT, 'sqms_prod_select');
+			foreach( $form['fields'] as &$field ) {
 
-        	if( $prod_obj === NULL ) {
+				//get html field
+				if ( $field->id == 14 ) {
+					//set the field content to the html
+					$field->content = $no_product_message;
+				}
+			}
+			// Did not find a product, so return the form and bail out
+			return $form;
+		}
 
-        		// Send error message with selection info
-        		$to = 'rolson@sequoiaims.com';
-        		$subject = 'HIQ Product Selection Error';
-        		$body = 'The following product was selected but not available<br>' . $prod_string;
-        		$headers = array('Content-Type: text/html; charset=UTF-8');
+		// Get all the data related to the chosen product string
+		$product_post_id 		= $prod_obj->ID;
+		$prod_meta 			= get_post_meta( $product_post_id );
+		$title 					= get_the_title( $product_post_id );
+		$cat 					= get_the_terms ( $product_post_id, 'system_type' );
+		$system_price 		= get_post_meta( $product_post_id, 'sqms-product-system-price', true );
+		$warranty_price 		= get_post_meta( $product_post_id, 'sqms-product-warranty-price', true );
+		$cmb 					= cmb2_get_metabox( 'sqms-product-overview-meta', $product_post_id );
+		$cmb_fields 			= $cmb->prop( 'fields' );
 
-        		wp_mail( $to, $subject, $body, $headers );
+		// Build the HTML that will be displayed in the form field
+		$content_output .= '<p>Your total quote is the guaranteed price for your selected system, plus the estimated cost of installation. <a href="https://hvacinstantquote.com/resources/faqs#about-money" target="_blank" title="Factors about cost of installation">Click here for common factors that affect the cost of an installation</a>.</p>';
+		$content_output .= '<h3>Your System Selection &amp; Quote</h3>';
+		$content_output .= '<div class="highlight-box cost-wrapper">';
+		$content_output .= '<h2>Your New HVAC System Equipment Quote is <span>' .  esc_html( $system_price ) . '</span></h2>';
+		$content_output .= '<h3>And Your Installation Estimate is Between <span>$1,000.00 - $2,500.00</span></h3>';
+		$content_output .= '<p><small>Note: Proper Equipment Selection Will Be Verified On Installation Inspection</small></p>';
+		$content_output .= '</div>';
+		$content_output .= '<div class="financing-box">' . get_finance_options( $system_price, $warranty_price ) . '</div>';
+		$content_output .= '<h3>Your Equipment Specifications:</h3>';
+		$content_output .= get_product_data( $product_post_id );
+		$content_output .= '<p>By accepting this quote, you will be connected with a local dealer who will schedule a visit to your home for inspection. You are not committing to a purchase.</p>';
 
-        		$photo_page_link = 'https://hvacinstantquote.com/heating-and-cooling-estimate/get-your-quote-by-photo/';
+		//loop back through form fields to get html field ID that we are populating with the data gathered above
+		foreach( $form['fields'] as &$field ) {
 
-        		$no_product_message = '<div class="avia_message_box avia-color-orange avia-size-large avia-icon_select-yes avia-border-solid  avia-builder-el-1  el_after_av_textblock  avia-builder-el-last "><span class="avia_message_box_title">Oops!</span><div class="avia_message_box_content"><span class="avia_message_box_icon" aria-hidden="true" data-av_icon="" data-av_iconfont="entypo-fontello"></span><p style="text-transform:none;font-size:16px;">We are so sorry, you appear to have found a bug in our system. An error message has been sent, but you can still get your quote by photo!</p></div></div><a href=" ' . $photo_page_link . ' " class="product-error-button button">Get Your Quote by Photo</a>';
-        		foreach( $form['fields'] as &$field ) {
-        		    //get html field
-        		    if ( $field->id == 14 ) {
-        		        //set the field content to the html
-        		        $field->content = $no_product_message;
-        		    }
-        		}
+			// Set content the the HTML block output
+			if ( $field->id == 14 ) {
+				$field->content = $content_output;
+			}
+			// Set a hidden field to the constructed product string
+			if ( $field->id == 56 ) {
+				$field->defaultValue = $prod_string;
+			}
+		}
+	}
 
-        		return $form;
-        	}
-
-	        // Get link to single product page
-	        $prod_link = esc_url( get_permalink( $prod_obj->ID ) );
-
-	        $product_post_id = $prod_obj->ID;
-
-	        $prod_meta = get_post_meta( $product_post_id );
-	        $title = get_the_title( $product_post_id );
-	        $cat = get_the_terms ( $product_post_id, 'system_type' );
-
-	        $system_price = get_post_meta( $product_post_id, 'sqms-product-system-price', true );
-	        $warranty_price = get_post_meta( $product_post_id, 'sqms-product-warranty-price', true );
-
-	        $cmb = cmb2_get_metabox( 'sqms-product-overview-meta', $product_post_id );
-	        $cmb_fields = $cmb->prop( 'fields' );
-
-	        $content_output .= '<p>Your total quote is the guaranteed price for your selected system, plus the estimated cost of installation. <a href="https://hvacinstantquote.com/resources/faqs#about-money" target="_blank" title="Factors about cost of installation">Click here for common factors that affect the cost of an installation</a>.</p>';
-	        $content_output .= '<h3>Your System Selection &amp; Quote</h3>';
-	        $content_output .= '<div class="highlight-box cost-wrapper">';
-	        $content_output .= '<h2>Your New HVAC System Equipment Quote is <span>' .  esc_html( $system_price ) . '</span></h2>';
-	        $content_output .= '<h3>And Your Installation Estimate is Between <span>$1,000.00 - $2,500.00</span></h3>';
-	        $content_output .= '<p><small>Note: Proper Equipment Selection Will Be Verified On Installation Inspection</small></p>';
-	        $content_output .= '</div>';
-	        $content_output .= '<div class="financing-box">' . get_finance_options( $system_price, $warranty_price ) . '</div>';
-	        $content_output .= '<h3>Your Equipment Specifications:</h3>';
-	        $content_output .= get_product_data( $product_post_id );
-	        $content_output .= '<p>By accepting this quote, you will be connected with a local dealer who will schedule a visit to your home for inspection. You are not committing to a purchase.</p>';
-
-	        //loop back through form fields to get html field (id 14 on my form) that we are populating with the data gathered above
-	        foreach( $form['fields'] as &$field ) {
-	            //get html field
-	            if ( $field->id == 14 ) {
-	                //set the field content to the html
-	                $field->content = $content_output;
-	            }
-
-	            if ( $field->id == 56 ) {
-	                //set the field content to the html
-	                $field->defaultValue = $prod_string;
-	            }
-	        }
-	    }
-
-    //return altered form so changes are displayed
-    return $form;
+	//return altered form so changes are displayed
+	return $form;
 }
 
 function gf_load_error_report_form(){
