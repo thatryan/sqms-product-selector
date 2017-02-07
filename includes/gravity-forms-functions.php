@@ -16,8 +16,6 @@ add_filter( 'gform_pre_render_12', 'display_choice_result' );
 add_filter( 'gform_notification_12', 'get_dealer_email', 10, 3 );
 add_filter( 'gform_notification_16', 'get_dealer_email', 10, 3 );
 
-// add_filter( 'gform_entry_meta', 'add_meta_to_entry', 10, 2);
-
 add_filter('gform_pre_render_15', 'add_readonly_script');
 
 add_filter( 'gform_replace_merge_tags', 'replace_dealer_notification', 10, 7 );
@@ -561,38 +559,6 @@ function get_dealer_name( $entry ) {
 
 	return $dealer_name;
 }
-
-function add_meta_to_entry($entry_meta, $form_id){
-
-    $entry_meta['dealer'] = array(
-        'label' => 'Dealer',
-        'is_numeric' => false,
-        // 'update_entry_meta_callback' => 'update_dealer_entry_meta',
-        'is_default_column' => false
-    );
-
-    return $entry_meta;
-}
-
-function update_dealer_entry_meta( $key, $lead, $form ){
-
-	if( $form['id'] == 12 ) {
-		$dealer_id = rgpost( 'input_69'  );
-	}
-	elseif( $form['id'] == 16 ){
-		$dealer_id = rgpost( 'input_18'  );
-	}
-	else {
-		return '';
-	}
-
-	$dealer = get_post( $dealer_id );
-	$dealer_name = $dealer->post_name;
-	$value = $dealer_name;
-
-	return $value;
-}
-
 
 function replace_dealer_notification( $text, $form, $entry, $url_encode, $esc_html, $nl2br, $format ) {
 
