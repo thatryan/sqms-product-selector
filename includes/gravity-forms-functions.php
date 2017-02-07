@@ -1,130 +1,58 @@
 <?php
-/**
- * Remove anchor on selector form, messes with positioning on
- * page changes
- */
-add_filter( 'gform_confirmation_anchor_12', function() {
-    return 0;
-} );
-
+// Set scroll distance to 0 for selection form
+add_filter( 'gform_confirmation_anchor_12', function() { return 0; } );
 add_filter( 'gform_pre_render_12', 'create_dynamic_orientation_dropdown' );
-
-add_filter( 'gform_pre_render_20', 'dealer_review_id' );
-
 add_filter( 'gform_pre_render_12', 'display_choice_result' );
-
-add_filter( 'gform_notification_12', 'get_dealer_email', 10, 3 );
-add_filter( 'gform_notification_16', 'get_dealer_email', 10, 3 );
-
-add_filter('gform_pre_render_15', 'add_readonly_script');
-
+add_filter( 'gform_pre_render_15', 'add_readonly_script' );
+add_filter( 'gform_pre_render_20', 'dealer_review_id' );
+add_filter( 'gform_notification', 'get_dealer_email', 10, 3 );
 add_filter( 'gform_replace_merge_tags', 'replace_dealer_notification', 10, 7 );
-
-add_action( 'gform_pre_submission_12', 'choose_new_dealer' );
-add_action( 'gform_pre_submission_16', 'choose_new_dealer' );
-
 add_filter( 'gform_confirmation', 'custom_confirmation', 10, 4 );
 
+
+add_action( 'gform_pre_submission_12', 'choose_new_dealer' );
 add_action( 'gform_after_submission_15', 'update_report_entry_meta', 10, 2 );
+add_action( 'gform_pre_submission_16', 'choose_new_dealer' );
 
-add_action( 'wp_ajax_nopriv_gf_get_error_report_form', 'gf_load_error_report_form' );
-add_action( 'wp_ajax_gf_get_error_report_form', 'gf_load_error_report_form' );
+/**
+ * Dynamically build the drop down for SEER options based on previous choices
+ * @param  object $form GF $form
+ * @return object       Filtered GF $form
+ */
+function create_dynamic_orientation_dropdown( $form ) {
 
-function custom_confirmation( $confirmation, $form, $entry, $ajax ) {
+	$current_page = GFFormDisplay::get_current_page( $form['id'] );
 
-	if( $form['id'] == 12 ) {
-		$dealer_id = $entry['69'];
+	if ( $current_page >= 6 ) {
+
+		// Bring in the file with the SEER data
+		include 'data/data-orientation.php';
+
+		foreach ( $form['fields'] as &$field ) {
+
+			if ( $field->type != 'radio' || strpos( $field->cssClass, 'orientation-dynamic' ) === false ) {
+				continue;
+			}
+
+			$system_choice 	= rgpost( 'input_3' );
+			$tonnage 			= rgpost( 'input_4' );
+			$seer 				= rgpost( 'input_37' );
+			$string 				= $system_choice . $tonnage . $seer;
+
+			if( $string === 'our-3.0-14.5-' || $string === 'our-5.0-14.0-' ) {
+
+				$field->choices = $out_v;
+			}
+			else {
+				$field->choices = $out_all;
+			}
+
+			$field->placeholder = 'Choose Unit Orientation';
+		}
 	}
-	elseif( $form['id'] == 16 ) {
-		$dealer_id = $entry['18'];
-	}
-	elseif( $form['id'] == 23 ) {
-		$dealer_id = $entry['1'];
-	}
-	else {
-		return $confirmation;
-	}
-
-	$confirmation = '';
-	$dealer_name = get_the_title( $dealer_id );
-	$dealer_link =  get_permalink( $dealer_id );
-	$dealer_phone = get_post_meta( $dealer_id, 'sqms-product-phone', true );
-	$dealer_address = get_post_meta( $dealer_id, 'sqms-product-address', true );
-	$dealer_snippet = wpautop( get_post_meta( $dealer_id, 'sqms-product-snippet', true ) );
-	$dealer_years = get_post_meta( $dealer_id, 'sqms-product-years', true );
-	$dealer_license = get_post_meta( $dealer_id, 'sqms-product-license', true );
-
-	$dealer_headshot = wp_get_attachment_image( get_post_meta( $dealer_id, 'sqms-product-headshot_id', 1 ), 'medium' );
-
-	$dealer_logos = get_post_meta( $dealer_id, 'sqms-product-logos', 1 );
-
-
-	$address = wp_parse_args( $dealer_address, array(
-	    'address-1' => '',
-	    'address-2' => '',
-	    'city'      => '',
-	    'state'     => '',
-	    'zip'       => '',
-	) );
-
-	$confirmation .= '<div class="dealer-conf-wrapper clearfix">';
-	$confirmation .= '<h3>Thank you!</h3><p>Your certfied Payne dealer is <a href=" ' . $dealer_link . ' " target="_blank">' . $dealer_name . '</a> and they will be in contact to schedule your home visit within 24 hours.</p><hr />';
-
-	$confirmation .= '<h1 class="dealer-conf-title"><a href=" ' . $dealer_link . ' " target="_blank">' . $dealer_name . '</a></h1>';
-
-	$confirmation .= '<div class="clearfix">';
-
-	$confirmation .= '<div class="flex_column av_one_half  flex_column_div first">';
-	$confirmation .= '<div class="dealer-conf-headshot">' . $dealer_headshot . '</div>';
-	$confirmation .= '</div>';
-
-	$confirmation .= '<div class="flex_column av_one_half  flex_column_div dealer-conf-meta">';
-	$confirmation .= '<p class="dealer-conf-address">' . esc_html( $address['address-1'] );
-	if ( $address['address-2'] ) :
-	$confirmation .= ' | ' . esc_html( $address['address-2'] );
-	endif;
-	$confirmation .= ' | ' . esc_html( $address['city'] ) . ' | ' . esc_html( $address['state'] ) . ' | ' . esc_html( $address['zip'] ) . '</p>';
-	$confirmation .= '<p class="dealer-conf-phone">' . $dealer_phone . '</p>';
-
-	$confirmation .= '<p class="dealer-conf-years"><span>Years in Business: </span>' . $dealer_years . '</p>';
-	$confirmation .= '<p class="dealer-conf-license"><span>ROC#: </span>' . $dealer_license . '</p>';
-
-	$confirmation .= '</div>';
-	$confirmation .= '</div>';
-	$confirmation .= '<div class="dealer-conf-snippet clearfix">' . $dealer_snippet . '</div>';
-	$confirmation .= '<div class="dealer-conf-footer">';
-	if( $dealer_logos ) :
-	$confirmation .= '<h2>We our proud of our hard earned accredidations</h2>';
-	$confirmation .= '<ul class="dealer-conf-icons">';
-	foreach ( (array) $dealer_logos as $attachment_id => $attachment_url ) {
-	    $confirmation .= '<li class="dealer-conf-icon">';
-	    $confirmation .= wp_get_attachment_image( $attachment_id, 'medium' );
-	    $confirmation .= '</li>';
-	}
-	$confirmation .= '</ul>';
-	endif;
-	$confirmation .= '<p>A copy of your quote information has been emailed to you. You may also download a PDF copy below.</p>';
-	$confirmation .= do_shortcode( '[gravitypdf name="Client Copy" id="57a03bc2e0cc7" class="button dealer-pdf" entry='.$entry['id'].' text="Download PDF"]' );
-	$confirmation .= '</div>';
-	$confirmation .= '</div>';
-
-    return $confirmation;
+	return $form;
 }
 
-
-function add_readonly_script($form){
-	if( !$_POST ) : ?>
-
-    <script type="text/javascript">
-        jQuery(document).ready(function(){
-            /* apply only to a textarea with a class of gf_readonly */
-            jQuery("li.gf_readonly input").attr("readonly","readonly");
-        });
-    </script>
-
-    <?php endif;
-    return $form;
-}
 /**
  * Builds an HTML structure to show the data for the selected product based
  * on inputs from user combined to make selection string
@@ -230,142 +158,39 @@ function display_choice_result( $form ) {
 	return $form;
 }
 
-function gf_load_error_report_form(){
+/**
+ * Make some fields on dealer report form readonly
+ * @param object $form the $form object
+ */
+function add_readonly_script($form){
+	// Only load the script on initial load into the lightbox
+	if( !$_POST ) : ?>
 
-	gravity_form( $error_form_id, false, false, false, array('chosen_string'=>$chosen_string), 1, true );
+    <script type="text/javascript">
+        jQuery(document).ready(function(){
+            /* apply only to a textarea with a class of gf_readonly */
+            jQuery("li.gf_readonly input").attr("readonly","readonly");
+        });
+    </script>
 
-	die();
-}
-
-function get_product_data( $product_post_id ) {
-
-	$data_points = array(
-				"sqms-product-tonnage",
-				"sqms-product-odu-voltage",
-				"sqms-product-odu-model",
-				"sqms-product-furnace-model",
-				"sqms-product-cooling-btu",
-				"sqms-product-seer",
-				"sqms-product-eer",
-				"sqms-product-system-price"
-		);
-
-	$cmb = cmb2_get_metabox( 'sqms-product-overview-meta', $product_post_id );
-	$cmb_fields = $cmb->prop( 'fields' );
-	$prod_data_output = '';
-
-	$prod_data_output .= '<table>';
-
-	foreach( $cmb_fields as $cmb_field ) {
-	    $cmb_field = $cmb->get_field( $cmb_field );
-	    if( $cmb_field && in_array(  $cmb_field->args( 'id' ), $data_points ) && 'NA' !== $cmb_field->escaped_value() && '0.00' !== $cmb_field->escaped_value() ) {
-	        $prod_data_output .= '<tr>';
-	        $prod_data_output .= '<td>'. $cmb_field->args( 'name' ) .'</td>';
-	        $prod_data_output .= '<td>'. $cmb_field->escaped_value() .'</td>';
-	        $prod_data_output .= '</tr>';
-	    }
-	}
-	$prod_data_output .= '</table>';
-
-	return $prod_data_output;
-}
-
-function create_dynamic_orientation_dropdown( $form ) {
-
-	$current_page = GFFormDisplay::get_current_page( $form['id'] );
-
-	if ( $current_page >= 6 ) {
-
-		include 'data/data-orientation.php';
-
-		foreach ( $form['fields'] as &$field ) {
-
-		    if ( $field->type != 'radio' || strpos( $field->cssClass, 'orientation-dynamic' ) === false ) {
-		        continue;
-		    }
-
-		    $system_choice = rgpost( 'input_3' );
-		    $tonnage = rgpost( 'input_4' );
-		    $seer = rgpost( 'input_37' );
-
-		    $string = $system_choice . $tonnage . $seer;
-
-		    if( $string === 'our-3.0-14.5-' || $string === 'our-5.0-14.0-' ) {
-		    	$field->choices = $out_v;
-		    }
-		    else {
-		    	$field->choices = $out_all;
-		    }
-
-		    $field->placeholder = 'Choose Unit Orientation';
-
-		}
-	}
-
+    <?php endif;
     return $form;
 }
 
-function choose_new_dealer( $form ) {
-
-	$zone = '';
-	$address_field = '';
-	$dealer_id_field = '';
-	$dealer_view_count_key = 'sqms_dealer_view_count';
-
-	if( $form['id'] == 12 ) {
-		$address_field = '47_5';
-		$dealer_id_field = 'input_69';
-	}
-	elseif( $form['id'] == 16 ) {
-		$address_field = '12_5';
-		$dealer_id_field = 'input_18';
-	}
-	else {
-		return;
-	}
-
-	$client_zip_code = $_POST['input_'.$address_field];
-	$term = get_term_by( 'slug', $client_zip_code, 'zone' );
-	$parent = get_term_by( 'id', $term->parent, 'zone' );
-
-	if( $parent ) {
-		$zone = $parent->slug;
-	}
-
-	$args = array(
-	    'post_type' => 'sqms_payne_dealer',
-	                'posts_per_page' => 1,
-	                'orderby'        => 'rand',
-	    'tax_query' => array(
-	        array(
-	            'taxonomy' => 'zone',
-	            'field'    => 'slug',
-	            'terms'    =>  $zone,
-	        ),
-	    ),
-	);
-
-	$dealer_array = get_posts( $args );
-	$selected_dealer_id = $dealer_array[0]->ID;
-
-	$dealer_count = absint( get_post_meta( $selected_dealer_id, $dealer_view_count_key, true ) );
-	$dealer_count++;
-	update_post_meta( $selected_dealer_id, $dealer_view_count_key, $dealer_count );
-
-	$_POST[$dealer_id_field] = $selected_dealer_id;
-
-}
-
+/**
+ * Get the dealer name from ID to display who is being reviewed
+ * @param  object $form GF $form object
+ * @return object       Filtered GF $form
+ */
 function dealer_review_id( $form ) {
+
 	$dealer_id = $_GET['dealer_id'];
 	$dealer_name = get_the_title( $dealer_id );
-	$title_content = '';
 	$title_content .= '<h3>You Are Reviewing: ' . $dealer_name . '</h3>';
 
 	foreach( $form['fields'] as &$field ) {
-	    //get html field
+	    // Get field to output dealer name in
 	    if ( $field->id == 9 ) {
-	        //set the field content to the html
 	        $field->content = $title_content;
 	    }
 	}
@@ -373,6 +198,13 @@ function dealer_review_id( $form ) {
 	return $form;
 }
 
+/**
+ * Find the dealer email to send the GF notifcation to
+ * @param  object $notification GF $notifcation
+ * @param  object $form         GF $form
+ * @param  object $entry        GF $entry
+ * @return object               filtered GF $notifcation with updated email to address
+ */
 function get_dealer_email( $notification, $form, $entry ) {
 
 	if ( $notification['name'] == 'Admin Notification' ) {
@@ -388,121 +220,323 @@ function get_dealer_email( $notification, $form, $entry ) {
 			return $notification;
 		}
 
-	      // $dealer_email = get_post_meta( $dealer_id, 'sqms-product-email', true );
-
-	      // $notification['to'] = $dealer_email;
-	      $notification['to'] = $testing_email;
+	      // $dealer_email 	= get_post_meta( $dealer_id, 'sqms-product-email', true );
+	      // $notification['to'] 	= $dealer_email;
+	      $notification['to'] 	= $testing_email;
 
 	  }
 
 	return $notification;
 }
 
-
-function get_dealer_name( $entry ) {
-
-	$dealer_id = rgar( $entry, '69' );
-	$dealer_name = get_the_title( $dealer_id );
-
-	return $dealer_name;
-}
-
+/**
+ * Build a custom merge tag to override the default notifcation on selector form
+ * @param  string $text       Current text where merge tag lives
+ * @param  object $form       GF $form object
+ * @param  object $entry      GF $entry object
+ * @param  bool $url_encode encode urls?
+ * @param  book $esc_html   encode html?
+ * @param  bool $nl2br      new lines to breaks?
+ * @param  string $format     How should value be formatted? Default HTML
+ * @return string             Modified string for notification
+ */
 function replace_dealer_notification( $text, $form, $entry, $url_encode, $esc_html, $nl2br, $format ) {
 
-    $custom_merge_tag = '{dealer_notification}';
+	$custom_merge_tag = '{dealer_notification}';
 
-    if ( strpos( $text, $custom_merge_tag ) === false ) {
-        return $text;
-    }
-
-    $prod_string = rgar( $entry, '56' );
-    $prod_obj = get_page_by_path($prod_string, OBJECT, 'sqms_prod_select');
-    $product_post_id = $prod_obj->ID;
-
-    // Address data
-    $address_field_id      = 47;
-    $street_value  = rgar( $entry, $address_field_id . '.1' );
-    $street2_value = rgar( $entry, $address_field_id . '.2' );
-    $city_value    = rgar( $entry, $address_field_id . '.3' );
-    $state_value   = rgar( $entry, $address_field_id . '.4' );
-    $zip_value     = rgar( $entry, $address_field_id . '.5' );
-
-    if( $street2_value ) {
-    	$formatted_street = $street_value . ', ' . $street2_value;
-    }
-    else {
-    	$formatted_street = $street_value;
-    }
-    $formatted_address_value = $formatted_street . '<br>' . $city_value . ', ' . $state_value . ' ' . $zip_value;
-
-	// accessories data
-	$accessory_string       = '';
-
-	foreach($form_data['field']['57.Are you interested in any accessories?'] as $acc_val){
-	    $accessory_string .= $acc_val . '<br>';
+	if ( strpos( $text, $custom_merge_tag ) === false ) {
+		return $text;
 	}
 
-    include 'template/template-merge-tag.php';
+	$prod_string 		= rgar( $entry, '56' );
+	$prod_obj 			= get_page_by_path($prod_string, OBJECT, 'sqms_prod_select');
+	$product_post_id 	= $prod_obj->ID;
+	$address_field_id 	= 47;
+	$street_value 		= rgar( $entry, $address_field_id . '.1' );
+	$street2_value 		= rgar( $entry, $address_field_id . '.2' );
+	$city_value 			= rgar( $entry, $address_field_id . '.3' );
+	$state_value 		= rgar( $entry, $address_field_id . '.4' );
+	$zip_value 			= rgar( $entry, $address_field_id . '.5' );
+	$accessory_string 	= '';
 
-    $text = str_replace( $custom_merge_tag, $prod_data_output, $text );
+	if( $street2_value ) {
+		$formatted_street = $street_value . ', ' . $street2_value;
+	}
+	else {
+		$formatted_street = $street_value;
+	}
 
-    return $text;
+	$formatted_address_value = $formatted_street . '<br>' . $city_value . ', ' . $state_value . ' ' . $zip_value;
+
+	foreach($form_data['field']['57.Are you interested in any accessories?'] as $acc_val){
+		$accessory_string .= $acc_val . '<br>';
+	}
+
+	// Bring in the template file with matching GF styling
+	include 'template/template-merge-tag.php';
+
+	$text = str_replace( $custom_merge_tag, $prod_data_output, $text );
+
+	return $text;
 }
 
+/**
+ * Build a custom confirmation page to display chosen dealer info
+ * @param  string $confirmation default confirmation text
+ * @param  object $form         GF $form object
+ * @param  object $entry        GF $entry object
+ * @param  book $ajax         is ajax being used on this form?
+ * @return string               Rebuil HTML confirmation message
+*/
+function custom_confirmation( $confirmation, $form, $entry, $ajax ) {
+	// Product selection form
+	if( $form['id'] == 12 ) {
+		$dealer_id = $entry['69'];
+	}
+	// Photo quote form
+	elseif( $form['id'] == 16 ) {
+		$dealer_id = $entry['18'];
+	}
+	// Temp testing form
+	elseif( $form['id'] == 23 ) {
+		$dealer_id = $entry['1'];
+	}
+	// None of the above, abort
+	else {
+		return $confirmation;
+	}
+
+	$confirmation 		= '';
+	$dealer_name 	= get_the_title( $dealer_id );
+	$dealer_link 		=  get_permalink( $dealer_id );
+	$dealer_phone 	= get_post_meta( $dealer_id, 'sqms-product-phone', true );
+	$dealer_address 	= get_post_meta( $dealer_id, 'sqms-product-address', true );
+	$dealer_snippet 	= wpautop( get_post_meta( $dealer_id, 'sqms-product-snippet', true ) );
+	$dealer_years 		= get_post_meta( $dealer_id, 'sqms-product-years', true );
+	$dealer_license 	= get_post_meta( $dealer_id, 'sqms-product-license', true );
+	$dealer_headshot = wp_get_attachment_image( get_post_meta( $dealer_id, 'sqms-product-headshot_id', 1 ), 'medium' );
+	$dealer_logos 		= get_post_meta( $dealer_id, 'sqms-product-logos', 1 );
+
+	$address = wp_parse_args( $dealer_address, array(
+		'address-1' 	=> '',
+		'address-2' 	=> '',
+		'city' 			=> '',
+		'state' 			=> '',
+		'zip' 			=> '',
+		)
+	);
+
+	$confirmation .= '<div class="dealer-conf-wrapper clearfix">';
+	$confirmation .= '<h3>Thank you!</h3><p>Your certfied Payne dealer is <a href=" ' . $dealer_link . ' " target="_blank">' . $dealer_name . '</a> and they will be in contact to schedule your home visit within 24 hours.</p><hr />';
+	$confirmation .= '<h1 class="dealer-conf-title"><a href=" ' . $dealer_link . ' " target="_blank">' . $dealer_name . '</a></h1>';
+	$confirmation .= '<div class="clearfix">';
+	$confirmation .= '<div class="flex_column av_one_half  flex_column_div first">';
+	$confirmation .= '<div class="dealer-conf-headshot">' . $dealer_headshot . '</div>';
+	$confirmation .= '</div>';
+	$confirmation .= '<div class="flex_column av_one_half  flex_column_div dealer-conf-meta">';
+	$confirmation .= '<p class="dealer-conf-address">' . esc_html( $address['address-1'] );
+	if ( $address['address-2'] ) :
+	$confirmation .= ' | ' . esc_html( $address['address-2'] );
+	endif;
+	$confirmation .= ' | ' . esc_html( $address['city'] ) . ' | ' . esc_html( $address['state'] ) . ' | ' . esc_html( $address['zip'] ) . '</p>';
+	$confirmation .= '<p class="dealer-conf-phone">' . $dealer_phone . '</p>';
+	$confirmation .= '<p class="dealer-conf-years"><span>Years in Business: </span>' . $dealer_years . '</p>';
+	$confirmation .= '<p class="dealer-conf-license"><span>ROC#: </span>' . $dealer_license . '</p>';
+	$confirmation .= '</div>';
+	$confirmation .= '</div>';
+	$confirmation .= '<div class="dealer-conf-snippet clearfix">' . $dealer_snippet . '</div>';
+	$confirmation .= '<div class="dealer-conf-footer">';
+	if( $dealer_logos ) :
+	$confirmation .= '<h2>We our proud of our hard earned accredidations</h2>';
+	$confirmation .= '<ul class="dealer-conf-icons">';
+	foreach ( (array) $dealer_logos as $attachment_id => $attachment_url ) {
+	$confirmation .= '<li class="dealer-conf-icon">';
+	$confirmation .= wp_get_attachment_image( $attachment_id, 'medium' );
+	$confirmation .= '</li>';
+	}
+	$confirmation .= '</ul>';
+	endif;
+	$confirmation .= '<p>A copy of your quote information has been emailed to you. You may also download a PDF copy below.</p>';
+	$confirmation .= do_shortcode( '[gravitypdf name="Client Copy" id="57a03bc2e0cc7" class="button dealer-pdf" entry='.$entry['id'].' text="Download PDF"]' );
+	$confirmation .= '</div>';
+	$confirmation .= '</div>';
+
+	return $confirmation;
+}
+
+/**
+ * This finds the dealer we are assigning to this submission based on user location
+ * @param  object $form GF $form object
+ * @return void       Either aborts if not proper form, or updates $_POST
+ */
+function choose_new_dealer( $form ) {
+
+	$zone 						= '';
+	$address_field 			= '';
+	$dealer_id_field 			= '';
+	$dealer_view_count_key 	= 'sqms_dealer_view_count';
+
+	if( $form['id'] == 12 ) {
+		$address_field 	= '47_5';
+		$dealer_id_field 	= 'input_69';
+	}
+	elseif( $form['id'] == 16 ) {
+		$address_field 	= '12_5';
+		$dealer_id_field 	= 'input_18';
+	}
+	else {
+		return;
+	}
+
+	// Find out what zone this client is in
+	$client_zip_code 	= $_POST['input_'.$address_field];
+	$term 				= get_term_by( 'slug', $client_zip_code, 'zone' );
+	$parent 			= get_term_by( 'id', $term->parent, 'zone' );
+
+	if( $parent ) {
+		$zone = $parent->slug;
+	}
+
+	// Get all dealers who service this zone
+	$args = array(
+		'post_type' 			=> 'sqms_payne_dealer',
+		'posts_per_page' 	=> 1,
+		'orderby'        		=> 'rand',
+		'tax_query' => array(
+			array(
+				'taxonomy' 		=> 'zone',
+				'field' 			=> 'slug',
+				'terms' 			=> $zone,
+				),
+			),
+		);
+
+	// Found a dealer, update their view count for later use...
+	$dealer_array 			= get_posts( $args );
+	$selected_dealer_id 	= $dealer_array[0]->ID;
+	$dealer_count 			= absint( get_post_meta( $selected_dealer_id, $dealer_view_count_key, true ) );
+	$dealer_count++;
+
+	update_post_meta( $selected_dealer_id, $dealer_view_count_key, $dealer_count );
+
+	// Set POST var to dealer ID for confirmation
+	$_POST[$dealer_id_field] = $selected_dealer_id;
+}
+
+/**
+ * Mark entry in list as reported on
+ * @param  object $entry GF $entry object
+ * @param  object $form  GF $form object
+ * @return void        updates GF entry meta
+ */
 function update_report_entry_meta( $entry, $form ) {
 
-	$reported = 'Yes';
-	$quote_form_id = 12;
-	$quote_id = $_GET['quote_id'];
-
-	$quote_id = filter_input( INPUT_GET, 'quote_id', FILTER_SANITIZE_NUMBER_INT );
-
+	$reported 			= 'Yes';
+	$quote_form_id 	= 12;
+	$quote_id 			= $_GET['quote_id'];
+	$quote_id 			= filter_input( INPUT_GET, 'quote_id', FILTER_SANITIZE_NUMBER_INT );
 
 	gform_update_meta( intval( $quote_id ), 'quote_reported', $reported, $quote_form_id );
 
 }
 
-function get_finance_options( $system_price, $warranty_price ) {
+// Utility functions
 
-	$equip_cost = str_replace( ',', '', ltrim( $system_price, '$' ) );
-	$install_cost_min = 1000.00;
-	$install_cost_max = 2500.00;
-	$total_cost_min = $equip_cost + $install_cost_min;
-	$total_cost_max = $equip_cost + $install_cost_max;
+/**
+ * Given the product ID, get all its meta and build a table
+ * @param  int $product_post_id the post ID of the chosen product
+ * @return string                  HTML structure of product data
+ */
+function get_product_data( $product_post_id ) {
 
-	$term_options = array(
-			35,
-			47,
-			59
+	$data_points = array(
+		"sqms-product-tonnage",
+		"sqms-product-odu-voltage",
+		"sqms-product-odu-model",
+		"sqms-product-furnace-model",
+		"sqms-product-cooling-btu",
+		"sqms-product-seer",
+		"sqms-product-eer",
+		"sqms-product-system-price"
 		);
 
-		$finance_data = '';
-		$finance_data .= '<h3>Estimated Monthly Financing Payments, including installation costs, with <a href="https://hvacinstantquote.com/resources/appliance-financing/" target="_blank" title="Microf Financing">Microf Financing</a></h3>';
-		$finance_data .= '<table><thead><tr><th>Payment Amount</th><th>35 monthly payments</th><th>47 monthly payments</th><th>59 monthly payments</th></tr></thead><tbody><tr><td>$1,000.00 Install Cost</td>';
+	$cmb 					= cmb2_get_metabox( 'sqms-product-overview-meta', $product_post_id );
+	$cmb_fields 			= $cmb->prop( 'fields' );
+	$prod_data_output 	= '<table>';
 
-		foreach ($term_options as $term) {
-			$term_payment = microf_payment_calc($total_cost_min, $term);
+	foreach( $cmb_fields as $cmb_field ) {
 
-			$finance_data .= '<td>$' . $term_payment . '</td>';
+		$cmb_field = $cmb->get_field( $cmb_field );
+
+		if( $cmb_field && in_array(  $cmb_field->args( 'id' ), $data_points ) && 'NA' !== $cmb_field->escaped_value() && '0.00' !== $cmb_field->escaped_value() ) {
+
+			$prod_data_output .= '<tr>';
+			$prod_data_output .= '<td>'. $cmb_field->args( 'name' ) .'</td>';
+			$prod_data_output .= '<td>'. $cmb_field->escaped_value() .'</td>';
+			$prod_data_output .= '</tr>';
 		}
+	}
 
+	$prod_data_output .= '</table>';
 
-		$finance_data .= '</tr><tr><td>$2,500.00 Install Cost</td>';
-		foreach ($term_options as $term) {
-			$term_payment = microf_payment_calc($total_cost_max, $term);
-
-			$finance_data .= '<td>$' . $term_payment . '</td>';
-		}
-		$finance_data .= '</tr></tbody></table>';
-		$finance_data .= '<p><small>Note: Actual monthly payment based upon actual installation cost provided by your dealer.</small></p>';
-		$finance_data .= '<h3>Optional Warranty Cost: <b>'.$warranty_price.'</b></h3>';
-		$finance_data .= '<p><small>Note: Warranty cost not included in finance projections. Extended warranties are optional and can be added after accepting the final quote below.</small></p>';
-
-
-	return $finance_data;
+	return $prod_data_output;
 }
 
-function microf_payment_calc($amount_financed, $term){
+/**
+ * Build the finance options table
+ * @param  string $system_price   Cost of the system
+ * @param  string $warranty_price Cost of optional warranty
+ * @return string                 HTML structure of warranty cost table
+ */
+function get_finance_options( $system_price, $warranty_price ) {
+
+	$equip_cost 			= str_replace( ',', '', ltrim( $system_price, '$' ) );
+	$install_cost_min 		= 1000.00;
+	$install_cost_max 		= 2500.00;
+	$total_cost_min 		= $equip_cost + $install_cost_min;
+	$total_cost_max 		= $equip_cost + $install_cost_max;
+
+	$term_options 	= array(
+		35,
+		47,
+		59
+		);
+
+	$finance_data = '';
+	$finance_data .= '<h3>Estimated Monthly Financing Payments, including installation costs, with <a href="https://hvacinstantquote.com/resources/appliance-financing/" target="_blank" title="Microf Financing">Microf Financing</a></h3>';
+	$finance_data .= '<table><thead><tr><th>Payment Amount</th><th>35 monthly payments</th><th>47 monthly payments</th><th>59 monthly payments</th></tr></thead><tbody><tr><td>$1,000.00 Install Cost</td>';
+
+	foreach ($term_options as $term) {
+		$term_payment = microf_payment_calc($total_cost_min, $term);
+		$finance_data .= '<td>$' . $term_payment . '</td>';
+	}
+
+	$finance_data .= '</tr><tr><td>$2,500.00 Install Cost</td>';
+
+	foreach ($term_options as $term) {
+		$term_payment = microf_payment_calc($total_cost_max, $term);
+		$finance_data .= '<td>$' . $term_payment . '</td>';
+	}
+
+	$finance_data .= '</tr></tbody></table>';
+	$finance_data .= '<p><small>Note: Actual monthly payment based upon actual installation cost provided by your dealer.</small></p>';
+	$finance_data .= '<h3>Optional Warranty Cost: <b>'.$warranty_price.'</b></h3>';
+	$finance_data .= '<p><small>Note: Warranty cost not included in finance projections. Extended warranties are optional and can be added after accepting the final quote below.</small></p>';
+
+	return $finance_data;
+
+}
+
+/**
+ * Use Microf's formula to calculate finance cost
+ * @param  float $amount_financed Cost of system
+ * @param  int $term            term length
+ * @return float                  Payment amount
+ */
+function microf_payment_calc( $amount_financed, $term ) {
+
 	$estimated_payment = ROUND(($amount_financed/$term), 2) + ROUND(($amount_financed *(53/2400)), 2);
+
 	return $estimated_payment;
+
 }
