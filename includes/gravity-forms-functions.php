@@ -270,49 +270,6 @@ function get_product_data( $product_post_id ) {
 	return $prod_data_output;
 }
 
-function build_disclaimer_html() {
-$disclaimer_html = <<<'DISCLAIMERS'
-<h3>Factors that may affect price when dealer evaluates your home:</h3>
-<div class="col-wrapper">
-<div class="col-left">
-<h4>Ductwork Issues</h4>
-<ul>
-<li>Inadequate return or supply air</li>
-<li>Leaking ductwork</li>
-<li>Collapsed flex duct</li>
-</ul>
-<h4>Electrical</h4>
-<ul>
-<li>Inadequate or improve power supply</li>
-<li>Requires new disconnect / fuse sizes</li>
-<li>New thermostat required</li>
-</ul>
-<h4>Unit Location</h4>
-<ul>
-<li>Diificult to access unit due to fences, roof location, etc.</li>
-<li>Unit location changes</li>
-</ul>
-<h4>Split System Issues</h4>
-<ul>
-<li>New refrigerant line set</li>
-<li>Evap coil dimension changes from original</li>
-<li>New concrete mounting pad needed</li>
-</ul>
-<h4>Package Units</h4>
-<ul>
-<li>New roof curb required</li>
-<li>New downturn plennum required</li>
-</ul>
-</div>
-<div class="col-right">
-<img src="https://hvacinstantquote.com/wp-content/uploads/2016/09/hvac-installation.jpg" class="alignright" />
-</div>
-</div>
-DISCLAIMERS;
-
-return $disclaimer_html;
-}
-
 function create_dynamic_orientation_dropdown( $form ) {
 
 	$current_page = GFFormDisplay::get_current_page( $form['id'] );
