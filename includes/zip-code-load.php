@@ -56,7 +56,7 @@ function gf_zip_load_form(){
 	    		}
 	    	}
 
-	    	gravity_form( $zip_form_id, false, false, false, array('market_key'=>$market_zone), 1, true );
+	    	gravity_form( $zip_form_id, false, false, false, array('market_key'=>$market_zone), true );
 	    }
 	    else {
 	    	echo '<div class="avia_message_box avia-color-blue avia-size-large avia-icon_select-yes avia-border-solid  avia-builder-el-1  el_after_av_textblock  avia-builder-el-last  "><span class="avia_message_box_title">Check Back Soon!</span><div class="avia_message_box_content"><p style="text-transform:none;font-size:16px;">HVAC IQ currently services the greater Phoenix, AZ market. We are expanding throughout the southwest, check back soon to see if we service your city!</p></div></div>';

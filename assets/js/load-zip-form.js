@@ -8,7 +8,7 @@
 
 			$.ajax({
 				url: zip_form_params.ajaxurl,
-				type: 'get',
+				method: 'get',
 				data: {
 					'action':'get_gravity_form',
 					'zip_value' : zipEntered,

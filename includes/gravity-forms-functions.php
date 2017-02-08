@@ -3,12 +3,12 @@
 add_filter( 'gform_confirmation_anchor_12', function() { return 0; } );
 add_filter( 'gform_pre_render_12', 'create_dynamic_orientation_dropdown' );
 add_filter( 'gform_pre_render_12', 'display_choice_result' );
+add_filter( 'gform_notification_12', 'get_dealer_email', 10, 3 );
 add_filter( 'gform_pre_render_15', 'add_readonly_script' );
 add_filter( 'gform_pre_render_20', 'dealer_review_id' );
-add_filter( 'gform_notification', 'get_dealer_email', 10, 3 );
+add_filter( 'gform_notification_16', 'get_dealer_email', 10, 3 );
 add_filter( 'gform_replace_merge_tags', 'replace_dealer_notification', 10, 7 );
 add_filter( 'gform_confirmation', 'custom_confirmation', 10, 4 );
-
 
 add_action( 'gform_pre_submission_12', 'choose_new_dealer' );
 add_action( 'gform_after_submission_15', 'update_report_entry_meta', 10, 2 );
@@ -441,6 +441,18 @@ function update_report_entry_meta( $entry, $form ) {
 }
 
 // Utility functions
+/**
+ * Get the dealer name for output in PDF
+ * @param  object $entry GF $entry object
+ * @return string        Dealer name
+ */
+function get_dealer_name( $entry ) {
+
+	$dealer_id = rgar( $entry, '69' );
+	$dealer_name = get_the_title( $dealer_id );
+
+	return $dealer_name;
+}
 
 /**
  * Given the product ID, get all its meta and build a table

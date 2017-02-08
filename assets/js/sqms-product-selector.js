@@ -1,7 +1,6 @@
 var gfp_auto_advance_page_js = {"fields":["3","21","25","22","37","6","65","27","59", "70", "71", "72", "73"],"form_id":"12"};
 
 function gfp_add_auto_advance_field_events(_, e) {
-    console.log( e );
     if (e == gfp_auto_advance_page_js.form_id) {
 
         for (var a = 0; a < gfp_auto_advance_page_js.fields.length; a++){
