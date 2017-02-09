@@ -1,21 +1,40 @@
 <?php
+/**
+ * Registers all the meta fields.
+ */
+add_filter( 'cmb2_sanitize_text_number', 'sqms_sanitize_text_number', 10, 2 );
 
+add_action( 'cmb2_render_text_number', 'sqms_render_text_number', 10, 5 );
 add_action( 'cmb2_init', 'sqms_prodcut_selector_meta' );
 
-// render numbers
-add_action( 'cmb2_render_text_number', 'sm_cmb_render_text_number', 10, 5 );
-function sm_cmb_render_text_number( $field, $escaped_value, $object_id, $object_type, $field_type_object ) {
-    echo $field_type_object->input( array( 'class' => 'cmb2-text-small', 'type' => 'number' ) );
+/**
+ * Sanitize input, be sure it is a number.
+ * @param  string $null Override value to return, modifies to short circuit CMB2 saving
+ * @param  string $new  Value being passed in
+ * @return string       Clean value
+ */
+function sqms_sanitize_text_number( $null, $new ) {
+	$new = preg_replace( "/[^0-9]/", "", $new );
+	return $new;
 }
 
-// sanitize the field
-add_filter( 'cmb2_sanitize_text_number', 'sm_cmb2_sanitize_text_number', 10, 2 );
-function sm_cmb2_sanitize_text_number( $null, $new ) {
-    $new = preg_replace( "/[^0-9]/", "", $new );
-
-    return $new;
+/**
+ * Custom field for a text number
+ * @param  object $field             CMB2 field object
+ * @param  string $escaped_value     Value pass through escaping filter
+ * @param  int $object_id         CPT ID for object
+ * @param  string $object_type       Current object type
+ * @param  object $field_type_object CMB2_Types object
+ * @return string                   Output for new field
+ */
+function sqms_render_text_number( $field, $escaped_value, $object_id, $object_type, $field_type_object ) {
+	echo $field_type_object->input( array( 'class' => 'cmb2-text-small', 'type' => 'number' ) );
 }
 
+/**
+ * Registes all the meta fields used for dealer pages, product posts, and user ID.
+ * @return void Registers/adds meta boxes
+ */
 function sqms_prodcut_selector_meta() {
 	// Prefix the meta
 	$prefix = 'sqms-product-';
@@ -113,9 +132,6 @@ function sqms_prodcut_selector_meta() {
 		'id'         => $prefix . 'logos',
 		'type'       => 'file_list',
 	) );
-
-
-
 
 	$sqms_dealer_meta->add_field( array(
 		'name'        => 'Dealer Selections',
@@ -233,7 +249,6 @@ function sqms_prodcut_selector_meta() {
 		'type'       => 'text',
 		'default'       => 'NA',
 	) );
-
 
 	// Add fields to breakdown container
 	$sqms_prod_overview_meta->add_field( array(
@@ -408,21 +423,20 @@ function sqms_prodcut_selector_meta() {
  */
 function cmb2_get_post_options( $query_args ) {
 
-    $args = wp_parse_args( $query_args, array(
-        'post_type'   => 'sqms_payne_dealer',
-        'numberposts' => -1,
-    ) );
+	$args = wp_parse_args( $query_args, array(
+			'post_type' 		=> 'sqms_payne_dealer',
+			'numberposts' 	=> -1,
+		) );
+	$posts 			= get_posts( $args );
+	$post_options 	= array();
 
-    $posts = get_posts( $args );
+	if ( $posts ) {
+		foreach ( $posts as $post ) {
+			$post_options[ $post->post_name ] = $post->post_title;
+		}
+	}
 
-    $post_options = array();
-    if ( $posts ) {
-        foreach ( $posts as $post ) {
-          $post_options[ $post->post_name ] = $post->post_title;
-        }
-    }
-
-    return $post_options;
+	return $post_options;
 }
 
 /**

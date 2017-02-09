@@ -1,11 +1,18 @@
 <?php
+/**
+ * Functions for outputting and supporting the shortcodes.
+ */
 
-// https://www.gravityhelp.com/documentation/article/using-dynamic-population/
-// Above link for parameters on dynamic population
-// used for sending data from lead list to form for auto notification to get review
-
+add_action( 'init', 'display_dealer_entries_register_shortcode' );
+add_action( 'init', 'display_dealer_reviews_register_shortcode' );
 add_action( 'wp_ajax_nopriv_gf_button_get_form', 'gf_button_ajax_get_form' );
 add_action( 'wp_ajax_gf_button_get_form', 'gf_button_ajax_get_form' );
+
+
+
+function display_dealer_entries_register_shortcode() {
+	add_shortcode( 'dealer-entries', 'display_dealer_entries' );
+}
 
 function display_dealer_entries() {
 
@@ -79,25 +86,18 @@ function display_dealer_entries() {
 	return $lead_list;
 }
 
-function display_dealer_entries_register_shortcode() {
-	add_shortcode( 'dealer-entries', 'display_dealer_entries' );
-}
-add_action( 'init', 'display_dealer_entries_register_shortcode' );
-
-function gf_button_ajax_get_form(){
-
-	$report_form_id = isset( $_GET['form_id'] ) ? absint( $_GET['form_id'] ) : 0;
-	gravity_form( $report_form_id,true, false, false, false, true );
-
-	die();
-}
-
-
+/**
+ * Add shortcode to display dealer ratings
+ * @return void registers shortcode
+ */
 function display_dealer_reviews_register_shortcode() {
 	add_shortcode( 'dealer-reviews', 'display_dealer_reviews' );
 }
-add_action( 'init', 'display_dealer_reviews_register_shortcode' );
 
+/**
+ * Output the dealer review rating
+ * @return string HTML for stars
+ */
 function display_dealer_reviews() {
 
 	$dealer_id = get_the_ID();
@@ -133,11 +133,10 @@ function display_dealer_reviews() {
 	return $rating_stars;
 }
 
-add_filter( 'gform_replace_merge_tags', 'gv_grab_post_id',10, 7 );
-function gv_grab_post_id ( $text, $form, $entry, $url_encode, $esc_html, $nl2br, $format ) {
-    $merge_tag = '{current_post_id}';
-    if ( strpos( $text, $merge_tag ) === false ) {
-        return $text;
-    }
-    return get_the_ID();
+function gf_button_ajax_get_form(){
+
+	$report_form_id = isset( $_GET['form_id'] ) ? absint( $_GET['form_id'] ) : 0;
+	gravity_form( $report_form_id,true, false, false, false, true );
+
+	die();
 }
