@@ -1,4 +1,9 @@
 <?php
+/**
+ * Functions to handle all the dynamic building and display of Gravity Forms
+ * options inside of the system selector and photo quote forms.
+ */
+
 // Set scroll distance to 0 for selection form
 add_filter( 'gform_confirmation_anchor_12', function() { return 0; } );
 add_filter( 'gform_pre_render_12', 'create_dynamic_orientation_dropdown' );
