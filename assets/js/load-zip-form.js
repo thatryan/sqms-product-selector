@@ -14,7 +14,7 @@
 					'zip_value' : zipEntered,
 				},
 				beforeSend: function (jqXHR, settings) {
-				  // console.log( settings );
+				  $(".sqms-form-chooser-wrapper").append("<div class='zip-loader'></div>");
 				},
 				success: function( response ) {
 					formWrapper.empty().html( response );

@@ -1,3 +1,9 @@
+.zip-loader {
+	width: 300px;
+	height: 217px;
+	margin: 0 auto;
+	background: url(../img/hiq-loader.gif) no-repeat;
+}
 #top form.sqms-zip-search-form {
 	display: none;
 	margin: 0;

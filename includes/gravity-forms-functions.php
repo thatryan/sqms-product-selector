@@ -6,7 +6,6 @@
 
 // Set scroll distance to 0 for selection form
 add_filter( 'gform_confirmation_anchor_12', function() { return 0; } );
-add_filter( 'gform_pre_render_12', 'create_dynamic_orientation_dropdown' );
 add_filter( 'gform_pre_render_12', 'display_choice_result' );
 add_filter( 'gform_notification_12', 'get_dealer_email', 10, 3 );
 add_filter( 'gform_pre_render_15', 'add_readonly_script' );
@@ -14,49 +13,11 @@ add_filter( 'gform_pre_render_20', 'dealer_review_id' );
 add_filter( 'gform_notification_16', 'get_dealer_email', 10, 3 );
 add_filter( 'gform_replace_merge_tags', 'replace_dealer_notification', 10, 7 );
 add_filter( 'gform_confirmation', 'custom_confirmation', 10, 4 );
+add_filter( 'gform_ajax_spinner_url', 'add_hiq_spinner_image', 10, 2 );
 
 add_action( 'gform_pre_submission_12', 'choose_new_dealer' );
 add_action( 'gform_after_submission_15', 'update_report_entry_meta', 10, 2 );
 add_action( 'gform_pre_submission_16', 'choose_new_dealer' );
-
-/**
- * Dynamically build the drop down for SEER options based on previous choices
- * @param  object $form GF $form
- * @return object       Filtered GF $form
- */
-function create_dynamic_orientation_dropdown( $form ) {
-
-	$current_page = GFFormDisplay::get_current_page( $form['id'] );
-
-	if ( $current_page >= 6 ) {
-
-		// Bring in the file with the SEER data
-		include 'data/data-orientation.php';
-
-		foreach ( $form['fields'] as &$field ) {
-
-			if ( $field->type != 'radio' || strpos( $field->cssClass, 'orientation-dynamic' ) === false ) {
-				continue;
-			}
-
-			$system_choice 	= rgpost( 'input_3' );
-			$tonnage 			= rgpost( 'input_4' );
-			$seer 				= rgpost( 'input_37' );
-			$string 				= $system_choice . $tonnage . $seer;
-
-			if( $string === 'our-3.0-14.5-' || $string === 'our-5.0-14.0-' ) {
-
-				$field->choices = $out_v;
-			}
-			else {
-				$field->choices = $out_all;
-			}
-
-			$field->placeholder = 'Choose Unit Orientation';
-		}
-	}
-	return $form;
-}
 
 /**
  * Builds an HTML structure to show the data for the selected product based
@@ -367,6 +328,17 @@ function custom_confirmation( $confirmation, $form, $entry, $ajax ) {
 	$confirmation .= '</div>';
 
 	return $confirmation;
+}
+
+/**
+ * Replace default GF loading image with custom one
+ * @param string $image_src Spinner image to be filtered
+ * @param object $form      GF $form object
+ * @return  string New spinner image URL
+ */
+function add_hiq_spinner_image( $image_src, $form ) {
+	return SQMS_PROD_SEL_URL . '/assets/img/hiq-loader.gif';
+	return " ";
 }
 
 /**
