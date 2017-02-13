@@ -396,7 +396,10 @@ function choose_new_dealer( $form ) {
 
 	update_post_meta( $selected_dealer_id, $dealer_view_count_key, $dealer_count );
 
-	// Set POST var to dealer ID for confirmation
+	/**
+	 * Set POST variable for the hidden dealer ID field to the dealer ID chosen via query above
+	 * See gravityhelp.com/documentation/article/gform_pre_submission
+	 */
 	$_POST[$dealer_id_field] = $selected_dealer_id;
 }
 
