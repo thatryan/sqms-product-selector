@@ -180,7 +180,8 @@ function get_dealer_email( $notification, $form, $entry ) {
 			$testing_email = rgpost( 'input_12'  );
 		}
 		elseif( $form['id'] == 16 ){
-			$dealer_id = rgpost( 'input_18'  );
+			// $dealer_id = rgpost( 'input_18'  );
+			$testing_email = rgpost( 'input_10' );
 		}
 		else {
 			return $notification;
@@ -322,8 +323,10 @@ function custom_confirmation( $confirmation, $form, $entry, $ajax ) {
 	}
 	$confirmation .= '</ul>';
 	endif;
+	if( $form['id'] == 12 ) {
 	$confirmation .= '<p>A copy of your quote information has been emailed to you. You may also download a PDF copy below.</p>';
 	$confirmation .= do_shortcode( '[gravitypdf name="Client Copy" id="57a03bc2e0cc7" class="button dealer-pdf" entry='.$entry['id'].' text="Download PDF"]' );
+	}
 	$confirmation .= '</div>';
 	$confirmation .= '</div>';
 
