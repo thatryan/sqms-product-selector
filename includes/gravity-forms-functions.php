@@ -15,9 +15,9 @@ add_filter( 'gform_replace_merge_tags', 'replace_dealer_notification', 10, 7 );
 add_filter( 'gform_confirmation', 'custom_confirmation', 10, 4 );
 add_filter( 'gform_ajax_spinner_url', 'add_hiq_spinner_image', 10, 2 );
 
-add_action( 'gform_pre_submission_12', 'choose_new_dealer' );
+add_action( 'gform_validation_12', 'choose_new_dealer' );
 add_action( 'gform_after_submission_15', 'update_report_entry_meta', 10, 2 );
-add_action( 'gform_pre_submission_16', 'choose_new_dealer' );
+add_action( 'gform_validation_16', 'choose_new_dealer' );
 
 /**
  * Builds an HTML structure to show the data for the selected product based
@@ -176,20 +176,20 @@ function get_dealer_email( $notification, $form, $entry ) {
 	if ( $notification['name'] == 'Admin Notification' ) {
 
 		if( $form['id'] == 12 ) {
-			// $dealer_id = rgpost( 'input_69'  );
-			$testing_email = rgpost( 'input_12'  );
+			$dealer_id = rgpost( 'input_69'  );
+			// $testing_email = rgpost( 'input_12'  );
 		}
 		elseif( $form['id'] == 16 ){
-			// $dealer_id = rgpost( 'input_18'  );
-			$testing_email = rgpost( 'input_10' );
+			$dealer_id = rgpost( 'input_18'  );
+			// $testing_email = rgpost( 'input_10' );
 		}
 		else {
 			return $notification;
 		}
 
-	      // $dealer_email 	= get_post_meta( $dealer_id, 'sqms-product-email', true );
-	      // $notification['to'] 	= $dealer_email;
-	      $notification['to'] 	= $testing_email;
+	      $dealer_email 	= get_post_meta( $dealer_id, 'sqms-product-email', true );
+	      $notification['to'] 	= $dealer_email;
+	      // $notification['to'] 	= $testing_email;
 
 	  }
 
@@ -349,7 +349,9 @@ function add_hiq_spinner_image( $image_src, $form ) {
  * @param  object $form GF $form object
  * @return void       Either aborts if not proper form, or updates $_POST
  */
-function choose_new_dealer( $form ) {
+function choose_new_dealer( $validation_result ) {
+	$form = $validation_result['form'];
+
 
 	$zone 						= '';
 	$address_field 			= '';
@@ -358,10 +360,12 @@ function choose_new_dealer( $form ) {
 	$dealer_view_count_key 	= 'sqms_dealer_view_count';
 
 	if( $form['id'] == 12 ) {
+		$address_field_id 	= '47';
 		$address_field 	= '47_5';
 		$dealer_id_field 	= 'input_69';
 	}
 	elseif( $form['id'] == 16 ) {
+		$address_field_id 	= '12';
 		$address_field 	= '12_5';
 		$dealer_id_field 	= 'input_18';
 	}
@@ -375,6 +379,19 @@ function choose_new_dealer( $form ) {
 	$parent 			= get_term_by( 'id', $term->parent, 'zone' );
 
 	if( !$parent ) {
+		// Set the form validation to false
+		$validation_result['is_valid'] = false;
+
+		// Finding Field with ID of the address and marking it as failed validation
+		foreach( $form['fields'] as &$field ) {
+
+		    if ( $field->id == $address_field_id ) {
+		        $field->failed_validation = true;
+		        $field->validation_message = 'Sorry, but we do not service this area yet.';
+		        break;
+		    }
+		}
+
 		$choose_error = "No Zone Found";
 
 		// Send error message with zip code info
@@ -384,7 +401,10 @@ function choose_new_dealer( $form ) {
 		$headers 	= array('Content-Type: text/html; charset=UTF-8');
 
 		wp_mail( $to, $subject, $body, $headers );
-		return;
+
+		$validation_result['form'] = $form;
+		return $validation_result;
+
 	}
 
 	$zone = $parent->slug;
@@ -407,6 +427,20 @@ function choose_new_dealer( $form ) {
 	$dealer_array 			= get_posts( $args );
 
 	if( !$dealer_array ) {
+
+		// Set the form validation to false
+		$validation_result['is_valid'] = false;
+
+		// Finding Field with ID of the address and marking it as failed validation
+		foreach( $form['fields'] as &$field ) {
+
+		    if ( $field->id == $address_field_id ) {
+		        $field->failed_validation = true;
+		        $field->validation_message = 'Sorry, but we do not service this area yet.';
+		        break;
+		    }
+		}
+
 		$choose_error = "No Dealers";
 
 		$to 		= 'rolson@sequoiaims.com';
@@ -416,7 +450,9 @@ function choose_new_dealer( $form ) {
 
 		wp_mail( $to, $subject, $body, $headers );
 
-		return;
+		$validation_result['form'] = $form;
+		return $validation_result;
+
 	}
 
 	$selected_dealer_id 	= $dealer_array[0]->ID;
