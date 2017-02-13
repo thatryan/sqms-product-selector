@@ -350,6 +350,7 @@ function choose_new_dealer( $form ) {
 
 	$zone 						= '';
 	$address_field 			= '';
+	$choose_error 			= '';
 	$dealer_id_field 			= '';
 	$dealer_view_count_key 	= 'sqms_dealer_view_count';
 
@@ -370,9 +371,20 @@ function choose_new_dealer( $form ) {
 	$term 				= get_term_by( 'slug', $client_zip_code, 'zone' );
 	$parent 			= get_term_by( 'id', $term->parent, 'zone' );
 
-	if( $parent ) {
-		$zone = $parent->slug;
+	if( !$parent ) {
+		$choose_error = "No Zone Found";
+
+		// Send error message with zip code info
+		$to 		= 'rolson@sequoiaims.com';
+		$subject 	= 'HIQ Product Selection Error: ' . $choose_error;
+		$body 		= 'The following zip code was entered but not found in any zone:<br>' . $client_zip_code;
+		$headers 	= array('Content-Type: text/html; charset=UTF-8');
+
+		wp_mail( $to, $subject, $body, $headers );
+		return;
 	}
+
+	$zone = $parent->slug;
 
 	// Get all dealers who service this zone
 	$args = array(
@@ -390,6 +402,20 @@ function choose_new_dealer( $form ) {
 
 	// Found a dealer, update their view count for later use...
 	$dealer_array 			= get_posts( $args );
+
+	if( !$dealer_array ) {
+		$choose_error = "No Dealers";
+
+		$to 		= 'rolson@sequoiaims.com';
+		$subject 	= 'HIQ Product Selection Error: ' . $choose_error;
+		$body 		= 'The following zip code was entered but not found in any zone:<br>Client Zip: ' . $client_zip_code . '<br>Chosen Zone: ' . $zone;
+		$headers 	= array('Content-Type: text/html; charset=UTF-8');
+
+		wp_mail( $to, $subject, $body, $headers );
+
+		return;
+	}
+
 	$selected_dealer_id 	= $dealer_array[0]->ID;
 	$dealer_count 			= absint( get_post_meta( $selected_dealer_id, $dealer_view_count_key, true ) );
 	$dealer_count++;
