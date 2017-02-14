@@ -66,6 +66,7 @@ class Product_Selector {
 		define( 'SQMS_PROD_SEL_PATH', WP_PLUGIN_DIR . '/' . SQMS_PLUGIN_NAME );
 		define( 'SQMS_PROD_SEL_URL', WP_PLUGIN_URL . '/' . SQMS_PLUGIN_NAME );
 
+		// require_once( 'includes/settings-page.php' );
 		require_once( 'includes/post-type.php' );
 		require_once( 'cmb2/init.php' );
 		require_once( 'includes/meta.php' );
