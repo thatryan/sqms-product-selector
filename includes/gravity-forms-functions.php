@@ -15,9 +15,12 @@ add_filter( 'gform_replace_merge_tags', 'replace_dealer_notification', 10, 7 );
 add_filter( 'gform_confirmation', 'custom_confirmation', 10, 4 );
 add_filter( 'gform_ajax_spinner_url', 'add_hiq_spinner_image', 10, 2 );
 
-add_action( 'gform_validation_12', 'choose_new_dealer' );
+add_filter( 'gform_field_validation_12_47', 'validate_zip_zone', 10, 4 );
+add_filter( 'gform_field_validation_16_12', 'validate_zip_zone', 10, 4 );
+
+add_action( 'gform_pre_submission_12', 'choose_new_dealer' );
 add_action( 'gform_after_submission_15', 'update_report_entry_meta', 10, 2 );
-add_action( 'gform_validation_16', 'choose_new_dealer' );
+add_action( 'gform_pre_submission_16', 'choose_new_dealer' );
 
 /**
  * Builds an HTML structure to show the data for the selected product based
@@ -219,6 +222,7 @@ function replace_dealer_notification( $text, $form, $entry, $url_encode, $esc_ht
 	$prod_obj 			= get_page_by_path($prod_string, OBJECT, 'sqms_prod_select');
 	$product_post_id 	= $prod_obj->ID;
 	$address_field_id 	= 47;
+	$accessory_field_id 	= 57;
 	$street_value 		= rgar( $entry, $address_field_id . '.1' );
 	$street2_value 		= rgar( $entry, $address_field_id . '.2' );
 	$city_value 			= rgar( $entry, $address_field_id . '.3' );
@@ -235,9 +239,8 @@ function replace_dealer_notification( $text, $form, $entry, $url_encode, $esc_ht
 
 	$formatted_address_value = $formatted_street . '<br>' . $city_value . ', ' . $state_value . ' ' . $zip_value;
 
-	foreach($form_data['field']['57.Are you interested in any accessories?'] as $acc_val){
-		$accessory_string .= $acc_val . '<br>';
-	}
+	$accessory_field       = GFFormsModel::get_field( $form, $accessory_field_id );
+	$accessory_string = is_object( $accessory_field ) ? $accessory_field->get_value_export( $entry ) : '';
 
 	// Bring in the template file with matching GF styling
 	include 'template/template-merge-tag.php';
@@ -345,13 +348,39 @@ function add_hiq_spinner_image( $image_src, $form ) {
 }
 
 /**
+ * Validate if zip code entered is a serviceable area
+ * @param  array $result Validation result to be filtered
+ * @param  string|array $value  field values to be validated
+ * @param  object $form   GF $form object
+ * @param  object $field  GF $field object
+ * @return array         return $result array
+ */
+function validate_zip_zone( $result, $value, $form, $field ) {
+
+	$zip 		= rgar( $value, $field->id . '.5' );
+	$good_zip 	= is_serviceable_zip_code( $zip );
+
+    //address field will pass $value as an array with each of the elements as an item within the array, the key is the field id
+    if ( !$good_zip && $result['is_valid'] ) {
+
+    	$result['is_valid'] = false;
+    	$result['message']  = 'Sorry, we do not service that zip code yet.';
+
+    }
+    else {
+                $result['is_valid'] = true;
+                $result['message']  = '';
+            }
+// GFCommon::log_debug( __METHOD__ . '(): POST => ' . print_r( $_POST, true ) );
+    return $result;
+}
+
+/**
  * This finds the dealer we are assigning to this submission based on user location
  * @param  object $form GF $form object
  * @return void       Either aborts if not proper form, or updates $_POST
  */
-function choose_new_dealer( $validation_result ) {
-	$form = $validation_result['form'];
-
+function choose_new_dealer( $form ) {
 
 	$zone 						= '';
 	$address_field 			= '';
@@ -360,102 +389,27 @@ function choose_new_dealer( $validation_result ) {
 	$dealer_view_count_key 	= 'sqms_dealer_view_count';
 
 	if( $form['id'] == 12 ) {
-		$address_field_id 	= '47';
 		$address_field 	= '47_5';
 		$dealer_id_field 	= 'input_69';
 	}
 	elseif( $form['id'] == 16 ) {
-		$address_field_id 	= '12';
 		$address_field 	= '12_5';
 		$dealer_id_field 	= 'input_18';
 	}
 	else {
 		return;
 	}
-
+// GFCommon::log_debug( __METHOD__ . '(): POST => ' . print_r( $_POST, true ) );
 	// Find out what zone this client is in
-	$client_zip_code 	= $_POST['input_'.$address_field];
-	$term 				= get_term_by( 'slug', $client_zip_code, 'zone' );
-	$parent 			= get_term_by( 'id', $term->parent, 'zone' );
+	$zone = is_serviceable_zip_code( $_POST['input_'.$address_field] );
 
-	if( !$parent ) {
-		// Set the form validation to false
-		$validation_result['is_valid'] = false;
+	GFCommon::log_debug( __METHOD__ . 'Zone: ' . $zone );
 
-		// Finding Field with ID of the address and marking it as failed validation
-		foreach( $form['fields'] as &$field ) {
+	// Get a dealer that servics that zone
+	$selected_dealer_id 	= zone_has_dealer( $zone );
 
-		    if ( $field->id == $address_field_id ) {
-		        $field->failed_validation = true;
-		        $field->validation_message = 'Sorry, but we do not service this area yet.';
-		        break;
-		    }
-		}
+	GFCommon::log_debug( __METHOD__ . 'Dealer ID: ' . $selected_dealer_id );
 
-		$choose_error = "No Zone Found";
-
-		// Send error message with zip code info
-		$to 		= 'rolson@sequoiaims.com';
-		$subject 	= 'HIQ Product Selection Error: ' . $choose_error;
-		$body 		= 'The following zip code was entered but not found in any zone:<br>' . $client_zip_code;
-		$headers 	= array('Content-Type: text/html; charset=UTF-8');
-
-		wp_mail( $to, $subject, $body, $headers );
-
-		$validation_result['form'] = $form;
-		return $validation_result;
-
-	}
-
-	$zone = $parent->slug;
-
-	// Get all dealers who service this zone
-	$args = array(
-		'post_type' 			=> 'sqms_payne_dealer',
-		'posts_per_page' 	=> 1,
-		'orderby'        		=> 'rand',
-		'tax_query' => array(
-			array(
-				'taxonomy' 		=> 'zone',
-				'field' 			=> 'slug',
-				'terms' 			=> $zone,
-				),
-			),
-		);
-
-	// Found a dealer, update their view count for later use...
-	$dealer_array 			= get_posts( $args );
-
-	if( !$dealer_array ) {
-
-		// Set the form validation to false
-		$validation_result['is_valid'] = false;
-
-		// Finding Field with ID of the address and marking it as failed validation
-		foreach( $form['fields'] as &$field ) {
-
-		    if ( $field->id == $address_field_id ) {
-		        $field->failed_validation = true;
-		        $field->validation_message = 'Sorry, but we do not service this area yet.';
-		        break;
-		    }
-		}
-
-		$choose_error = "No Dealers";
-
-		$to 		= 'rolson@sequoiaims.com';
-		$subject 	= 'HIQ Product Selection Error: ' . $choose_error;
-		$body 		= 'The following zip code was entered but not found in any zone:<br>Client Zip: ' . $client_zip_code . '<br>Chosen Zone: ' . $zone;
-		$headers 	= array('Content-Type: text/html; charset=UTF-8');
-
-		wp_mail( $to, $subject, $body, $headers );
-
-		$validation_result['form'] = $form;
-		return $validation_result;
-
-	}
-
-	$selected_dealer_id 	= $dealer_array[0]->ID;
 	$dealer_count 			= absint( get_post_meta( $selected_dealer_id, $dealer_view_count_key, true ) );
 	$dealer_count++;
 
@@ -486,6 +440,77 @@ function update_report_entry_meta( $entry, $form ) {
 }
 
 // Utility functions
+
+/**
+ * Validate if zip code entered is in service area
+ * @param  int  $client_zip_code Zip code entered
+ * @return bool|string                  false, or slug of zone
+ */
+function is_serviceable_zip_code( $client_zip_code ) {
+	// Find out what zone this client is in
+	$term 				= get_term_by( 'slug', $client_zip_code, 'zone' );
+	$parent 			= get_term_by( 'id', $term->parent, 'zone' );
+
+	if( !$parent ) {
+		$choose_error = "No Zone Found";
+
+		// Send error message with zip code info
+		$to 		= 'rolson@sequoiaims.com';
+		$subject 	= 'HIQ Product Selection Error: ' . $choose_error;
+		$body 		= 'The following zip code was entered but not found in any zone:<br>' . $client_zip_code;
+		$headers 	= array('Content-Type: text/html; charset=UTF-8');
+
+		wp_mail( $to, $subject, $body, $headers );
+
+		return false;
+	}
+
+	return $parent->slug;
+}
+
+/**
+ * Find a dealer that services the zone that was found via zip code
+ * @param  string $zone_slug Slug of the zip code zone
+ * @return bool|int            false, or dealer ID
+ */
+function zone_has_dealer( $zone_slug ) {
+
+	// Get all dealers who service this zone
+	$args = array(
+		'post_type' 			=> 'sqms_payne_dealer',
+		'posts_per_page' 	=> 1,
+		'orderby'        		=> 'rand',
+		'tax_query' => array(
+			array(
+				'taxonomy' 		=> 'zone',
+				'field' 			=> 'slug',
+				'terms' 			=> $zone_slug,
+				),
+			),
+		);
+
+	// Found a dealer, update their view count for later use...
+	$dealer_array 			= get_posts( $args );
+	// GFCommon::log_debug( __METHOD__ . '(): dealer_array => ' . print_r( $form, true ) );
+
+
+
+	if( !$dealer_array ) {
+		$choose_error = "No Dealers";
+
+		$to 		= 'rolson@sequoiaims.com';
+		$subject 	= 'HIQ Product Selection Error: ' . $choose_error;
+		$body 		= 'The following zip code was entered but not found in any zone:<br>Client Zip: ' . $client_zip_code . '<br>Chosen Zone: ' . $zone;
+		$headers 	= array('Content-Type: text/html; charset=UTF-8');
+
+		wp_mail( $to, $subject, $body, $headers );
+
+		return false;
+	}
+
+	return $dealer_array[0]->ID;
+}
+
 /**
  * Get the dealer name for output in PDF
  * @param  object $entry GF $entry object
