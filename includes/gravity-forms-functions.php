@@ -179,20 +179,20 @@ function get_dealer_email( $notification, $form, $entry ) {
 	if ( $notification['name'] == 'Admin Notification' ) {
 
 		if( $form['id'] == 12 ) {
-			$dealer_id = rgpost( 'input_69'  );
-			// $testing_email = rgpost( 'input_12'  );
+			// $dealer_id = rgpost( 'input_69'  );
+			$testing_email = rgpost( 'input_12'  );
 		}
 		elseif( $form['id'] == 16 ){
-			$dealer_id = rgpost( 'input_18'  );
-			// $testing_email = rgpost( 'input_10' );
+			// $dealer_id = rgpost( 'input_18'  );
+			$testing_email = rgpost( 'input_10' );
 		}
 		else {
 			return $notification;
 		}
 
-	      $dealer_email 	= get_post_meta( $dealer_id, 'sqms-product-email', true );
-	      $notification['to'] 	= $dealer_email;
-	      // $notification['to'] 	= $testing_email;
+	      // $dealer_email 	= get_post_meta( $dealer_id, 'sqms-product-email', true );
+	      // $notification['to'] 	= $dealer_email;
+	      $notification['to'] 	= $testing_email;
 
 	  }
 
