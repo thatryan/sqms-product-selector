@@ -1,7 +1,8 @@
 <?php
-
 /**
  * custom option and settings
+ * I want this to display all zones and their zip codes, as well as a button
+ * to clear dealer view meta
  */
 function wporg_settings_init() {
  	// register a new setting for "wporg" page
