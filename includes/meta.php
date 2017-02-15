@@ -142,10 +142,7 @@ function sqms_prodcut_selector_meta() {
 		'column' => array(
 		    'position' => 3,
 		),
-		'attributes'  => array(
-			'readonly' => 'readonly',
-			'disabled' => 'disabled',
-		),
+
 	) );
 
 	$sqms_dealer_meta->add_field( array(
