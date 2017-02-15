@@ -73,7 +73,7 @@ class Product_Selector {
 		require_once( ABSPATH . 'wp-admin/includes/template.php' );
 		require_once( 'includes/gravity-forms-functions.php' );
 		require_once( 'includes/gravity-view-functions.php' );
-		require_once( 'includes/capabilities.php' );
+		// require_once( 'includes/capabilities.php' );
 		require_once( 'includes/shortcode.php' );
 		require_once( 'includes/zip-code-load.php' );
 

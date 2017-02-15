@@ -3,7 +3,7 @@
  * Set capabilities so that logged in dealers, who are viewing their own page, can reply
  * to reviews, which are Gravity View notes.
  */
-add_filter( 'user_has_cap', 'sqms_user_has_cap_filter', 10, 4 );
+add_filter( 'user_has_cap', 'sqms_user_has_cap_filter' );
 
 /**
  * Add capabilites to logged in dealers so they can see/reply to "reviews" with GF entry notes.
