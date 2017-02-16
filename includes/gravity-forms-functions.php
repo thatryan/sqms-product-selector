@@ -176,6 +176,9 @@ function dealer_review_id( $form ) {
  */
 function get_dealer_email( $notification, $form, $entry ) {
 
+	$notification['from'] 	= 'mail@sequoiaims.com';
+	$notification['fromName'] 	= 'Sequoia Mail Service';
+
 	if ( $notification['name'] == 'Admin Notification' ) {
 
 		if( $form['id'] == 12 ) {
@@ -186,14 +189,10 @@ function get_dealer_email( $notification, $form, $entry ) {
 			// $dealer_id = rgpost( 'input_18'  );
 			$testing_email = rgpost( 'input_10' );
 		}
-		else {
-			return $notification;
-		}
 
 	      // $dealer_email 	= get_post_meta( $dealer_id, 'sqms-product-email', true );
 	      // $notification['to'] 	= $dealer_email;
 	      $notification['to'] 	= $testing_email;
-	      $notification['from'] 	= 'mail@sequoiaims.com';
 
 	  }
 
