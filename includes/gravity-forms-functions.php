@@ -193,6 +193,7 @@ function get_dealer_email( $notification, $form, $entry ) {
 	      // $dealer_email 	= get_post_meta( $dealer_id, 'sqms-product-email', true );
 	      // $notification['to'] 	= $dealer_email;
 	      $notification['to'] 	= $testing_email;
+	      $notification['from'] 	= 'mail@sequoiaims.com';
 
 	  }
 
