@@ -399,7 +399,8 @@ function choose_new_dealer( $form ) {
 	else {
 		return;
 	}
-// GFCommon::log_debug( __METHOD__ . '(): POST => ' . print_r( $_POST, true ) );
+
+	// GFCommon::log_debug( __METHOD__ . '(): POST => ' . print_r( $_POST, true ) );
 	// Find out what zone this client is in
 	$zone = is_serviceable_zip_code( $_POST['input_'.$address_field] );
 
@@ -489,12 +490,11 @@ function zone_has_dealer( $zone_slug ) {
 			),
 		);
 
-	// Found a dealer, update their view count for later use...
+	// Search for dealer based on query args
 	$dealer_array 			= get_posts( $args );
 	// GFCommon::log_debug( __METHOD__ . '(): dealer_array => ' . print_r( $form, true ) );
 
-
-
+	// No dealers found, send me an error to investigate
 	if( !$dealer_array ) {
 		$choose_error = "No Dealers";
 
@@ -508,6 +508,7 @@ function zone_has_dealer( $zone_slug ) {
 		return false;
 	}
 
+	// found a dealer, get their ID
 	return $dealer_array[0]->ID;
 }
 
