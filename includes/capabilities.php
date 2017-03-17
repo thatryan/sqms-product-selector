@@ -10,13 +10,49 @@ function dealer_caps() {
 }
 
 
+add_filter( 'map_meta_cap', 'jt_map_meta_cap', 10, 4 );
 
+function jt_map_meta_cap( $caps, $cap, $user_id, $args ) {
+echo '<pre>';
+print_r($caps);
+echo '</pre>';
+exit();
+    // GF or GV should have some meta capability for viewing, editing, etc.
+    // There may be multiple caps to check for.  For now, we'll just focus on
+    // one.  Basically, you need to see if this is the meta cap being checked
+    // for before running your code.
+    if ( 'gravityforms_edit_entry_notes' === $cap ) {
+
+        // $args[0] is generally where the object ID (post ID in the case
+        // of posts) is passed in for this particular meta cap check.
+        if ( is_array( $args ) && isset( $args[0] ) ) {
+
+            // OK.  So, we have post ID at this point.  Let's get the
+            // "dealer ID", which is stored as post meta.
+            $dealer_id = get_post_meta( absint( $args[0] ), 'sqms-product-dealer-id', true );
+
+            // Now we need to check if the dealer ID matches the user ID
+            // (current user).  If so, we need to "map" some primitive caps
+            // to this meta cap.  It can be anything as simple as the "read"
+            // capability.  Or, it can be multiple capabilities.  We know the
+            // current user is the dealer, so we'll just keep it simple and
+            // set it to "read".
+            if ( absint( $dealer_id ) === absint( $user_id ) ) {
+
+                $caps = array( 'gravityview_add_entry_notes' );
+            }
+        }
+    }
+
+    // Always return the array of caps.
+    return $caps;
+}
 
 /**
  * Set capabilities so that logged in dealers, who are viewing their own page, can reply
  * to reviews, which are Gravity View notes.
  */
-add_filter( 'map_meta_cap', 'sqms_user_has_cap_filter', 10, 4 );
+// add_filter( 'map_meta_cap', 'sqms_user_has_cap_filter', 10, 4 );
 
 
 function sqms_user_has_cap_filter( $allcaps, $cap, $user_id, $args ) {

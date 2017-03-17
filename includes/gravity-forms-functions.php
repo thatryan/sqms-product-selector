@@ -404,12 +404,12 @@ function choose_new_dealer( $form ) {
 	// Find out what zone this client is in
 	$zone = is_serviceable_zip_code( $_POST['input_'.$address_field] );
 
-	GFCommon::log_debug( __METHOD__ . 'Zone: ' . $zone );
+	// GFCommon::log_debug( __METHOD__ . 'Zone: ' . $zone );
 
 	// Get a dealer that servics that zone
 	$selected_dealer_id 	= zone_has_dealer( $zone );
 
-	GFCommon::log_debug( __METHOD__ . 'Dealer ID: ' . $selected_dealer_id );
+	// GFCommon::log_debug( __METHOD__ . 'Dealer ID: ' . $selected_dealer_id );
 
 	$dealer_count 			= absint( get_post_meta( $selected_dealer_id, $dealer_view_count_key, true ) );
 	$dealer_count++;
