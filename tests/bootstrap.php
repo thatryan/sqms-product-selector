@@ -3,6 +3,9 @@
  * PHPUnit bootstrap file
  *
  * @package Sqms_Product_Selector
+ * Read More:
+ * https://seravo.fi/2015/continuous-integration-testing-for-wordpress-plugins-on-github-using-travis-ci
+ * https://ben.lobaugh.net/blog/84669/how-to-add-unit-testing-and-continuous-integration-to-your-wordpress-plugin
  */
 
 $_tests_dir = getenv( 'WP_TESTS_DIR' );
