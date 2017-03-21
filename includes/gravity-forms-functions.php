@@ -7,6 +7,7 @@
 // Set scroll distance to 0 for selection form
 add_filter( 'gform_confirmation_anchor_12', function() { return 0; } );
 add_filter( 'gform_pre_render_12', 'display_choice_result' );
+add_action( 'gform_post_paging_12', 'add_gtm_pagination', 10, 3 );
 add_filter( 'gform_notification_12', 'get_dealer_email', 10, 3 );
 add_filter( 'gform_pre_render_15', 'add_readonly_script' );
 add_filter( 'gform_pre_render_20', 'dealer_review_id' );
@@ -125,6 +126,29 @@ function display_choice_result( $form ) {
 
 	//return altered form so changes are displayed
 	return $form;
+}
+
+/**
+ * Add info to datalayer for Google Tag Manager on pagination evetns
+ * @param object $form                GF $form object
+ * @param int $source_page_number  page user coming from
+ * @param int $current_page_number current page number
+ * @return void
+ */
+function add_gtm_pagination( $form, $source_page_number, $current_page_number ) {
+	$event 				= 'QuoteFormPaginate';
+	$event_category 	= 'Forms';
+	$event_action 		= 'Pagination';
+	$event_label 		= sprintf( '%s::%d::%d', esc_html( $form['title'] ), absint( $source_page_number ), absint( $current_page_number ) ); ?>
+	<script>
+		window.datalayer.push({
+			'event' : '<?php echo $event; ?>',
+			'eventCategory' : '<?php echo $event_category; ?>',
+			'eventAction' : '<?php echo $event_action; ?>',
+			'eventLabel' : '<?php echo $event_label; ?>',
+		});
+	</script>
+	<?php
 }
 
 /**
