@@ -141,7 +141,7 @@ function add_gtm_pagination( $form, $source_page_number, $current_page_number ) 
 	$event_action 		= 'Pagination';
 	$event_label 		= sprintf( '%s::%d::%d', esc_html( $form['title'] ), absint( $source_page_number ), absint( $current_page_number ) ); ?>
 	<script>
-		window.datalayer.push({
+		window.dataLayer.push({
 			'event' : '<?php echo $event; ?>',
 			'eventCategory' : '<?php echo $event_category; ?>',
 			'eventAction' : '<?php echo $event_action; ?>',
