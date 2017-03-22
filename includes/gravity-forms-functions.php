@@ -461,7 +461,6 @@ function add_gtm_submission( $entry, $form ) {
 	$event_action 		= 'Submission';
 	$event_label 		= 'Quote Form Completed'; ?>
 	<script>
-		window.parent.dataLayer = window.parent.dataLayer || [];
 		window.parent.dataLayer.push({
 			'event' : '<?php echo $event; ?>',
 			'eventCategory' : '<?php echo $event_category; ?>',
