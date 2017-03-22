@@ -142,14 +142,13 @@ function add_gtm_pagination( $form, $source_page_number, $current_page_number ) 
 	$event_action 		= 'Pagination';
 	$event_label 		= sprintf( '%s::%d::%d', esc_html( $form['title'] ), absint( $source_page_number ), absint( $current_page_number ) ); ?>
 	<script>
-		if ( typeof( window.parent.dataLayer ) != 'undefined' ) {
-			window.parent.dataLayer.push({
-				'event' : '<?php echo $event; ?>',
-				'eventCategory' : '<?php echo $event_category; ?>',
-				'eventAction' : '<?php echo $event_action; ?>',
-				'eventLabel' : '<?php echo $event_label; ?>',
-			});
-		}
+		window.parent.dataLayer = window.parent.dataLayer || [];
+		window.parent.dataLayer.push({
+			'event' : '<?php echo $event; ?>',
+			'eventCategory' : '<?php echo $event_category; ?>',
+			'eventAction' : '<?php echo $event_action; ?>',
+			'eventLabel' : '<?php echo $event_label; ?>',
+		});
 	</script>
 	<?php
 }
@@ -462,14 +461,13 @@ function add_gtm_submission( $entry, $form ) {
 	$event_action 		= 'Submission';
 	$event_label 		= 'Quote Form Completed'; ?>
 	<script>
-		if ( typeof( window.parent.dataLayer ) != 'undefined' ) {
-			window.parent.dataLayer.push({
-				'event' : '<?php echo $event; ?>',
-				'eventCategory' : '<?php echo $event_category; ?>',
-				'eventAction' : '<?php echo $event_action; ?>',
-				'eventLabel' : '<?php echo $event_label; ?>',
-			});
-		}
+		window.parent.dataLayer = window.parent.dataLayer || [];
+		window.parent.dataLayer.push({
+			'event' : '<?php echo $event; ?>',
+			'eventCategory' : '<?php echo $event_category; ?>',
+			'eventAction' : '<?php echo $event_action; ?>',
+			'eventLabel' : '<?php echo $event_label; ?>',
+		});
 	</script>
 	<?php
 }
