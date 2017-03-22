@@ -20,6 +20,7 @@ add_filter( 'gform_field_validation_12_47', 'validate_zip_zone', 10, 4 );
 add_filter( 'gform_field_validation_16_12', 'validate_zip_zone', 10, 4 );
 
 add_action( 'gform_pre_submission_12', 'choose_new_dealer' );
+add_action( 'gform_after_submission_12', 'add_gtm_submission', 10, 2 );
 add_action( 'gform_after_submission_15', 'update_report_entry_meta', 10, 2 );
 add_action( 'gform_pre_submission_16', 'choose_new_dealer' );
 
@@ -141,13 +142,14 @@ function add_gtm_pagination( $form, $source_page_number, $current_page_number ) 
 	$event_action 		= 'Pagination';
 	$event_label 		= sprintf( '%s::%d::%d', esc_html( $form['title'] ), absint( $source_page_number ), absint( $current_page_number ) ); ?>
 	<script>
-		window.parent.dataLayer = window.parent.dataLayer || [];
-		window.parent.dataLayer.push({
-			'event' : '<?php echo $event; ?>',
-			'eventCategory' : '<?php echo $event_category; ?>',
-			'eventAction' : '<?php echo $event_action; ?>',
-			'eventLabel' : '<?php echo $event_label; ?>',
-		});
+		if ( typeof( window.parent.dataLayer ) != 'undefined' ) {
+			window.parent.dataLayer.push({
+				'event' : '<?php echo $event; ?>',
+				'eventCategory' : '<?php echo $event_category; ?>',
+				'eventAction' : '<?php echo $event_action; ?>',
+				'eventLabel' : '<?php echo $event_label; ?>',
+			});
+		}
 	</script>
 	<?php
 }
@@ -446,6 +448,30 @@ function choose_new_dealer( $form ) {
 	 * See gravityhelp.com/documentation/article/gform_pre_submission
 	 */
 	$_POST[$dealer_id_field] = $selected_dealer_id;
+}
+
+/**
+ * Push form submission to dataLayer for GTM tracking
+ * @param  object $entry GF $entry object
+ * @param  object $form  GF $form object
+ * @return void        adds script for GTM
+ */
+function add_gtm_submission( $entry, $form ) {
+	$event 				= 'quoteFormSubmit';
+	$event_category 	= 'Forms';
+	$event_action 		= 'Submission';
+	$event_label 		= 'Quote Form Completed'; ?>
+	<script>
+		if ( typeof( window.parent.dataLayer ) != 'undefined' ) {
+			window.parent.dataLayer.push({
+				'event' : '<?php echo $event; ?>',
+				'eventCategory' : '<?php echo $event_category; ?>',
+				'eventAction' : '<?php echo $event_action; ?>',
+				'eventLabel' : '<?php echo $event_label; ?>',
+			});
+		}
+	</script>
+	<?php
 }
 
 /**
