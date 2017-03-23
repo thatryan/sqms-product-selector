@@ -369,7 +369,7 @@ function custom_confirmation( $confirmation, $form, $entry, $ajax ) {
  * @return  string New spinner image URL
  */
 function add_hiq_spinner_image( $image_src, $form ) {
-	return SQMS_PROD_SEL_URL . '/assets/img/hiq-loader.gif';
+	return SQMS_PROD_SEL_URL . '/assets/img/hiq-loader-small.gif';
 	return " ";
 }
 
