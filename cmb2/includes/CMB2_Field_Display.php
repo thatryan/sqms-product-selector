@@ -14,6 +14,7 @@ class CMB2_Field_Display {
 
 	/**
 	 * A CMB field object
+	 *
 	 * @var   CMB2_Field object
 	 * @since 2.2.2
 	 */
@@ -21,6 +22,7 @@ class CMB2_Field_Display {
 
 	/**
 	 * The CMB field object's value.
+	 *
 	 * @var   mixed
 	 * @since 2.2.2
 	 */
@@ -28,6 +30,7 @@ class CMB2_Field_Display {
 
 	/**
 	 * Get the corresponding display class for the field type.
+	 *
 	 * @since  2.2.2
 	 * @param  CMB2_Field $field
 	 * @return CMB2_Field_Display
@@ -101,6 +104,7 @@ class CMB2_Field_Display {
 
 	/**
 	 * Setup our class vars
+	 *
 	 * @since 2.2.2
 	 * @param CMB2_Field $field A CMB2 field object
 	 */
@@ -112,9 +116,8 @@ class CMB2_Field_Display {
 	/**
 	 * Catchall method if field's 'display_cb' is NOT defined, or field type does
 	 * not have a corresponding display method
+	 *
 	 * @since 2.2.2
-	 * @param  string $method    Non-existent method name
-	 * @param  array  $arguments All arguments passed to the method
 	 */
 	public function display() {
 		// If repeatable
@@ -124,7 +127,7 @@ class CMB2_Field_Display {
 			if ( is_array( $this->field->value ) ) {
 
 				// Then loop and output.
-				echo '<ul class="cmb2-'. str_replace( '_', '-', $this->field->type() ) .'">';
+				echo '<ul class="cmb2-' . str_replace( '_', '-', $this->field->type() ) . '">';
 				foreach ( $this->field->value as $val ) {
 					$this->value = $val;
 					echo '<li>', $this->_display(), '</li>';
@@ -132,7 +135,6 @@ class CMB2_Field_Display {
 				}
 				echo '</ul>';
 			}
-
 		} else {
 			$this->_display();
 		}
@@ -140,6 +142,7 @@ class CMB2_Field_Display {
 
 	/**
 	 * Default fallback display method.
+	 *
 	 * @since 2.2.2
 	 */
 	protected function _display() {
@@ -150,6 +153,7 @@ class CMB2_Field_Display {
 class CMB2_Display_Text_Url extends CMB2_Field_Display {
 	/**
 	 * Display url value.
+	 *
 	 * @since 2.2.2
 	 */
 	protected function _display() {
@@ -160,6 +164,7 @@ class CMB2_Display_Text_Url extends CMB2_Field_Display {
 class CMB2_Display_Text_Money extends CMB2_Field_Display {
 	/**
 	 * Display text_money value.
+	 *
 	 * @since 2.2.2
 	 */
 	protected function _display() {
@@ -171,6 +176,7 @@ class CMB2_Display_Text_Money extends CMB2_Field_Display {
 class CMB2_Display_Colorpicker extends CMB2_Field_Display {
 	/**
 	 * Display color picker value.
+	 *
 	 * @since 2.2.2
 	 */
 	protected function _display() {
@@ -181,6 +187,7 @@ class CMB2_Display_Colorpicker extends CMB2_Field_Display {
 class CMB2_Display_Checkbox extends CMB2_Field_Display {
 	/**
 	 * Display multicheck value.
+	 *
 	 * @since 2.2.2
 	 */
 	protected function _display() {
@@ -191,6 +198,7 @@ class CMB2_Display_Checkbox extends CMB2_Field_Display {
 class CMB2_Display_Select extends CMB2_Field_Display {
 	/**
 	 * Display select value.
+	 *
 	 * @since 2.2.2
 	 */
 	protected function _display() {
@@ -213,6 +221,7 @@ class CMB2_Display_Select extends CMB2_Field_Display {
 class CMB2_Display_Multicheck extends CMB2_Field_Display {
 	/**
 	 * Display multicheck value.
+	 *
 	 * @since 2.2.2
 	 */
 	protected function _display() {
@@ -238,6 +247,7 @@ class CMB2_Display_Multicheck extends CMB2_Field_Display {
 class CMB2_Display_Textarea extends CMB2_Field_Display {
 	/**
 	 * Display textarea value.
+	 *
 	 * @since 2.2.2
 	 */
 	protected function _display() {
@@ -248,16 +258,18 @@ class CMB2_Display_Textarea extends CMB2_Field_Display {
 class CMB2_Display_Textarea_Code extends CMB2_Field_Display {
 	/**
 	 * Display textarea_code value.
+	 *
 	 * @since 2.2.2
 	 */
 	protected function _display() {
-		echo '<xmp class="cmb2-code">'. print_r( $this->value, true ) .'</xmp>';
+		echo '<xmp class="cmb2-code">' . print_r( $this->value, true ) . '</xmp>';
 	}
 }
 
 class CMB2_Display_Text_Time extends CMB2_Field_Display {
 	/**
 	 * Display text_time value.
+	 *
 	 * @since 2.2.2
 	 */
 	protected function _display() {
@@ -268,6 +280,7 @@ class CMB2_Display_Text_Time extends CMB2_Field_Display {
 class CMB2_Display_Text_Date extends CMB2_Field_Display {
 	/**
 	 * Display text_date value.
+	 *
 	 * @since 2.2.2
 	 */
 	protected function _display() {
@@ -278,6 +291,7 @@ class CMB2_Display_Text_Date extends CMB2_Field_Display {
 class CMB2_Display_Text_Date_Timezone extends CMB2_Field_Display {
 	/**
 	 * Display text_datetime_timestamp_timezone value.
+	 *
 	 * @since 2.2.2
 	 */
 	protected function _display() {
@@ -306,18 +320,20 @@ class CMB2_Display_Text_Date_Timezone extends CMB2_Field_Display {
 class CMB2_Display_Taxonomy_Radio extends CMB2_Field_Display {
 	/**
 	 * Display single taxonomy value.
+	 *
 	 * @since 2.2.2
 	 */
 	protected function _display() {
-		$taxonomy   = $this->field->args( 'taxonomy' );
-		$field_type = new CMB2_Type_Taxonomy_Radio( new CMB2_Types( $this->field ) );
-		$terms      = $field_type->get_object_terms();
-		$term       = false;
+		$taxonomy = $this->field->args( 'taxonomy' );
+		$types    = new CMB2_Types( $this->field );
+		$type     = $types->get_new_render_type( $this->field->type(), 'CMB2_Type_Taxonomy_Radio' );
+		$terms    = $type->get_object_terms();
+		$term     = false;
 
 		if ( is_wp_error( $terms ) || empty( $terms ) && ( $default = $this->field->get_default() ) ) {
 			$term = get_term_by( 'slug', $default, $taxonomy );
 		} elseif ( ! empty( $terms ) ) {
-			$term = $terms[key( $terms )];
+			$term = $terms[ key( $terms ) ];
 		}
 
 		if ( $term ) {
@@ -330,12 +346,14 @@ class CMB2_Display_Taxonomy_Radio extends CMB2_Field_Display {
 class CMB2_Display_Taxonomy_Multicheck extends CMB2_Field_Display {
 	/**
 	 * Display taxonomy values.
+	 *
 	 * @since 2.2.2
 	 */
 	protected function _display() {
-		$taxonomy   = $this->field->args( 'taxonomy' );
-		$field_type = new CMB2_Type_Taxonomy_Multicheck( new CMB2_Types( $this->field ) );
-		$terms      = $field_type->get_object_terms();
+		$taxonomy = $this->field->args( 'taxonomy' );
+		$types    = new CMB2_Types( $this->field );
+		$type     = $types->get_new_render_type( $this->field->type(), 'CMB2_Type_Taxonomy_Multicheck' );
+		$terms    = $type->get_object_terms();
 
 		if ( is_wp_error( $terms ) || empty( $terms ) && ( $default = $this->field->get_default() ) ) {
 			$terms = array();
@@ -353,7 +371,7 @@ class CMB2_Display_Taxonomy_Multicheck extends CMB2_Field_Display {
 			$links = array();
 			foreach ( $terms as $term ) {
 				$link = get_edit_term_link( $term->term_id, $taxonomy );
-				$links[] = '<a href="'. esc_url( $link ) .'">'. esc_html( $term->name ) .'</a>';
+				$links[] = '<a href="' . esc_url( $link ) . '">' . esc_html( $term->name ) . '</a>';
 			}
 			// Then loop and output.
 			echo '<div class="cmb2-taxonomy-terms-', esc_attr( $taxonomy ), '">';
@@ -366,6 +384,7 @@ class CMB2_Display_Taxonomy_Multicheck extends CMB2_Field_Display {
 class CMB2_Display_File extends CMB2_Field_Display {
 	/**
 	 * Display file value.
+	 *
 	 * @since 2.2.2
 	 */
 	protected function _display() {
@@ -375,19 +394,20 @@ class CMB2_Display_File extends CMB2_Field_Display {
 
 		$this->value = esc_url_raw( $this->value );
 
-		$field_type = new CMB2_Type_File_Base( new CMB2_Types( $this->field ) );
+		$types = new CMB2_Types( $this->field );
+		$type  = $types->get_new_render_type( $this->field->type(), 'CMB2_Type_File_Base' );
 
 		$id = $this->field->get_field_clone( array(
-			'id' => $field_type->_id() . '_id',
+			'id' => $this->field->_id() . '_id',
 		) )->escaped_value( 'absint' );
 
-		$this->file_output( $this->value, $id, $field_type );
+		$this->file_output( $this->value, $id, $type );
 	}
 
 	protected function file_output( $url_value, $id, CMB2_Type_File_Base $field_type ) {
 		// If there is no ID saved yet, try to get it from the url
 		if ( $url_value && ! $id ) {
-			$id = cmb2_utils()->image_id_from_url( esc_url_raw( $url_value ) );
+			$id = CMB2_Utils::image_id_from_url( esc_url_raw( $url_value ) );
 		}
 
 		if ( $field_type->is_valid_img_ext( $url_value ) ) {
@@ -405,9 +425,9 @@ class CMB2_Display_File extends CMB2_Field_Display {
 		} else {
 
 			printf( '<div class="file-status"><span>%1$s <strong><a href="%2$s">%3$s</a></strong></span></div>',
-				esc_html( $field_type->_text( 'file_text', __( 'File:', 'cmb2' ) ) ),
+				esc_html( $field_type->_text( 'file_text', esc_html__( 'File:', 'cmb2' ) ) ),
 				$url_value,
-				cmb2_utils()->get_file_name_from_path( $url_value )
+				CMB2_Utils::get_file_name_from_path( $url_value )
 			);
 
 		}
@@ -417,6 +437,7 @@ class CMB2_Display_File extends CMB2_Field_Display {
 class CMB2_Display_File_List extends CMB2_Display_File {
 	/**
 	 * Display file_list value.
+	 *
 	 * @since 2.2.2
 	 */
 	protected function _display() {
@@ -424,11 +445,12 @@ class CMB2_Display_File_List extends CMB2_Display_File {
 			return;
 		}
 
-		$field_type = new CMB2_Type_File_Base( new CMB2_Types( $this->field ) );
+		$types = new CMB2_Types( $this->field );
+		$type  = $types->get_new_render_type( $this->field->type(), 'CMB2_Type_File_Base' );
 
 		echo '<ul class="cmb2-display-file-list">';
 		foreach ( $this->value as $id => $fullurl ) {
-			echo '<li>', $this->file_output( esc_url_raw( $fullurl ), $id, $field_type ), '</li>';
+			echo '<li>', $this->file_output( esc_url_raw( $fullurl ), $id, $type ), '</li>';
 		}
 		echo '</ul>';
 	}
@@ -437,6 +459,7 @@ class CMB2_Display_File_List extends CMB2_Display_File {
 class CMB2_Display_oEmbed extends CMB2_Field_Display {
 	/**
 	 * Display oembed value.
+	 *
 	 * @since 2.2.2
 	 */
 	protected function _display() {
