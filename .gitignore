@@ -11,3 +11,5 @@ Thumbs.db
 
 # Sassy
 .sass-cache
+
+node_modules/
