@@ -91,11 +91,6 @@ class Product_Selector {
 	 */
 	public function dealer_login_redirect( $redirect_to, $request, $user  ) {
 
-		// A temp user to bypass the coming soon page for demos
-		if( $user->user_login == 'preview' ) {
-			return home_url();
-		}
-
 		//is there a user to check?
 		if ( isset( $user->roles ) && is_array( $user->roles ) ) {
 
