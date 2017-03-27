@@ -34,7 +34,6 @@ function get_check_zip_form() {
 	gravity_form_enqueue_scripts( $selection_form_id, true );
 
 	wp_localize_script( 'load-zip-form', 'zip_form_params', $zip_form_params );
-	wp_enqueue_script('jquery-validate');
 	wp_enqueue_script('load-zip-form');
 
 	// Pretty much need JS enabled for all this to work right, so send a message if not

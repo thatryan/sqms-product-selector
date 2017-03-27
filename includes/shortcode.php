@@ -50,8 +50,8 @@ function display_dealer_entries() {
 		'dealer_id' 			=> $dealer_id,
 		);
 
-	wp_localize_script( 'load-report-form-script', 'form_params', $form_params );
-	wp_enqueue_script( 'load-report-form-script' );
+	wp_localize_script( 'load-report-form', 'form_params', $form_params );
+	wp_enqueue_script( 'load-report-form' );
 
 	$lead_list  = '';
 	$lead_list .= '<h3>Lead List For: '.$dealer_name.'</h3>';

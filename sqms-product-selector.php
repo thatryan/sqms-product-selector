@@ -4,7 +4,7 @@
 	Plugin URI: https://github.com/thatryan
 	Description: Register product and handle logic for chooser
 	Author: Ryan Olson
-	Version: 1.1.52
+	Version: 1.1.53
 	Author URI: http://thatryan.com
  */
 
@@ -30,7 +30,7 @@ class Product_Selector {
 	 * @type string
 	 */
 
-	public $plugin_version = '1.1.51';
+	public $plugin_version = '1.1.53';
 
 	/**
 	 * Path to this plugin's directory.
@@ -124,26 +124,19 @@ class Product_Selector {
 	public function header_assets() {
 
 		// Register styles
-		wp_register_style( 'vex', $this->plugin_url . 'assets/css/vex.css', array(), $this->plugin_version );
-		wp_register_style( 'vex-theme', $this->plugin_url . 'assets/css/vex-theme-default.css', array(), $this->plugin_version );
+		wp_register_style( 'hiq-style', $this->plugin_url . 'assets/css/hiq-styles.min.css', array(), $this->plugin_version );
 
 		// Register scripts
-		wp_register_script( 'vex-script', $this->plugin_url . 'assets/js/vex.combined.min.js', array ('jquery'), $this->plugin_version, false );
-		wp_register_script( 'load-report-form-script', $this->plugin_url . 'assets/js/load-report-form.js', array ('jquery'), $this->plugin_version, false );
-		wp_register_script( 'load-zip-form', $this->plugin_url . 'assets/js/load-zip-form.js', array ('jquery'), $this->plugin_version, false );
-		wp_register_script( 'jquery-validate', $this->plugin_url . 'assets/js/jquery.validate.min.js', array ('jquery'), $this->plugin_version, false );
-		wp_register_script( 'sqms-prod-select-script', $this->plugin_url . 'assets/js/sqms-product-selector.js', array ('jquery'), $this->plugin_version, false );
+		wp_register_script( 'load-report-form', $this->plugin_url . 'assets/js/load-report-form.min.js', array ('jquery'), $this->plugin_version, false );
+		wp_register_script( 'load-zip-form', $this->plugin_url . 'assets/js/load-zip-form.min.js', array ('jquery'), $this->plugin_version, false );
+		wp_register_script( 'hiq-scripts', $this->plugin_url . 'assets/js/hiq-scripts.js', array ('jquery'), $this->plugin_version, false );
 
 		// Enqueue styles
 		wp_enqueue_style( 'dashicons' );
-		wp_enqueue_style( 'sqms-prod-select', $this->plugin_url . 'assets/css/sqms-product-selector.css', array(), $this->plugin_version );
-		wp_enqueue_style( 'vex' );
-		wp_enqueue_style( 'vex-theme' );
+		wp_enqueue_style( 'hiq-style' );
 
 		// Enqueue scripts
-		wp_enqueue_script('sqms-prod-select-script');
-		wp_enqueue_script('vex-script');
-
+		wp_enqueue_script( 'hiq-scripts' );
 	}
 
 	/**

@@ -1,0 +1,31 @@
+{
+  "name": "sqms-product-selector",
+  "version": "1.1.52",
+  "description": "[![Build Status](https://travis-ci.org/thatryan/sqms-product-selector.svg?branch=master)](https://travis-ci.org/thatryan/sqms-product-selector)",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thatryan/sqms-product-selector.git"
+  },
+  "author": "Ryan Olson",
+  "bugs": {
+    "url": "https://github.com/thatryan/sqms-product-selector/issues"
+  },
+  "homepage": "https://github.com/thatryan/sqms-product-selector#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.1",
+    "gulp-cssnano": "^2.1.2",
+    "gulp-imagemin": "^3.2.0",
+    "gulp-jshint": "^2.0.4",
+    "gulp-notify": "^3.0.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-uglify": "^2.1.2"
+  }
+}
