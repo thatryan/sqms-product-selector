@@ -508,6 +508,8 @@ function is_serviceable_zip_code( $client_zip_code ) {
 		$to 		= 'rolson@sequoiaims.com';
 		$subject 	= 'HIQ Product Selection Error: ' . $choose_error;
 		$body 		= 'The following zip code was entered but not found in any zone:<br>' . $client_zip_code;
+		$body 		.= '<h4>POST Data:</h4><br>';
+		$body 		.= print_r( $_POST, true );
 		$headers 	= array('Content-Type: text/html; charset=UTF-8');
 
 		wp_mail( $to, $subject, $body, $headers );
