@@ -202,8 +202,8 @@ function dealer_review_id( $form ) {
  */
 function get_dealer_email( $notification, $form, $entry ) {
 
-	$notification['from'] 	= 'mail@sequoiaims.com';
-	$notification['fromName'] 	= 'Sequoia Mail Service';
+	$notification['from'] 	= 'mail@hvacinstantquote.com';
+	$notification['fromName'] 	= 'HVAC Instant Quote ';
 	$notification['bcc'] 	= 'rolson@sequoiaims.com, jbenbrook@sequoiaims.com';
 
 	if ( $notification['name'] == 'Admin Notification' ) {

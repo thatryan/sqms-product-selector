@@ -95,8 +95,14 @@
 #top .gform_wrapper .sqms-prod-sel-form label.gfield_label {
 	font-size: 1.5em;
 }
+
 #top label span.product-choice-title {
-	color: #888888;
+	color: #3a3a3a;
+}
+
+#top label span.product-choice-desc {
+  display: block;
+  margin-bottom: 8px;
 }
 
 #top input#choice_12_67_3 {
