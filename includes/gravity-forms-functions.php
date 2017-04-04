@@ -385,6 +385,14 @@ function add_hiq_spinner_image( $image_src, $form ) {
 function validate_zip_zone( $result, $value, $form, $field ) {
 
 	$zip 		= rgar( $value, $field->id . '.5' );
+
+	if( empty( $zip ) ) {
+		$result['is_valid'] = false;
+		$result['message']  = 'Please be sure you enter your valid zip code.';
+
+		return $result;
+	}
+
 	$good_zip 	= is_serviceable_zip_code( $zip );
 
     //address field will pass $value as an array with each of the elements as an item within the array, the key is the field id
@@ -508,8 +516,9 @@ function is_serviceable_zip_code( $client_zip_code ) {
 		$to 		= 'rolson@sequoiaims.com';
 		$subject 	= 'HIQ Product Selection Error: ' . $choose_error;
 		$body 		= 'The following zip code was entered but not found in any zone:<br>' . $client_zip_code;
-		$body 		.= '<h4>POST Data:</h4><br>';
+		$body 		.= '<h4>POST Data:</h4><pre>';
 		$body 		.= print_r( $_POST, true );
+		$body 		.= '</pre>';
 		$headers 	= array('Content-Type: text/html; charset=UTF-8');
 
 		wp_mail( $to, $subject, $body, $headers );
