@@ -324,7 +324,7 @@ function custom_confirmation( $confirmation, $form, $entry, $ajax ) {
 	);
 
 	$confirmation .= '<div class="dealer-conf-wrapper clearfix">';
-	$confirmation .= '<h3>Thank you!</h3><p>Your certfied Payne dealer is <a href=" ' . $dealer_link . ' " target="_blank">' . $dealer_name . '</a> and they will be in contact to schedule your home visit within 24 hours.</p><hr />';
+	$confirmation .= '<h3>Thank you!</h3><p>Your certfied Payne dealer is <a href=" ' . $dealer_link . ' " target="_blank">' . $dealer_name . '</a> and they will be in contact to schedule your home visit within 24 hours during the normal business week.</p><hr />';
 	$confirmation .= '<h1 class="dealer-conf-title"><a href=" ' . $dealer_link . ' " target="_blank">' . $dealer_name . '</a></h1>';
 	$confirmation .= '<div class="clearfix">';
 	$confirmation .= '<div class="flex_column av_one_half  flex_column_div first">';
