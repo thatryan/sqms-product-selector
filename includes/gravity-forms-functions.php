@@ -477,6 +477,7 @@ function add_gtm_submission( $entry, $form ) {
 			'eventLabel' : '<?php echo $event_label; ?>',
 		});
 	</script>
+	<script>fbq('track', 'Lead');</script>
 	<?php
 }
 
