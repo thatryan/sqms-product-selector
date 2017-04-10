@@ -303,6 +303,7 @@ function custom_confirmation( $confirmation, $form, $entry, $ajax ) {
 		return $confirmation;
 	}
 
+	$conversion_code = '<!-- Google Code for Instant Quote Form Conversion Page --><script type="text/javascript">/* <![CDATA[ */var google_conversion_id = 856718203;var google_conversion_language = "en";var google_conversion_format = "3";var google_conversion_color = "ffffff";var google_conversion_label = "62pkCKSq8m8Q-_bBmAM";var google_remarketing_only = false;/* ]]> */</script><script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js"></script><noscript><div style="display:inline;"><img height="1" width="1" style="border-style:none;" alt="" src="//www.googleadservices.com/pagead/conversion/856718203/?label=62pkCKSq8m8Q-_bBmAM&amp;guid=ON&amp;script=0"/></div></noscript>';
 	$confirmation 		= '';
 	$dealer_name 	= get_the_title( $dealer_id );
 	$dealer_link 		=  get_permalink( $dealer_id );
@@ -360,7 +361,7 @@ function custom_confirmation( $confirmation, $form, $entry, $ajax ) {
 	$confirmation .= '</div>';
 	$confirmation .= '</div>';
 
-	return $confirmation;
+	return $conversion_code . $confirmation;
 }
 
 /**
