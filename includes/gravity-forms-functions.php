@@ -11,6 +11,7 @@ add_action( 'gform_post_paging_12', 'add_gtm_pagination', 10, 3 );
 add_filter( 'gform_notification_12', 'get_dealer_email', 10, 3 );
 add_filter( 'gform_pre_render_15', 'add_readonly_script' );
 add_filter( 'gform_pre_render_20', 'dealer_review_id' );
+add_filter( 'gform_submit_button_12', 'add_note_below_submit', 10, 2 );
 add_filter( 'gform_notification_16', 'get_dealer_email', 10, 3 );
 add_filter( 'gform_replace_merge_tags', 'replace_dealer_notification', 10, 7 );
 add_filter( 'gform_confirmation', 'custom_confirmation', 10, 4 );
@@ -193,6 +194,14 @@ function dealer_review_id( $form ) {
 	return $form;
 }
 
+/**
+ * Add a notice below submit button on quote form
+ * @param string $button String containing the input tag to be filtered
+ * @param object $form   GF $form object
+ */
+function add_note_below_submit( $button, $form ) {
+	return $button .= '<p>*by submitting your contact info to a Payne dealer, you are not committing to a quote or appointment.</p>';
+}
 /**
  * Find the dealer email to send the GF notifcation to
  * @param  object $notification GF $notifcation
