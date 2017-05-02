@@ -68,8 +68,11 @@ function display_choice_result( $form ) {
 
 			// Send error message with selection info
 			$to 		= 'rolson@sequoiaims.com';
-			$subject 	= 'HIQ Product Selection Error';
-			$body 		= 'The following product was selected but not available<br>' . $prod_string;
+			$subject 	= 'HIQ Product Selection Error: No Product';
+			$body 		= 'The following product was selected but not available<br><b>' . $prod_string . '</b><br>Function: <b>display_choice_result()</b>';
+			$body 		.= '<h4>POST Data:</h4><pre>';
+			$body 		.= print_r( $_POST, true );
+			$body 		.= '</pre>';
 			$headers 	= array('Content-Type: text/html; charset=UTF-8');
 
 			wp_mail( $to, $subject, $body, $headers );
@@ -521,12 +524,10 @@ function is_serviceable_zip_code( $client_zip_code ) {
 	$parent 			= get_term_by( 'id', $term->parent, 'zone' );
 
 	if( !$parent ) {
-		$choose_error = "No Zone Found";
-
 		// Send error message with zip code info
 		$to 		= 'rolson@sequoiaims.com';
-		$subject 	= 'HIQ Product Selection Error: ' . $choose_error;
-		$body 		= 'The following zip code was entered but not found in any zone:<br>' . $client_zip_code;
+		$subject 	= 'HIQ Product Selection Error: No Zone' ;
+		$body 		= 'The following zip code was entered but not found in any zone:<br><b>' . $client_zip_code . '</b><br>Function: <b>is_serviceable_zip_code()</b>';
 		$body 		.= '<h4>POST Data:</h4><pre>';
 		$body 		.= print_r( $_POST, true );
 		$body 		.= '</pre>';
@@ -567,11 +568,13 @@ function zone_has_dealer( $zone_slug ) {
 
 	// No dealers found, send me an error to investigate
 	if( !$dealer_array ) {
-		$choose_error = "No Dealers";
 
 		$to 		= 'rolson@sequoiaims.com';
-		$subject 	= 'HIQ Product Selection Error: ' . $choose_error;
-		$body 		= 'The following zip code was entered but not found in any zone:<br>Client Zip: ' . $client_zip_code . '<br>Chosen Zone: ' . $zone;
+		$subject 	= 'HIQ Product Selection Error: No Dealers';
+		$body 		= 'No dealer found for zone slug:<br>Zone Slug: ' . $zone_slug . '<br>Function: <b>zone_has_dealer()</b>';
+		$body 		.= '<h4>POST Data:</h4><pre>';
+		$body 		.= print_r( $_POST, true );
+		$body 		.= '</pre>';
 		$headers 	= array('Content-Type: text/html; charset=UTF-8');
 
 		wp_mail( $to, $subject, $body, $headers );
