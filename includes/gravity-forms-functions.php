@@ -216,7 +216,7 @@ function get_dealer_email( $notification, $form, $entry ) {
 
 	$notification['from'] 	= 'mail@hvacinstantquote.com';
 	$notification['fromName'] 	= 'HVAC Instant Quote ';
-	$notification['bcc'] 	= 'rolson@sequoiaims.com, jbenbrook@sequoiaims.com';
+	$notification['bcc'] 	= 'rolson@sequoiaims.com, jbenbrook@sequoiaims.com, KSturm@siglers.com, lscherer@siglers.com, mschwartz@sequoiaims.com';
 
 	if ( $notification['name'] == 'Admin Notification' ) {
 
