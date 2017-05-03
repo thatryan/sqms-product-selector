@@ -256,7 +256,7 @@ function replace_dealer_notification( $text, $form, $entry, $url_encode, $esc_ht
 	if ( strpos( $text, $custom_merge_tag ) === false ) {
 		return $text;
 	}
-
+	$date_created 	= rgar( $entry, 'date_created' );
 	$prod_string 		= rgar( $entry, '56' );
 	$prod_obj 			= get_page_by_path($prod_string, OBJECT, 'sqms_prod_select');
 	$product_post_id 	= $prod_obj->ID;
