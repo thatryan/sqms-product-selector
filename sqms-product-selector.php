@@ -132,7 +132,7 @@ class Product_Selector {
 		wp_register_script( 'hiq-scripts', $this->plugin_url . 'assets/js/hiq-scripts.js', array ('jquery'), $this->plugin_version, false );
 
 		// Enqueue styles
-		// wp_enqueue_style( 'dashicons' );
+		wp_enqueue_style( 'dashicons' );
 		wp_enqueue_style( 'hiq-style' );
 
 		// Enqueue scripts
