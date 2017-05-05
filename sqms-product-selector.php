@@ -127,9 +127,9 @@ class Product_Selector {
 		wp_register_style( 'hiq-style', $this->plugin_url . 'assets/css/hiq-styles.min.css', array(), $this->plugin_version );
 
 		// Register scripts
-		wp_register_script( 'load-report-form', $this->plugin_url . 'assets/js/load-report-form.min.js', array ('jquery'), $this->plugin_version, false );
-		wp_register_script( 'load-zip-form', $this->plugin_url . 'assets/js/load-zip-form.min.js', array ('jquery'), $this->plugin_version, false );
-		wp_register_script( 'hiq-scripts', $this->plugin_url . 'assets/js/hiq-scripts.js', array ('jquery'), $this->plugin_version, false );
+		wp_register_script( 'load-report-form', $this->plugin_url . 'assets/js/load-report-form.min.js', array ('jquery'), $this->plugin_version, true );
+		wp_register_script( 'load-zip-form', $this->plugin_url . 'assets/js/load-zip-form.min.js', array ('jquery'), $this->plugin_version, true );
+		wp_register_script( 'hiq-scripts', $this->plugin_url . 'assets/js/hiq-scripts.js', array ('jquery'), $this->plugin_version, true );
 
 		// Enqueue styles
 		wp_enqueue_style( 'dashicons' );
