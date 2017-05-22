@@ -261,7 +261,7 @@ function replace_dealer_notification( $text, $form, $entry, $url_encode, $esc_ht
 	$prod_obj 			= get_page_by_path($prod_string, OBJECT, 'sqms_prod_select');
 	$product_post_id 	= $prod_obj->ID;
 	$address_field_id 	= 47;
-	$accessory_field_id 	= 57;
+	// $accessory_field_id 	= 57;
 	$street_value 		= rgar( $entry, $address_field_id . '.1' );
 	$street2_value 		= rgar( $entry, $address_field_id . '.2' );
 	$city_value 			= rgar( $entry, $address_field_id . '.3' );
@@ -278,8 +278,8 @@ function replace_dealer_notification( $text, $form, $entry, $url_encode, $esc_ht
 
 	$formatted_address_value = $formatted_street . '<br>' . $city_value . ', ' . $state_value . ' ' . $zip_value;
 
-	$accessory_field       = GFFormsModel::get_field( $form, $accessory_field_id );
-	$accessory_string = is_object( $accessory_field ) ? $accessory_field->get_value_export( $entry ) : '';
+	// $accessory_field       = GFFormsModel::get_field( $form, $accessory_field_id );
+	// $accessory_string = is_object( $accessory_field ) ? $accessory_field->get_value_export( $entry ) : '';
 
 	// Bring in the template file with matching GF styling
 	include 'template/template-merge-tag.php';
