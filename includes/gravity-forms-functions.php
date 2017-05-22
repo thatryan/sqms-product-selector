@@ -659,8 +659,8 @@ function get_finance_options( $system_price, $warranty_price ) {
 		59
 		);
 
-	$finance_data = '';
-	$finance_data .= '<h3>Estimated Monthly Financing Payments, including installation costs, with <a href="https://hvacinstantquote.com/resources/appliance-financing/" target="_blank" title="Microf Financing">Microf Financing</a></h3>';
+	$finance_data = '<h2>Interested in Financing?</h2>';
+	$finance_data .= '<h4>Estimated Monthly Financing Payments, including installation costs, with <a href="https://hvacinstantquote.com/resources/appliance-financing/" target="_blank" title="Microf Financing">Microf Financing</a></h4>';
 	$finance_data .= '<table><thead><tr><th>Payment Amount</th><th>35 monthly payments</th><th>47 monthly payments</th><th>59 monthly payments</th></tr></thead><tbody><tr><td>$1,000.00 Install Cost</td>';
 
 	foreach ($term_options as $term) {
