@@ -8,6 +8,7 @@
 add_filter( 'gform_confirmation_anchor_12', function() { return 0; } );
 add_filter( 'gform_pre_render_12', 'display_choice_result' );
 add_action( 'gform_post_paging_12', 'add_gtm_pagination', 10, 3 );
+add_filter( 'gform_field_value_zip_check', 'populate_zip_code' );
 add_filter( 'gform_notification_12', 'get_dealer_email', 10, 3 );
 add_filter( 'gform_pre_render_15', 'add_readonly_script' );
 add_filter( 'gform_pre_render_20', 'dealer_review_id' );
@@ -155,6 +156,10 @@ function add_gtm_pagination( $form, $source_page_number, $current_page_number ) 
 		});
 	</script>
 	<?php
+}
+
+function populate_zip_code() {
+	return $_GET['zip_value'];
 }
 
 /**
@@ -439,6 +444,7 @@ function choose_new_dealer( $form ) {
 	if( $form['id'] == 12 ) {
 		$address_field 	= '47_5';
 		$dealer_id_field 	= 'input_69';
+		$zip_check_field 	 	= sanitize_text_field( rgpost( 'input_75' ) );
 	}
 	elseif( $form['id'] == 16 ) {
 		$address_field 	= '12_5';
@@ -450,7 +456,8 @@ function choose_new_dealer( $form ) {
 
 	// GFCommon::log_debug( __METHOD__ . '(): POST => ' . print_r( $_POST, true ) );
 	// Find out what zone this client is in
-	$zone = is_serviceable_zip_code( $_POST['input_'.$address_field] );
+
+	$zone = is_serviceable_zip_code( $zip_check_field );
 
 	// GFCommon::log_debug( __METHOD__ . 'Zone: ' . $zone );
 
