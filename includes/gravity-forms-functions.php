@@ -112,8 +112,6 @@ function display_choice_result( $form ) {
 		$content_output .= '<p><small>Note: Proper Equipment Selection Will Be Verified On Installation Inspection</small></p>';
 		$content_output .= '</div>';
 		$content_output .= '<div class="financing-box">' . get_finance_options( $system_price, $warranty_price ) . '</div>';
-		$content_output .= '<h3>Your Equipment Specifications:</h3>';
-		$content_output .= get_product_data( $product_post_id );
 		$content_output .= '<p>By accepting this quote, you will be connected with a local dealer who will schedule a visit to your home for inspection. You are not committing to a purchase.</p>';
 
 		//loop back through form fields to get html field ID that we are populating with the data gathered above
