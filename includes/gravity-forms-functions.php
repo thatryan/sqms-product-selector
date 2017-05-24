@@ -8,6 +8,7 @@
 add_filter( 'gform_confirmation_anchor_12', function() { return 0; } );
 add_filter( 'gform_pre_render_12', 'display_choice_result' );
 add_action( 'gform_post_paging_12', 'add_gtm_pagination', 10, 3 );
+add_action( 'gform_post_paging_12', 'add_to_mailchimp', 10, 3 );
 add_filter( 'gform_field_value_zip_check', 'populate_zip_code' );
 add_filter( 'gform_notification_12', 'get_dealer_email', 10, 3 );
 add_filter( 'gform_pre_render_15', 'add_readonly_script' );
@@ -154,6 +155,32 @@ function add_gtm_pagination( $form, $source_page_number, $current_page_number ) 
 		});
 	</script>
 	<?php
+}
+
+function add_to_mailchimp( $form, $source_page_number, $current_page_number ) {
+
+	$current_page 		= GFFormDisplay::get_current_page( $form['id'] );
+
+	// After page 7 we have the data to build the string
+	if ( $current_page == 8 ) {
+
+	$first_name = rgpost( 'input_11_3' );
+	$last_name = rgpost( 'input_11_6' );
+	$email_address = rgpost( 'input_12' );
+
+	$data = [
+	    'email'     => $email_address,
+	    'status'    => 'subscribed',
+	    'firstname' => $first_name,
+	    'lastname'  => $last_name,
+	];
+
+	$result = syncMailchimp($data);
+
+	// error_log('Result');
+	// error_log( print_r( $result, true ) );
+	}
+
 }
 
 function populate_zip_code() {
@@ -699,4 +726,39 @@ function microf_payment_calc( $amount_financed, $term ) {
 
 	return $estimated_payment;
 
+}
+
+function syncMailchimp($data) {
+
+    $apiKey = 'bf70c8feae6656aee33f2d370a31b28f-us15';
+    $listId = '3f93b40d22';
+
+    $dataCenter = substr($apiKey,strpos($apiKey,'-')+1);
+    $memberID = md5(strtolower($data['email']));
+    $url = 'https://' . $dataCenter . '.api.mailchimp.com/3.0/lists/' . $listId . '/members/' . $memberID;
+
+    $json = json_encode([
+        'email_address' => $data['email'],
+        'status'        => $data['status'], // "subscribed","unsubscribed","cleaned","pending"
+        'merge_fields'  => [
+            'FNAME'     => $data['firstname'],
+            'LNAME'     => $data['lastname']
+        ]
+    ]);
+
+    $ch = curl_init($url);
+
+    curl_setopt($ch, CURLOPT_USERPWD, 'user:' . $apiKey);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
+
+    $result = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    return $result;
 }
