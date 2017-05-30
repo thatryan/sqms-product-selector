@@ -168,7 +168,7 @@ function add_to_mailchimp( $form, $source_page_number, $current_page_number ) {
 	$current_page 		= GFFormDisplay::get_current_page( $form['id'] );
 
 	// After page 7 we have the data to build the string
-	if ( $current_page == 8 ) {
+	if ( $current_page == 7 ) {
 
 	$first_name = rgpost( 'input_11_3' );
 	$last_name = rgpost( 'input_11_6' );
