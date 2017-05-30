@@ -568,6 +568,8 @@ function choose_new_dealer( $form ) {
 	}
 
 	if( isset( $_POST[$dealer_id_field] ) ) {
+		error_log('Dealer ID Pre-Set');
+		error_log( print_r( $_POST[$dealer_id_field] ) );
 		return;
 	}
 
@@ -614,7 +616,7 @@ function add_gtm_submission( $entry, $form ) {
 			'eventLabel' : '<?php echo $event_label; ?>',
 		});
 	</script>
-	<script>fbq('track', 'Lead');</script>
+	<!-- <script>fbq('track', 'Lead');</script> -->
 	<?php
 }
 
@@ -661,6 +663,8 @@ function is_serviceable_zip_code( $client_zip_code ) {
 
 		return false;
 	}
+		error_log('Zip Check');
+	error_log( print_r( $parent->slug, true ) );
 
 	return $parent->slug;
 }
@@ -705,6 +709,9 @@ function zone_has_dealer( $zone_slug ) {
 
 		return false;
 	}
+
+		error_log('Zone Check');
+	error_log( print_r( $dealer_array[0]->ID, true ) );
 
 	// found a dealer, get their ID
 	return $dealer_array[0]->ID;
