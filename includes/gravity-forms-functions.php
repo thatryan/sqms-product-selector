@@ -567,11 +567,11 @@ function choose_new_dealer( $form ) {
 		return;
 	}
 
-	if( isset( $_POST[$dealer_id_field] ) ) {
-		error_log('Dealer ID Pre-Set');
-		error_log( print_r( $_POST[$dealer_id_field] ) );
-		return;
-	}
+	// if( isset( $_POST[$dealer_id_field] ) ) {
+	// 	error_log('Dealer ID Pre-Set');
+	// 	error_log( print_r( $_POST[$dealer_id_field] ) );
+	// 	return;
+	// }
 
 	// GFCommon::log_debug( __METHOD__ . '(): POST => ' . print_r( $_POST, true ) );
 	// Find out what zone this client is in
