@@ -21,7 +21,8 @@ function check_zip_code_register_shortcode() {
  * @return string HTML for zip code check form
  */
 function get_check_zip_form() {
-
+	$selection_form_id = 12;
+	$market_zone = 'PHX-';
 	/**
 	 * Enqueue the scripts and styles for selection form here to get them
 	 * into the page because the form itself is loaded in via ajax.
@@ -44,8 +45,6 @@ function get_check_zip_form() {
 		return $no_script_message . $check_zip_form;
 	}
 	else {
-		$selection_form_id = 12;
-		$market_zone = 'PHX-';
 
 		gravity_form( $selection_form_id, false, false, false, array('market_key'=>$market_zone), true );
 
