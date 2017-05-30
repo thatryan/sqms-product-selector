@@ -22,26 +22,34 @@ function check_zip_code_register_shortcode() {
  */
 function get_check_zip_form() {
 
-	$zip_form_params = array(
-		'ajaxurl' => admin_url( 'admin-ajax.php' ),
-		);
-	$selection_form_id = 12;
+	if( empty( $_GET['dealer_ref'] ) || !is_valid( $_GET['dealer_ref'] ) ) {
+		$zip_form_params = array(
+			'ajaxurl' => admin_url( 'admin-ajax.php' ),
+			);
 
-	/**
-	 * Enqueue the scripts and styles for selection form here to get them
-	 * into the page because the form itself is loaded in via ajax.
-	 */
-	gravity_form_enqueue_scripts( $selection_form_id, true );
+		wp_localize_script( 'load-zip-form', 'zip_form_params', $zip_form_params );
+		wp_enqueue_script('load-zip-form');
 
-	wp_localize_script( 'load-zip-form', 'zip_form_params', $zip_form_params );
-	wp_enqueue_script('load-zip-form');
+		// Pretty much need JS enabled for all this to work right, so send a message if not
+		$no_script_message = '<noscript><div class="avia_message_box avia-color-red avia-size-large avia-icon_select-yes avia-border-solid  avia-builder-el-1  el_after_av_textblock  avia-builder-el-last  "><span class="avia_message_box_title">Enable JavaScript!</span><div class="avia_message_box_content"><p style="text-transform:none;font-size:16px;">For full functionality of this site it is necessary to enable JavaScript. Here are the <a href="http://www.enable-javascript.com/" target="_blank"> instructions how to enable JavaScript in your web browser</a>.</p></div></div></noscript>';
 
-	// Pretty much need JS enabled for all this to work right, so send a message if not
-	$no_script_message = '<noscript><div class="avia_message_box avia-color-red avia-size-large avia-icon_select-yes avia-border-solid  avia-builder-el-1  el_after_av_textblock  avia-builder-el-last  "><span class="avia_message_box_title">Enable JavaScript!</span><div class="avia_message_box_content"><p style="text-transform:none;font-size:16px;">For full functionality of this site it is necessary to enable JavaScript. Here are the <a href="http://www.enable-javascript.com/" target="_blank"> instructions how to enable JavaScript in your web browser</a>.</p></div></div></noscript>';
+		$check_zip_form = '<form action="" id="get_gravity_form" class="sqms-zip-search-form clearfix"><p class="zip-input-wrap"><label>Please Enter Your Zip Code<input name="zip_code_input" class="text_input" type="text" id="zip-check-input" value="" placeholder="enter zip code..."></label></p><p class="zip-button-wrap"><input type="submit"  value="Check Your Area" class="gf-test-zip-code button"></p></form>';
 
-	$check_zip_form = '<form action="" id="get_gravity_form" class="sqms-zip-search-form clearfix"><p class="zip-input-wrap"><label>Please Enter Your Zip Code<input name="zip_code_input" class="text_input" type="text" id="zip-check-input" value="" placeholder="enter zip code..."></label></p><p class="zip-button-wrap"><input type="submit"  value="Check Your Area" class="gf-test-zip-code button"></p></form>';
+		return $no_script_message . $check_zip_form;
+	}
+	else {
+		$selection_form_id = 12;
+		$market_zone = 'PHX-';
 
-	return $no_script_message . $check_zip_form;
+		/**
+		 * Enqueue the scripts and styles for selection form here to get them
+		 * into the page because the form itself is loaded in via ajax.
+		 */
+		gravity_form_enqueue_scripts( $selection_form_id, true );
+		gravity_form( $selection_form_id, false, false, false, array('market_key'=>$market_zone), true );
+
+	}
+
 }
 
 /**
