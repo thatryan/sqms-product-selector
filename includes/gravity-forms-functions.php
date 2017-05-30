@@ -367,17 +367,20 @@ function replace_dealer_notification( $text, $form, $entry, $url_encode, $esc_ht
 function custom_confirmation( $confirmation, $form, $entry, $ajax ) {
 	// Product selection form
 	if( $form['id'] == 12 ) {
-		$dealer_id = $entry['69'];
-		$prod_string = $entry['56'];
+		$dealer_id = rgar( $entry, '69' );
+		$prod_string = rgar( $entry, '56' );
 	}
 	// Photo quote form
 	elseif( $form['id'] == 16 ) {
-		$dealer_id = $entry['18'];
+		$dealer_id = rgar( $entry, '18' );
 	}
 	// None of the above, abort
 	else {
 		return $confirmation;
 	}
+	// error_log('Result');
+	error_log( print_r( $dealer_id, true ) );
+	error_log( print_r( $prod_string, true ) );
 
 	$confirmation 		= "";
 	// Get the chosen product object
@@ -389,7 +392,7 @@ function custom_confirmation( $confirmation, $form, $entry, $ajax ) {
 		// Send error message with selection info
 		$to 		= 'rolson@sequoiaims.com';
 		$subject 	= 'HIQ Product Selection Error: No Product';
-		$body 		= 'The following product was selected but not available<br><b>' . $prod_string . '</b><br>Function: <b>display_choice_result()</b>';
+		$body 		= 'The following product was selected but not available<br><b>' . $prod_string . '</b><br>Function: <b>custom_confirmation()</b>';
 		$body 		.= '<h4>POST Data:</h4><pre>';
 		$body 		.= print_r( $_POST, true );
 		$body 		.= '</pre>';
