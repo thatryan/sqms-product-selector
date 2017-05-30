@@ -22,6 +22,12 @@ function check_zip_code_register_shortcode() {
  */
 function get_check_zip_form() {
 
+	/**
+	 * Enqueue the scripts and styles for selection form here to get them
+	 * into the page because the form itself is loaded in via ajax.
+	 */
+	gravity_form_enqueue_scripts( $selection_form_id, true );
+
 	if( empty( $_GET['dealer_ref'] ) || !is_valid( $_GET['dealer_ref'] ) ) {
 		$zip_form_params = array(
 			'ajaxurl' => admin_url( 'admin-ajax.php' ),
@@ -41,11 +47,6 @@ function get_check_zip_form() {
 		$selection_form_id = 12;
 		$market_zone = 'PHX-';
 
-		/**
-		 * Enqueue the scripts and styles for selection form here to get them
-		 * into the page because the form itself is loaded in via ajax.
-		 */
-		gravity_form_enqueue_scripts( $selection_form_id, true );
 		gravity_form( $selection_form_id, false, false, false, array('market_key'=>$market_zone), true );
 
 	}
