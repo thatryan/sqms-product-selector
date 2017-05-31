@@ -43,7 +43,7 @@ function get_check_zip_form() {
 		// Pretty much need JS enabled for all this to work right, so send a message if not
 		$no_script_message = '<noscript><div class="avia_message_box avia-color-red avia-size-large avia-icon_select-yes avia-border-solid  avia-builder-el-1  el_after_av_textblock  avia-builder-el-last  "><span class="avia_message_box_title">Enable JavaScript!</span><div class="avia_message_box_content"><p style="text-transform:none;font-size:16px;">For full functionality of this site it is necessary to enable JavaScript. Here are the <a href="http://www.enable-javascript.com/" target="_blank"> instructions how to enable JavaScript in your web browser</a>.</p></div></div></noscript>';
 
-		$check_zip_form = '<form action="" id="get_gravity_form" class="sqms-zip-search-form clearfix"><p class="zip-input-wrap"><label>Please Enter Your Zip Code<input name="zip_code_input" class="text_input" type="text" id="zip-check-input" value="" placeholder="enter zip code..."></label></p><p class="zip-button-wrap"><input type="submit"  value="Check Your Area" class="gf-test-zip-code button"></p></form>';
+		$check_zip_form = '<h2>Start here for your FREE HVAC System Quote</h2><form action="" id="get_gravity_form" class="sqms-zip-search-form clearfix"><p class="zip-input-wrap"><label>Please Enter Your Zip Code<input name="zip_code_input" class="text_input" type="text" id="zip-check-input" value="" placeholder="enter zip code..."></label></p><p class="zip-button-wrap"><input type="submit"  value="Check Your Area" class="gf-test-zip-code button"></p></form>';
 
 		return $no_script_message . $check_zip_form;
 	}
