@@ -29,8 +29,10 @@ add_action( 'gform_after_submission_15', 'update_report_entry_meta', 10, 2 );
 add_action( 'gform_pre_submission_16', 'choose_new_dealer' );
 
 function check_for_referral_id( ) {
-
-	return $_GET['dealer_ref'];
+	if( isset( $_GET['dealer_ref'] ) ) {
+		return $_GET['dealer_ref'];
+	}
+	return;
 
 }
 /**
@@ -190,7 +192,6 @@ function add_to_mailchimp( $form, $source_page_number, $current_page_number ) {
 			$populated 	= rgpost( 'input_' . $field->id );
 
 			if ( !$is_hidden && $populated !='' ) {
-				$html_content 	.= '<li>' . $field->label . ': ' . rgpost( 'input_' . $field->id ) . '</li>';
 				$prod_string 	.= rgpost( 'input_' . $field->id );
 			}
 		}
@@ -378,9 +379,6 @@ function custom_confirmation( $confirmation, $form, $entry, $ajax ) {
 	else {
 		return $confirmation;
 	}
-	// error_log('Result');
-	error_log( print_r( $dealer_id, true ) );
-	error_log( print_r( $prod_string, true ) );
 
 	$confirmation 		= "";
 	// Get the chosen product object
@@ -446,7 +444,6 @@ function custom_confirmation( $confirmation, $form, $entry, $ajax ) {
 	$confirmation .= '<p><small>Note: Proper Equipment Selection Will Be Verified On Installation Inspection</small></p>';
 	$confirmation .= '</div>';
 	$confirmation .= '<div class="financing-box">' . get_finance_options( $system_price, $warranty_price ) . '</div>';
-	$confirmation .= '<p>By accepting this quote, you will be connected with a local dealer who will schedule a visit to your home for inspection. You are not committing to a purchase.</p>';
 
 	$conversion_code = '<!-- Google Code for Instant Quote Form Conversion Page --><script type="text/javascript">/* <![CDATA[ */var google_conversion_id = 856718203;var google_conversion_language = "en";var google_conversion_format = "3";var google_conversion_color = "ffffff";var google_conversion_label = "62pkCKSq8m8Q-_bBmAM";var google_remarketing_only = false;/* ]]> */</script><script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js"></script><noscript><div style="display:inline;"><img height="1" width="1" style="border-style:none;" alt="" src="//www.googleadservices.com/pagead/conversion/856718203/?label=62pkCKSq8m8Q-_bBmAM&amp;guid=ON&amp;script=0"/></div></noscript>';
 
@@ -488,8 +485,8 @@ function custom_confirmation( $confirmation, $form, $entry, $ajax ) {
 	$confirmation .= '</div>';
 	$confirmation .= '</div>';
 
-	// return $conversion_code . $confirmation;
-	return $confirmation;
+	return $conversion_code . $confirmation;
+	// return $confirmation;
 }
 
 /**
@@ -546,7 +543,8 @@ function validate_zip_zone( $result, $value, $form, $field ) {
  */
 function choose_new_dealer( $form ) {
 
-
+	// error_log('POST');
+	// error_log( print_r( $_POST, true ) );
 	$zone 						= '';
 	$address_field 			= '';
 	$choose_error 			= '';
@@ -567,11 +565,11 @@ function choose_new_dealer( $form ) {
 		return;
 	}
 
-	// if( isset( $_POST[$dealer_id_field] ) ) {
-	// 	error_log('Dealer ID Pre-Set');
-	// 	error_log( print_r( $_POST[$dealer_id_field] ) );
-	// 	return;
-	// }
+	if( isset( $_POST[$dealer_id_field] ) && $_POST[$dealer_id_field] != "" ) {
+		error_log('Dealer ID Pre-Set');
+		error_log( print_r( $_POST, true ) );
+		return;
+	}
 
 	// GFCommon::log_debug( __METHOD__ . '(): POST => ' . print_r( $_POST, true ) );
 	// Find out what zone this client is in
@@ -616,7 +614,7 @@ function add_gtm_submission( $entry, $form ) {
 			'eventLabel' : '<?php echo $event_label; ?>',
 		});
 	</script>
-	<!-- <script>fbq('track', 'Lead');</script> -->
+	<script>fbq('track', 'Lead');</script>
 	<?php
 }
 
@@ -663,8 +661,8 @@ function is_serviceable_zip_code( $client_zip_code ) {
 
 		return false;
 	}
-		error_log('Zip Check');
-	error_log( print_r( $parent->slug, true ) );
+	// 	error_log('Zip Check');
+	// error_log( print_r( $parent->slug, true ) );
 
 	return $parent->slug;
 }
@@ -710,8 +708,8 @@ function zone_has_dealer( $zone_slug ) {
 		return false;
 	}
 
-		error_log('Zone Check');
-	error_log( print_r( $dealer_array[0]->ID, true ) );
+	// 	error_log('Zone Check');
+	// error_log( print_r( $dealer_array[0]->ID, true ) );
 
 	// found a dealer, get their ID
 	return $dealer_array[0]->ID;

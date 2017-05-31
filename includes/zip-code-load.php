@@ -29,7 +29,10 @@ function get_check_zip_form() {
 	 */
 	gravity_form_enqueue_scripts( $selection_form_id, true );
 
-	if( empty( $_GET['dealer_ref'] ) || !is_valid( $_GET['dealer_ref'] ) ) {
+	if( isset( $_GET['dealer_ref'] ) && is_valid( $_GET['dealer_ref'] ) ) {
+		gravity_form( $selection_form_id, false, false, false, array('market_key'=>$market_zone), true );
+	}
+	else {
 		$zip_form_params = array(
 			'ajaxurl' => admin_url( 'admin-ajax.php' ),
 			);
@@ -44,12 +47,6 @@ function get_check_zip_form() {
 
 		return $no_script_message . $check_zip_form;
 	}
-	else {
-
-		gravity_form( $selection_form_id, false, false, false, array('market_key'=>$market_zone), true );
-
-	}
-
 }
 
 /**
