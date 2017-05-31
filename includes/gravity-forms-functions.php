@@ -828,7 +828,7 @@ function microf_payment_calc( $amount_financed, $term ) {
 function syncMailchimp($data) {
 
     $apiKey = 'bf70c8feae6656aee33f2d370a31b28f-us15';
-    $listId = '3f93b40d22';
+    $listId = 'f194b8d22b';
 
     $dataCenter = substr($apiKey,strpos($apiKey,'-')+1);
     $memberID = md5(strtolower($data['email']));
