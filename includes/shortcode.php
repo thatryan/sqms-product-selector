@@ -4,6 +4,7 @@
  */
 
 add_action( 'init', 'display_dealer_entries_register_shortcode' );
+add_action( 'init', 'display_quote_table_register_shortcode' );
 add_action( 'init', 'display_dealer_reviews_register_shortcode' );
 add_action( 'wp_ajax_nopriv_gf_button_get_form', 'gf_button_ajax_get_form' );
 add_action( 'wp_ajax_gf_button_get_form', 'gf_button_ajax_get_form' );
@@ -14,6 +15,10 @@ add_action( 'wp_ajax_gf_button_get_form', 'gf_button_ajax_get_form' );
  */
 function display_dealer_entries_register_shortcode() {
 	add_shortcode( 'dealer-entries', 'display_dealer_entries' );
+}
+
+function display_quote_table_register_shortcode() {
+	add_shortcode( 'quote-table', 'display_quote_table' );
 }
 
 /**
@@ -91,6 +96,51 @@ function display_dealer_entries() {
 
 	return $lead_list;
 }
+
+
+function display_quote_table() {
+
+	$quote_form_id 	= 12;
+	$search_criteria = array();
+	$sorting         = array();
+	$paging          = array( 'offset' => 0, 'page_size' => 250 );
+	$total_count     = 0;
+
+	$entries         = GFAPI::get_entries( $quote_form_id, $search_criteria, $sorting, $paging, $total_count );
+
+
+	$lead_list  = '';
+	$lead_list  = '<h3>Total Entries: '.$total_count.'</h3>';
+	$lead_list .= '<table class="all-entry-list">';
+	$lead_list .= '<thead>';
+	$lead_list .= '<tr>';
+	$lead_list .= '<th>Quote Date</th><th>Client Name</th><th>System</th><th>Dealer</th><th>Reported</th>';
+	$lead_list .= '</tr>';
+	$lead_list .= '</thead>';
+	$lead_list .= '<tbody>';
+
+	foreach ($entries as $entry ) {
+
+		$prod_obj 					= get_page_by_path($entry['56'], OBJECT, 'sqms_prod_select');
+		$product_post_id 			= $prod_obj->ID;
+		$dealer_name 			= get_the_title( $entry['69'] );
+		$client_name 				= $entry['11.3'] . ' ' . $entry['11.6'];
+
+		$reported 					= gform_get_meta( intval( $entry['id'] ), 'quote_reported' );
+		$date = date_create( $entry['date_created']);
+
+
+		$lead_list .= '<tr class="'.($reported === 'Yes' ? "reported" : "" ).'">';
+		$lead_list .= '<td>' . date_format( $date, 'F j, Y') . '</td><td>' . $client_name . '</td><td>' . $entry['56'] . '</td><td>' . $dealer_name . '</td><td>' . ( $reported === "Yes" ? $reported : 'No'  ). '</td>';
+		$lead_list .= '</tr>';
+	}
+
+	$lead_list .= '</tbody>';
+	$lead_list .= '</table>';
+
+	return $lead_list;
+}
+
 
 /**
  * Add shortcode to display dealer ratings

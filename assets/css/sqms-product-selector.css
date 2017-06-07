@@ -39,6 +39,11 @@
 	margin: 0;
 }
 
+.all-entry-list .reported td {
+	color:#2a2a2a;
+	background:#0fe2a8;
+}
+
 @media only screen and (min-width: 768px) {
 	#top .sqms-zip-search-form p {
 		float: left;
