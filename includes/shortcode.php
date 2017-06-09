@@ -130,11 +130,12 @@ function display_quote_table() {
 			$result = $report_entry[0][2];
 			$upsell = $report_entry[0][3];
 			$notes = $report_entry[0][4];
+			$comments = $report_entry[0][5];
 			$actual_sell = $report_entry[0][8];
 			$actual_labor = $report_entry[0][9];
 
-			$data = '<table><thead><tr><th>MSRP</th><th>Result</th><th>Actual Sale Price</th><th>Actual Labor Price</th><th>Upsell</th><th>Notes</th></tr></thead><tbody>';
-			$data .= '<tr><td> ' . $quoted_price . ' </td><td> ' . $result . ' </td><td> ' . $actual_sell . ' </td><td> ' . $actual_labor . ' </td><td> ' . $upsell . ' </td><td> ' . $notes . ' </td></tr>';
+			$data = '<table><thead><tr><th>MSRP</th><th>Result</th><th>Actual Sale Price</th><th>Actual Labor Price</th><th>Upsell</th><th>Notes</th><th>Comments</th></tr></thead><tbody>';
+			$data .= '<tr><td> ' . $quoted_price . ' </td><td> ' . $result . ' </td><td> ' . $actual_sell . ' </td><td> ' . $actual_labor . ' </td><td> ' . $upsell . ' </td><td> ' . $notes . ' </td><td> ' . $comments . ' </td></tr>';
 			$data .= '</tbody></table>';
 
 		}
