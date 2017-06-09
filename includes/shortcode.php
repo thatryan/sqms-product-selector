@@ -94,6 +94,7 @@ function display_dealer_entries() {
 function display_quote_table() {
 
 	$quote_form_id 	= 12;
+	$report_form_id 	= 15;
 	$search_criteria = array();
 	$sorting         = array();
 	$paging          = array( 'offset' => 0, 'page_size' => 250 );
@@ -113,19 +114,35 @@ function display_quote_table() {
 	$lead_list .= '<tbody>';
 
 	foreach ($entries as $entry ) {
-
+		$is_reported 				= false;
 		$prod_obj 					= get_page_by_path($entry['56'], OBJECT, 'sqms_prod_select');
 		$product_post_id 			= $prod_obj->ID;
 		$quoted_price 				= get_post_meta( $product_post_id, 'sqms-product-system-price', true );
 		$dealer_name 			= get_the_title( $entry['69'] );
 		$client_name 				= $entry['11.3'] . ' ' . $entry['11.6'];
-
+		$date 						= date_create( $entry['date_created']);
 		$reported 					= gform_get_meta( intval( $entry['id'] ), 'quote_reported' );
-		$date = date_create( $entry['date_created']);
+		if( $reported === 'Yes' ) {
+			$is_reported = true;
+			$report_search['field_filters'][] 	= array( 'key' => '1', 'value' => $entry['id'] );
+			$report_entry				= GFAPI::get_entries( $report_form_id, $report_search );
+
+			$result = $report_entry[0][2];
+			$upsell = $report_entry[0][3];
+			$notes = $report_entry[0][4];
+			$actual_sell = $report_entry[0][8];
+			$actual_labor = $report_entry[0][9];
+
+			$data = '<table><thead><tr><th>MSRP</th><th>Result</th><th>Actual Sale Price</th><th>Actual Labor Price</th><th>Upsell</th><th>Notes</th></tr></thead><tbody>';
+			$data .= '<tr><td> ' . $quoted_price . ' </td><td> ' . $result . ' </td><td> ' . $actual_sell . ' </td><td> ' . $actual_labor . ' </td><td> ' . $upsell . ' </td><td> ' . $notes . ' </td></tr>';
+			$data .= '</tbody></table>';
+
+		}
 
 
-		$lead_list .= '<tr class="'.($reported === 'Yes' ? "reported" : "" ).'">';
-		$lead_list .= '<td>' . $entry['id'] . '</td><td>' . date_format( $date, 'F j, Y') . '</td><td>' . $client_name . '</td><td>' . $entry['56'] . '</td><td>' . $quoted_price . '</td><td>' . $dealer_name . '</td><td>' . ( $reported === "Yes" ? $reported : 'No'  ). '</td>';
+
+		$lead_list .= '<tr class="'.( $is_reported ? "reported" : "" ).'">';
+		$lead_list .= '<td>' . $entry['id'] . '</td><td>' . date_format( $date, 'F j, Y') . '</td><td>' . $client_name . '</td><td>' . $entry['56'] . '</td><td>' . $quoted_price . '</td><td>' . $dealer_name . '</td><td>' . ( $is_reported ? 'Yes <button class="show-report" data-report_data=" ' . $data .'">More Info</button>' : 'No'  ). '</td>';
 		$lead_list .= '</tr>';
 	}
 

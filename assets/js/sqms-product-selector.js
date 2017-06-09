@@ -21,3 +21,16 @@ function gfp_auto_advance_page() {
 jQuery(document).on("gform_post_render", gfp_add_auto_advance_field_events);
 
 
+(function (ReportDataLoader, $) {
+
+    $(".show-report").on( "click", function(){
+        var button = $(this),
+            data = button.attr("data-report_data");
+            vex.open({
+                className:  "vex-theme-default report-modal",
+                content:    data,
+
+            });
+    }); // close click
+
+}(window.ReportDataLoader = window.ReportDataLoader || {}, jQuery));
