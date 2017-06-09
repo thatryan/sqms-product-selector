@@ -107,7 +107,7 @@ function display_quote_table() {
 	$lead_list .= '<table class="all-entry-list">';
 	$lead_list .= '<thead>';
 	$lead_list .= '<tr>';
-	$lead_list .= '<th>Quote Date</th><th>Client Name</th><th>System</th><th>Dealer</th><th>Reported</th>';
+	$lead_list .= '<th>Quote ID</th><th>Quote Date</th><th>Client Name</th><th>System</th><th>MSRP</th><th>Dealer</th><th>Reported</th>';
 	$lead_list .= '</tr>';
 	$lead_list .= '</thead>';
 	$lead_list .= '<tbody>';
@@ -116,6 +116,7 @@ function display_quote_table() {
 
 		$prod_obj 					= get_page_by_path($entry['56'], OBJECT, 'sqms_prod_select');
 		$product_post_id 			= $prod_obj->ID;
+		$quoted_price 				= get_post_meta( $product_post_id, 'sqms-product-system-price', true );
 		$dealer_name 			= get_the_title( $entry['69'] );
 		$client_name 				= $entry['11.3'] . ' ' . $entry['11.6'];
 
@@ -124,7 +125,7 @@ function display_quote_table() {
 
 
 		$lead_list .= '<tr class="'.($reported === 'Yes' ? "reported" : "" ).'">';
-		$lead_list .= '<td>' . date_format( $date, 'F j, Y') . '</td><td>' . $client_name . '</td><td>' . $entry['56'] . '</td><td>' . $dealer_name . '</td><td>' . ( $reported === "Yes" ? $reported : 'No'  ). '</td>';
+		$lead_list .= '<td>' . $entry['id'] . '</td><td>' . date_format( $date, 'F j, Y') . '</td><td>' . $client_name . '</td><td>' . $entry['56'] . '</td><td>' . $quoted_price . '</td><td>' . $dealer_name . '</td><td>' . ( $reported === "Yes" ? $reported : 'No'  ). '</td>';
 		$lead_list .= '</tr>';
 	}
 
