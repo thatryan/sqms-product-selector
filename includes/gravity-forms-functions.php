@@ -549,7 +549,6 @@ function choose_new_dealer( $form ) {
 	$address_field 			= '';
 	$choose_error 			= '';
 	$dealer_id_field 			= '';
-	$dealer_view_count_key 	= 'sqms_dealer_view_count';
 
 	if( $form['id'] == 12 ) {
 		$address_field 	= '47_5';
@@ -582,11 +581,6 @@ function choose_new_dealer( $form ) {
 	$selected_dealer_id 	= zone_has_dealer( $zone );
 
 	// GFCommon::log_debug( __METHOD__ . 'Dealer ID: ' . $selected_dealer_id );
-
-	$dealer_count 			= absint( get_post_meta( $selected_dealer_id, $dealer_view_count_key, true ) );
-	$dealer_count++;
-
-	update_post_meta( $selected_dealer_id, $dealer_view_count_key, $dealer_count );
 
 	/**
 	 * Set POST variable for the hidden dealer ID field to the dealer ID chosen via query above
@@ -674,11 +668,12 @@ function is_serviceable_zip_code( $client_zip_code ) {
  */
 function zone_has_dealer( $zone_slug ) {
 
+	$dealer_view_count_key 	= 'sqms_dealer_view_count';
+
 	// Get all dealers who service this zone
 	$args = array(
 		'post_type' 			=> 'sqms_payne_dealer',
-		'posts_per_page' 	=> 1,
-		'orderby'        		=> 'rand',
+		'posts_per_page' 	=> -1,
 		'tax_query' => array(
 			array(
 				'taxonomy' 		=> 'zone',
@@ -708,11 +703,35 @@ function zone_has_dealer( $zone_slug ) {
 		return false;
 	}
 
-	// 	error_log('Zone Check');
-	// error_log( print_r( $dealer_array[0]->ID, true ) );
+	$all_dealers = array();
+
+	foreach ($dealer_array as $dealer) {
+		$dealer_count 	= absint( get_post_meta( $dealer->ID, $dealer_view_count_key, true ) );
+		$all_dealers[] = array(
+	        'id' => $dealer->ID,
+	        'count' => $dealer_count,
+	    );
+	}
+
+	global $dealersMin;
+	 $dealersMin = min( array_column( $all_dealers, 'count' ) );
+	 	error_log('MIN');
+	 error_log(  $dealersMin  );
+	$dealersWithMinCount = array_filter($all_dealers, function ($dealer_min) {
+	  	global $dealersMin;
+
+	    return ($dealer_min['count'] == $dealersMin);
+	});
+
+
+	$chosen = $dealersWithMinCount[array_rand($dealersWithMinCount)]['id'];
+
+	$current_dealer_count	= absint( get_post_meta( $chosen, $dealer_view_count_key, true ) );
+	$current_dealer_count++;
+	update_post_meta( $chosen, $dealer_view_count_key, $current_dealer_count );
 
 	// found a dealer, get their ID
-	return $dealer_array[0]->ID;
+	return $chosen;
 }
 
 /**
