@@ -10,23 +10,23 @@ add_filter( 'gform_confirmation_anchor_12', function() { return 0; } );
 add_action( 'gform_post_paging_12', 'add_gtm_pagination', 10, 3 );
 add_action( 'gform_post_paging_12', 'add_to_mailchimp', 10, 3 );
 add_filter( 'gform_field_value_zip_check', 'populate_zip_code' );
-add_filter( 'gform_field_value_dealer_ref', 'check_for_referral_id' );
+// add_filter( 'gform_field_value_dealer_ref', 'check_for_referral_id' );
 add_filter( 'gform_notification_12', 'get_dealer_email', 10, 3 );
 add_filter( 'gform_pre_render_15', 'add_readonly_script' );
 add_filter( 'gform_pre_render_20', 'dealer_review_id' );
 add_filter( 'gform_submit_button_12', 'add_note_below_submit', 10, 2 );
 add_filter( 'gform_notification_16', 'get_dealer_email', 10, 3 );
-add_filter( 'gform_replace_merge_tags', 'replace_dealer_notification', 10, 7 );
+// add_filter( 'gform_replace_merge_tags', 'replace_dealer_notification', 10, 7 );
 add_filter( 'gform_confirmation', 'custom_confirmation', 10, 4 );
 add_filter( 'gform_ajax_spinner_url', 'add_hiq_spinner_image', 10, 2 );
 
 add_filter( 'gform_field_validation_12_47', 'validate_zip_zone', 10, 4 );
 add_filter( 'gform_field_validation_16_12', 'validate_zip_zone', 10, 4 );
 
-add_action( 'gform_pre_submission_12', 'choose_new_dealer' );
+// add_action( 'gform_pre_submission_12', 'choose_new_dealer' );
 add_action( 'gform_after_submission_12', 'add_gtm_submission', 10, 2 );
 add_action( 'gform_after_submission_15', 'update_report_entry_meta', 10, 2 );
-add_action( 'gform_pre_submission_16', 'choose_new_dealer' );
+// add_action( 'gform_pre_submission_16', 'choose_new_dealer' );
 
 function check_for_referral_id( ) {
 	if( isset( $_GET['dealer_ref'] ) ) {
@@ -284,22 +284,10 @@ function get_dealer_email( $notification, $form, $entry ) {
 
 	$notification['from'] 	= 'mail@hvacinstantquote.com';
 	$notification['fromName'] 	= 'HVAC Instant Quote ';
-	$notification['bcc'] 	= 'rolson@sequoiaims.com, jbenbrook@sequoiaims.com, KSturm@siglers.com, lscherer@siglers.com, mschwartz@sequoiaims.com';
 
 	if ( $notification['name'] == 'Admin Notification' ) {
 
-		if( $form['id'] == 12 ) {
-			$dealer_id = rgpost( 'input_69'  );
-			// $testing_email = rgpost( 'input_12'  );
-		}
-		elseif( $form['id'] == 16 ){
-			$dealer_id = rgpost( 'input_18'  );
-			// $testing_email = rgpost( 'input_10' );
-		}
-
-	      $dealer_email 	= get_post_meta( $dealer_id, 'sqms-product-email', true );
-	      $notification['to'] 	= $dealer_email;
-	      // $notification['to'] 	= $testing_email;
+	      $notification['to'] 	= 'lscherer@siglers.com, KSturm@siglers.com, rolson@sequoiaims.com, jbenbrook@sequoiaims.com, mschwartz@sequoiaims.com';
 
 	  }
 
@@ -405,26 +393,6 @@ function custom_confirmation( $confirmation, $form, $entry, $ajax ) {
 		return $confirmation;
 	}
 
-	// Dealer info
-	$dealer_name 	= get_the_title( $dealer_id );
-	$dealer_link 		=  get_permalink( $dealer_id );
-	$dealer_phone 	= get_post_meta( $dealer_id, 'sqms-product-phone', true );
-	$dealer_address 	= get_post_meta( $dealer_id, 'sqms-product-address', true );
-	$dealer_snippet 	= wpautop( get_post_meta( $dealer_id, 'sqms-product-snippet', true ) );
-	$dealer_years 		= get_post_meta( $dealer_id, 'sqms-product-years', true );
-	$dealer_license 	= get_post_meta( $dealer_id, 'sqms-product-license', true );
-	$dealer_headshot = wp_get_attachment_image( get_post_meta( $dealer_id, 'sqms-product-headshot_id', 1 ), 'medium' );
-	$dealer_logos 		= get_post_meta( $dealer_id, 'sqms-product-logos', 1 );
-
-	$address = wp_parse_args( $dealer_address, array(
-		'address-1' 	=> '',
-		'address-2' 	=> '',
-		'city' 			=> '',
-		'state' 			=> '',
-		'zip' 			=> '',
-		)
-	);
-
 	// Get all the data related to the chosen product string
 	$product_post_id 		= $prod_obj->ID;
 	$prod_meta 			= get_post_meta( $product_post_id );
@@ -448,42 +416,10 @@ function custom_confirmation( $confirmation, $form, $entry, $ajax ) {
 	$conversion_code = '<!-- Google Code for Instant Quote Form Conversion Page --><script type="text/javascript">/* <![CDATA[ */var google_conversion_id = 856718203;var google_conversion_language = "en";var google_conversion_format = "3";var google_conversion_color = "ffffff";var google_conversion_label = "62pkCKSq8m8Q-_bBmAM";var google_remarketing_only = false;/* ]]> */</script><script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js"></script><noscript><div style="display:inline;"><img height="1" width="1" style="border-style:none;" alt="" src="//www.googleadservices.com/pagead/conversion/856718203/?label=62pkCKSq8m8Q-_bBmAM&amp;guid=ON&amp;script=0"/></div></noscript>';
 
 	if( $form['id'] == 12 ) {
+	$confirmation .= '<h4>You will be contacted by an HVAC Instant Quote teammember within 24 hours to schedule your in home visit.</h4>';
 	$confirmation .= '<p>A copy of your quote information has been emailed to you. You may also download a PDF copy below.</p>';
 	$confirmation .= do_shortcode( '[gravitypdf name="Client Copy" id="57a03bc2e0cc7" class="button dealer-pdf" entry='.$entry['id'].' text="Download PDF"]' );
 	}
-
-	$confirmation .= '<div class="dealer-conf-wrapper clearfix">';
-	$confirmation .= '<p>Your certfied Payne dealer is <a href=" ' . $dealer_link . ' " target="_blank">' . $dealer_name . '</a> and they will be in contact to schedule your home visit within 24 hours during the normal business week.</p><hr />';
-	$confirmation .= '<h1 class="dealer-conf-title"><a href=" ' . $dealer_link . ' " target="_blank">' . $dealer_name . '</a></h1>';
-	$confirmation .= '<div class="clearfix">';
-	$confirmation .= '<div class="flex_column av_one_half  flex_column_div first">';
-	$confirmation .= '<div class="dealer-conf-headshot">' . $dealer_headshot . '</div>';
-	$confirmation .= '</div>';
-	$confirmation .= '<div class="flex_column av_one_half  flex_column_div dealer-conf-meta">';
-	$confirmation .= '<p class="dealer-conf-address">' . esc_html( $address['address-1'] );
-	if ( $address['address-2'] ) :
-	$confirmation .= ' | ' . esc_html( $address['address-2'] );
-	endif;
-	$confirmation .= ' | ' . esc_html( $address['city'] ) . ' | ' . esc_html( $address['state'] ) . ' | ' . esc_html( $address['zip'] ) . '</p>';
-	$confirmation .= '<p class="dealer-conf-phone">' . $dealer_phone . '</p>';
-	$confirmation .= '<p class="dealer-conf-years"><span>Years in Business: </span>' . $dealer_years . '</p>';
-	$confirmation .= '<p class="dealer-conf-license"><span>ROC#: </span>' . $dealer_license . '</p>';
-	$confirmation .= '</div>';
-	$confirmation .= '</div>';
-	$confirmation .= '<div class="dealer-conf-snippet clearfix">' . $dealer_snippet . '</div>';
-	$confirmation .= '<div class="dealer-conf-footer">';
-	if( $dealer_logos ) :
-	$confirmation .= '<h2>We our proud of our hard earned accredidations</h2>';
-	$confirmation .= '<ul class="dealer-conf-icons">';
-	foreach ( (array) $dealer_logos as $attachment_id => $attachment_url ) {
-	$confirmation .= '<li class="dealer-conf-icon">';
-	$confirmation .= wp_get_attachment_image( $attachment_id, 'medium' );
-	$confirmation .= '</li>';
-	}
-	$confirmation .= '</ul>';
-	endif;
-	$confirmation .= '</div>';
-	$confirmation .= '</div>';
 
 	return $conversion_code . $confirmation;
 	// return $confirmation;
