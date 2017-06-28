@@ -20,6 +20,7 @@ add_filter( 'gform_notification_16', 'get_dealer_email', 10, 3 );
 add_filter( 'gform_confirmation', 'custom_confirmation', 10, 4 );
 add_filter( 'gform_ajax_spinner_url', 'add_hiq_spinner_image', 10, 2 );
 
+// add_filter( 'gform_field_validation_12_48', 'validate_phone_number', 10, 4 );
 add_filter( 'gform_field_validation_12_47', 'validate_zip_zone', 10, 4 );
 add_filter( 'gform_field_validation_16_12', 'validate_zip_zone', 10, 4 );
 
@@ -284,12 +285,8 @@ function get_dealer_email( $notification, $form, $entry ) {
 
 	$notification['from'] 	= 'mail@hvacinstantquote.com';
 	$notification['fromName'] 	= 'HVAC Instant Quote ';
+	$notification['to'] 	= 'lscherer@siglers.com, KSturm@siglers.com, rolson@sequoiaims.com, jbenbrook@sequoiaims.com, mschwartz@sequoiaims.com';
 
-	if ( $notification['name'] == 'Admin Notification' ) {
-
-	      $notification['to'] 	= 'lscherer@siglers.com, KSturm@siglers.com, rolson@sequoiaims.com, jbenbrook@sequoiaims.com, mschwartz@sequoiaims.com';
-
-	  }
 
 	return $notification;
 }
@@ -470,6 +467,27 @@ function validate_zip_zone( $result, $value, $form, $field ) {
             }
 // GFCommon::log_debug( __METHOD__ . '(): POST => ' . print_r( $_POST, true ) );
     return $result;
+}
+
+
+function validate_phone_number( $result, $value, $form, $field ) {
+
+	require_once 'Twilio/autoload.php';
+
+	$sid = "AC3e8f655621ba956e2e449a458936224a";
+	$token = "60d6abf5afe0ee6796c88c0936fb2ed8";
+
+	$client = new Client($sid, $token);
+
+	$number = $client->lookups
+	    ->phoneNumbers("+15108675309")
+	    ->fetch(
+	        array("type" => "carrier")
+	    );
+
+	echo $number->carrier["type"] . "\r\n";
+	echo $number->carrier["name"];
+
 }
 
 /**
