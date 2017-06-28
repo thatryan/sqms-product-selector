@@ -9,6 +9,9 @@ add_action( 'init', 'display_dealer_reviews_register_shortcode' );
 add_action( 'wp_ajax_nopriv_gf_button_get_form', 'gf_button_ajax_get_form' );
 add_action( 'wp_ajax_gf_button_get_form', 'gf_button_ajax_get_form' );
 
+add_action( 'wp_ajax_nopriv_button_build_csv_export', 'build_csv_export' );
+add_action( 'wp_ajax_button_build_csv_export', 'build_csv_export' );
+
 /**
  * Add shortcode to output list of dealer entries.
  * @return void Registers shortcode
@@ -102,10 +105,18 @@ function display_quote_table() {
 
 	$entries         = GFAPI::get_entries( $quote_form_id, $search_criteria, $sorting, $paging, $total_count );
 
+	$csv_form_params = array(
+		'ajaxurl' 			=> admin_url( 'admin-ajax.php' ),
+		);
+
+	wp_localize_script( 'load-report-form', 'csv_form_params', $csv_form_params );
+	wp_enqueue_script( 'load-report-form' );
+
 
 	$lead_list  = '';
-	$lead_list  = '<h3>Total Entries: '.$total_count.'</h3>';
+	$lead_list  = '<h3 style="float:left;">Total Entries: '.$total_count.'</h3>';
 	$lead_list .= '<table class="all-entry-list">';
+	$lead_list .= '<button style="float:right;" id="list-export" class="export-entry-list">Export</button>';
 	$lead_list .= '<thead>';
 	$lead_list .= '<tr>';
 	$lead_list .= '<th>Quote ID</th><th>Quote Date</th><th>Client Name</th><th>System</th><th>MSRP</th><th>Dealer</th><th>Reported</th>';
@@ -212,4 +223,75 @@ function gf_button_ajax_get_form(){
 
 	die();
 
+}
+
+
+function build_csv_export() {
+	// output headers so that the file is downloaded rather than displayed
+	// header('Content-type: text/csv');
+	// header('Content-Disposition: attachment; filename="demo.csv"');
+
+	// // do not cache the file
+	// header('Pragma: no-cache');
+	// header('Expires: 0');
+
+	$upload_dir = wp_upload_dir();
+
+	$csv_path = trailingslashit( $upload_dir['basedir'] );
+	$filename="export-list_".date('c').".csv";
+	$csv_filename = $csv_path . $filename;
+
+
+	// create a file pointer connected to the output stream
+	$file = fopen($csv_filename, 'w');
+
+	$quote_form_id 	= 12;
+	$search_criteria = array();
+	$sorting         = array();
+	$paging          = array( 'offset' => 0, 'page_size' => 250 );
+	$total_count     = 0;
+
+	$entries         = GFAPI::get_entries( $quote_form_id, $search_criteria, $sorting, $paging, $total_count );
+
+	// Headers
+	$csv_headers = array(
+			'Quote ID',
+			'Quote Date',
+			'Client Name',
+			'System',
+			'MSRP',
+			'Dealer',
+			'Reported',
+		);
+
+	// send the column headers
+	fputcsv( $file, $csv_headers );
+
+	foreach ($entries as $entry ) {
+		$prod_obj 					= get_page_by_path($entry['56'], OBJECT, 'sqms_prod_select');
+		$product_post_id 			= $prod_obj->ID;
+		$quoted_price 				= get_post_meta( $product_post_id, 'sqms-product-system-price', true );
+		$dealer_name 			= get_the_title( $entry['69'] );
+		$client_name 				= $entry['11.3'] . ' ' . $entry['11.6'];
+		$date 						= date_create( $entry['date_created']);
+		$reported 					= gform_get_meta( intval( $entry['id'] ), 'quote_reported' );
+
+		$row = array(
+				$entry['id'],
+				date_format( $date, 'F j, Y'),
+				$client_name,
+				$entry['56'],
+				$quoted_price,
+				$dealer_name,
+				$reported,
+			);
+
+		fputcsv( $file, $row );
+	}
+	// Close the file
+	fclose($file);
+
+	$csv_location = trailingslashit( content_url() ) . 'uploads/' . $filename;
+	echo $csv_location;
+	die();
 }

@@ -45,3 +45,28 @@
 	}); // close click
 
 }(window.ReportFormLoader = window.ReportFormLoader || {}, jQuery));
+
+
+(function (ExportCSV, $) {
+
+	$(".export-entry-list").on( "click", function(){
+		var button = $(this);
+		// console.log(button);
+
+		$.ajax({
+			url: csv_form_params.ajaxurl,
+			type: 'get',
+			data: {
+				'action':'button_build_csv_export',
+			},
+
+			success: function( response ) {
+				console.log(response);
+				location.href = response;
+			},
+		}); // close ajax call
+
+
+	}); // close click
+
+}(window.ExportCSV = window.ExportCSV || {}, jQuery));
