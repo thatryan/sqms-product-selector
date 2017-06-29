@@ -4,8 +4,8 @@
  * options inside of the system selector and photo quote forms.
  */
 
-require_once 'Twilio/autoload.php';
-use Twilio\Rest\Client;
+// require_once 'Twilio/autoload.php';
+// use Twilio\Rest\Client;
 
 // Set scroll distance to 0 for selection form
 add_filter( 'gform_confirmation_anchor_12', function() { return 0; } );
