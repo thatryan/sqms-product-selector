@@ -499,7 +499,7 @@ function validate_phone_number( $result, $value, $form, $field ) {
 
 function populate_zone( $form ) {
 	$zone 					= '';
-	$customer_zone_field = 'input_76';
+	$customer_zone_field = 'input_78';
 	$zip_check_field 	 	= sanitize_text_field( rgpost( 'input_75' ) );
 	$zone = is_serviceable_zip_code( $zip_check_field );
 
