@@ -246,6 +246,7 @@ function build_csv_export() {
 	$file = fopen($csv_filename, 'w');
 
 	$quote_form_id 	= 12;
+	$report_form_id 	= 15;
 	$search_criteria = array();
 	$sorting         = array();
 	$paging          = array( 'offset' => 0, 'page_size' => 250 );
@@ -262,6 +263,13 @@ function build_csv_export() {
 			'MSRP',
 			'Dealer',
 			'Reported',
+			'MSRP',
+			'Result',
+			'Actual Sell Price',
+			'Actual Labor Price',
+			'Upsell',
+			'Notes',
+			'Comments',
 		);
 
 	// send the column headers
@@ -275,6 +283,34 @@ function build_csv_export() {
 		$client_name 				= $entry['11.3'] . ' ' . $entry['11.6'];
 		$date 						= date_create( $entry['date_created']);
 		$reported 					= gform_get_meta( intval( $entry['id'] ), 'quote_reported' );
+		$is_reported 				= false;
+
+		if( $reported === 'Yes' ) {
+			error_log('REPORTED!!');
+			$is_reported = true;
+			$csv_report_search['field_filters'][] 	= array( 'key' => '1', 'value' => $entry['id'] );
+			$csv_report_entry				= GFAPI::get_entries( $report_form_id, $csv_report_search );
+
+			$result = $csv_report_entry[0][2];
+			$upsell = $csv_report_entry[0][3];
+			$notes = $csv_report_entry[0][4];
+			$comments = $csv_report_entry[0][5];
+			$actual_sell = $csv_report_entry[0][8];
+			$actual_labor = $csv_report_entry[0][9];
+
+			$report_data = array(
+					$quoted_price,
+					$result,
+					$actual_sell,
+					$actual_labor,
+					$upsell,
+					$notes,
+					$comments,
+				);
+
+			// error_log('REPORT DATA:');
+			// error_log( print_r( $report_data, true ) );
+		}
 
 		$row = array(
 				$entry['id'],
@@ -286,7 +322,15 @@ function build_csv_export() {
 				$reported,
 			);
 
-		fputcsv( $file, $row );
+		$result = $row;
+
+		if( $is_reported ) {
+			$result = array_merge( $row, $report_data );
+			// error_log('Result:');
+			// error_log( print_r( $result, true ) );
+		}
+
+		fputcsv( $file, $result );
 	}
 	// Close the file
 	fclose($file);
