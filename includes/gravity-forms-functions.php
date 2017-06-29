@@ -4,6 +4,9 @@
  * options inside of the system selector and photo quote forms.
  */
 
+require_once 'Twilio/autoload.php';
+use Twilio\Rest\Client;
+
 // Set scroll distance to 0 for selection form
 add_filter( 'gform_confirmation_anchor_12', function() { return 0; } );
 // add_filter( 'gform_pre_render_12', 'display_choice_result' );
@@ -25,6 +28,7 @@ add_filter( 'gform_field_validation_12_47', 'validate_zip_zone', 10, 4 );
 add_filter( 'gform_field_validation_16_12', 'validate_zip_zone', 10, 4 );
 
 // add_action( 'gform_pre_submission_12', 'choose_new_dealer' );
+add_action( 'gform_pre_submission_12', 'populate_zone' );
 add_action( 'gform_after_submission_12', 'add_gtm_submission', 10, 2 );
 add_action( 'gform_after_submission_15', 'update_report_entry_meta', 10, 2 );
 // add_action( 'gform_pre_submission_16', 'choose_new_dealer' );
@@ -472,7 +476,7 @@ function validate_zip_zone( $result, $value, $form, $field ) {
 
 function validate_phone_number( $result, $value, $form, $field ) {
 
-	require_once 'Twilio/autoload.php';
+
 
 	$sid = "AC3e8f655621ba956e2e449a458936224a";
 	$token = "60d6abf5afe0ee6796c88c0936fb2ed8";
@@ -485,11 +489,28 @@ function validate_phone_number( $result, $value, $form, $field ) {
 	        array("type" => "carrier")
 	    );
 
-	echo $number->carrier["type"] . "\r\n";
-	echo $number->carrier["name"];
+	    		$result['is_valid'] = false;
+		$result['message']  = $number->carrier["type"] . '\r\n' . $number->carrier["name"];
+
+		return $result;
+
 
 }
 
+function populate_zone( $form ) {
+	$zone 					= '';
+	$customer_zone_field = 'input_76';
+	$zip_check_field 	 	= sanitize_text_field( rgpost( 'input_75' ) );
+	$zone = is_serviceable_zip_code( $zip_check_field );
+
+	$_POST[$customer_zone_field] = $zone;
+
+	// error_log('ZONE');
+	// error_log( $zone );
+
+	// error_log('POST');
+	// error_log( print_r( $_POST, true ) );
+}
 /**
  * This finds the dealer we are assigning to this submission based on user location
  * @param  object $form GF $form object
