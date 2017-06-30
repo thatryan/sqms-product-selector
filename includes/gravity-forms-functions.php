@@ -477,7 +477,7 @@ function validate_zip_zone( $result, $value, $form, $field ) {
 function validate_phone_number( $result, $value, $form, $field ) {
 
 	$phone_number 		= $value;
-	$access_key = "98e9fa4a8e93e4d4b3e32e4593971416";
+	$access_key = NUMVERIFY_API;
 
 	// Initialize CURL:
 	$ch = curl_init('http://apilayer.net/api/validate?access_key='.$access_key.'&number='.$phone_number.'&country_code=US'.'');
