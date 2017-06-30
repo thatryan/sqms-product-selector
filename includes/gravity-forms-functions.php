@@ -23,7 +23,7 @@ add_filter( 'gform_notification_16', 'get_dealer_email', 10, 3 );
 add_filter( 'gform_confirmation', 'custom_confirmation', 10, 4 );
 add_filter( 'gform_ajax_spinner_url', 'add_hiq_spinner_image', 10, 2 );
 
-// add_filter( 'gform_field_validation_12_48', 'validate_phone_number', 10, 4 );
+add_filter( 'gform_field_validation_12_48', 'validate_phone_number', 10, 4 );
 add_filter( 'gform_field_validation_12_47', 'validate_zip_zone', 10, 4 );
 add_filter( 'gform_field_validation_16_12', 'validate_zip_zone', 10, 4 );
 
@@ -476,23 +476,30 @@ function validate_zip_zone( $result, $value, $form, $field ) {
 
 function validate_phone_number( $result, $value, $form, $field ) {
 
+	$phone_number 		= $value;
+	$access_key = "98e9fa4a8e93e4d4b3e32e4593971416";
 
+	// Initialize CURL:
+	$ch = curl_init('http://apilayer.net/api/validate?access_key='.$access_key.'&number='.$phone_number.'&country_code=US'.'');
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-	$sid = "AC3e8f655621ba956e2e449a458936224a";
-	$token = "60d6abf5afe0ee6796c88c0936fb2ed8";
+	// Store the data:
+	$json = curl_exec($ch);
+	curl_close($ch);
 
-	$client = new Client($sid, $token);
+	// Decode JSON response:
+	$validationResult = json_decode($json, true);
 
-	$number = $client->lookups
-	    ->phoneNumbers("+15108675309")
-	    ->fetch(
-	        array("type" => "carrier")
-	    );
+    // error_log('RESULT');
+    // error_log( print_r( $validationResult, true ) );
 
-	    		$result['is_valid'] = false;
-		$result['message']  = $number->carrier["type"] . '\r\n' . $number->carrier["name"];
+	if( !$validationResult['valid'] ) {
+	    	$result['is_valid'] = false;
+		$result['message']  = 'Please enter a valid phone number';
 
-		return $result;
+	}
+
+	return $result;
 
 
 }
