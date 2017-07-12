@@ -293,7 +293,7 @@ function build_csv_export() {
 		$is_reported 				= false;
 
 		if( $reported === 'Yes' ) {
-			error_log('REPORTED!!');
+			// error_log('REPORTED!!');
 			$is_reported = true;
 			$csv_report_search['field_filters'][] 	= array( 'key' => '1', 'value' => $entry['id'] );
 			$csv_report_entry				= GFAPI::get_entries( $report_form_id, $csv_report_search );
