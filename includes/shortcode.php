@@ -135,8 +135,8 @@ function display_quote_table() {
 		$reported 					= gform_get_meta( intval( $entry['id'] ), 'quote_reported' );
 
 		if( $reported === 'Yes' ) {
-			// error_log('REPORT ENTRY:');
-			// error_log( print_r( $entry, true ) );
+			error_log('ENTRY ID:');
+			error_log(  $entry['id'] );
 			$is_reported = true;
 			$report_search['field_filters'][] 	= array( 'key' => '1', 'value' => $entry['id'] );
 			$report_entry				= GFAPI::get_entries( $report_form_id, $report_search );
