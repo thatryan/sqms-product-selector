@@ -302,8 +302,16 @@ function build_csv_export() {
 		if( $reported === 'Yes' ) {
 			// error_log('REPORTED!!');
 			$is_reported = true;
-			$csv_report_search['field_filters'][] 	= array( 'key' => '1', 'value' => $entry['id'] );
-			$csv_report_entry				= GFAPI::get_entries( $report_form_id, $csv_report_search );
+			$csv_report_search = [
+			    'status'        => 'active',
+			    'field_filters' => [
+			        [
+			            'key'   => '1',
+			            'value' => $entry['id'],
+			        ],
+			    ],
+			];
+			$csv_report_entry = GFAPI::get_entries( $report_form_id, $csv_report_search, null, [ 'page_size' => 1 ] );
 
 			$result = $csv_report_entry[0][2];
 			$upsell = $csv_report_entry[0][3];
