@@ -135,11 +135,14 @@ function display_quote_table() {
 		$reported 					= gform_get_meta( intval( $entry['id'] ), 'quote_reported' );
 
 		if( $reported === 'Yes' ) {
-			error_log('REPORT ENTRY:');
-			error_log( print_r( $entry, true ) );
+			// error_log('REPORT ENTRY:');
+			// error_log( print_r( $entry, true ) );
 			$is_reported = true;
 			$report_search['field_filters'][] 	= array( 'key' => '1', 'value' => $entry['id'] );
 			$report_entry				= GFAPI::get_entries( $report_form_id, $report_search );
+
+			error_log('REPORT ENTRY:');
+			error_log( print_r( $report_entry, true ) );
 
 			$result = $report_entry[0][2];
 			$upsell = $report_entry[0][3];
@@ -147,10 +150,6 @@ function display_quote_table() {
 			$comments = $report_entry[0][5];
 			$actual_sell = $report_entry[0][8];
 			$actual_labor = $report_entry[0][9];
-
-
-			// error_log('REPORT ENTRY:');
-			// error_log( print_r( $report_entry, true ) );
 
 			$data = '<table><thead><tr><th>MSRP</th><th>Result</th><th>Actual Sale Price</th><th>Actual Labor Price</th><th>Upsell</th><th>Notes</th><th>Comments</th></tr></thead><tbody>';
 			$data .= '<tr><td> ' . $quoted_price . ' </td><td> ' . $result . ' </td><td> ' . $actual_sell . ' </td><td> ' . $actual_labor . ' </td><td> ' . $upsell . ' </td><td> ' . $notes . ' </td><td> ' . $comments . ' </td></tr>';
