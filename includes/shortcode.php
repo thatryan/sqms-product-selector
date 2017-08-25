@@ -130,6 +130,7 @@ function display_quote_table() {
 		$product_post_id 			= $prod_obj->ID;
 		$quoted_price 				= get_post_meta( $product_post_id, 'sqms-product-system-price', true );
 		$dealer_name 			= get_the_title( $entry['69'] );
+		$contact_time 				= $entry['79'] ;
 		$client_name 				= $entry['11.3'] . ' ' . $entry['11.6'];
 		$date 						= date_create( $entry['date_created']);
 		$reported 					= gform_get_meta( intval( $entry['id'] ), 'quote_reported' );
