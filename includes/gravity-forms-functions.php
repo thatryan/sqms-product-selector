@@ -412,13 +412,13 @@ function custom_confirmation( $confirmation, $form, $entry, $ajax ) {
 	$cmb_fields 			= $cmb->prop( 'fields' );
 
 	// Build the HTML that will be displayed in the form field
-	$confirmation .= '<p>Your total quote is the guaranteed price for your selected system, plus the estimated cost of installation. <a href="https://hvacinstantquote.com/resources/faqs#about-money" target="_blank" title="Factors about cost of installation">Click here for common factors that affect the cost of an installation</a>.</p>';
 	$confirmation .= '<h3>Your System Selection &amp; Quote</h3>';
 	$confirmation .= '<div class="highlight-box cost-wrapper">';
 	$confirmation .= '<h2>Your New HVAC System Equipment Quote is <span>' .  esc_html( $system_price ) . '</span></h2>';
 	$confirmation .= '<h3>And Your Installation Estimate is Between <span>$1,000.00 - $2,500.00</span></h3>';
 	$confirmation .= '<p><small>Note: Proper Equipment Selection Will Be Verified On Installation Inspection</small></p>';
 	$confirmation .= '</div>';
+	$confirmation .= '<p>Your total quote is the guaranteed price for your selected system, plus the estimated cost of installation. <a href="https://hvacinstantquote.com/resources/faqs#about-money" target="_blank" title="Factors about cost of installation">Click here for common factors that affect the cost of an installation</a>.</p>';
 	$confirmation .= '<div class="financing-box">' . get_finance_options( $system_price, $warranty_price ) . '</div>';
 
 	$conversion_code = '<!-- Google Code for Instant Quote Form Conversion Page --><script type="text/javascript">/* <![CDATA[ */var google_conversion_id = 856718203;var google_conversion_language = "en";var google_conversion_format = "3";var google_conversion_color = "ffffff";var google_conversion_label = "62pkCKSq8m8Q-_bBmAM";var google_remarketing_only = false;/* ]]> */</script><script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js"></script><noscript><div style="display:inline;"><img height="1" width="1" style="border-style:none;" alt="" src="//www.googleadservices.com/pagead/conversion/856718203/?label=62pkCKSq8m8Q-_bBmAM&amp;guid=ON&amp;script=0"/></div></noscript>';
