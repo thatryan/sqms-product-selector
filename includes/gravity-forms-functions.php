@@ -821,14 +821,14 @@ function get_finance_options( $system_price, $warranty_price ) {
 
 	$finance_data = '<h2>Interested in Financing?</h2>';
 	$finance_data .= '<h4>Estimated Monthly Financing Payments, including installation costs, with <a href="https://hvacinstantquote.com/resources/appliance-financing/" target="_blank" title="Microf Financing">Microf Financing</a></h4>';
-	$finance_data .= '<table><thead><tr><th>Payment Amount</th><th>35 monthly payments</th><th>47 monthly payments</th><th>59 monthly payments</th></tr></thead><tbody><tr><td>$1,000.00 Install Cost</td>';
+	$finance_data .= '<table><thead><tr><th>Payment Amount</th><th>35 monthly payments</th><th>47 monthly payments</th><th>59 monthly payments</th></tr></thead><tbody><tr><td>'.$system_price.' HVAC System + $1,000.00 Install Cost</td>';
 
 	foreach ($term_options as $term) {
 		$term_payment = microf_payment_calc($total_cost_min, $term);
 		$finance_data .= '<td>$' . $term_payment . '</td>';
 	}
 
-	$finance_data .= '</tr><tr><td>$2,500.00 Install Cost</td>';
+	$finance_data .= '</tr><tr><td>'.$system_price.' HVAC System + $2,500.00 Install Cost</td>';
 
 	foreach ($term_options as $term) {
 		$term_payment = microf_payment_calc($total_cost_max, $term);
