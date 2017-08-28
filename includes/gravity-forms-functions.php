@@ -24,6 +24,7 @@ add_filter( 'gform_notification_16', 'get_dealer_email', 10, 3 );
 add_filter( 'gform_confirmation', 'custom_confirmation', 10, 4 );
 add_filter( 'gform_ajax_spinner_url', 'add_hiq_spinner_image', 10, 2 );
 
+add_filter( 'gform_field_validation_12_11', 'validate_name', 10, 4 );
 add_filter( 'gform_field_validation_12_48', 'validate_phone_number', 10, 4 );
 add_filter( 'gform_field_validation_12_47', 'validate_zip_zone', 10, 4 );
 add_filter( 'gform_field_validation_16_12', 'validate_zip_zone', 10, 4 );
@@ -479,6 +480,27 @@ function validate_zip_zone( $result, $value, $form, $field ) {
     return $result;
 }
 
+function validate_name( $result, $value, $form, $field ) {
+	if ( $field->type == 'name' ) {
+
+	    // Input values
+	    $prefix = rgar( $value, $field->id . '.2' );
+	    $first  = rgar( $value, $field->id . '.3' );
+	    $middle = rgar( $value, $field->id . '.4' );
+	    $last   = rgar( $value, $field->id . '.6' );
+	    $suffix = rgar( $value, $field->id . '.8' );
+
+	    if ( empty( $first ) ) {
+	        $result['is_valid'] = false;
+	        $result['message']  = empty( $field->errorMessage ) ? __( 'This field is required. Please enter a complete name.', 'gravityforms' ) : $field->errorMessage;
+	    } else {
+	        $result['is_valid'] = true;
+	        $result['message']  = '';
+	    }
+	}
+
+	return $result;
+}
 
 function validate_phone_number( $result, $value, $form, $field ) {
 
