@@ -9,6 +9,7 @@
 
 // Set scroll distance to 0 for selection form
 add_filter( 'gform_confirmation_anchor_12', function() { return 0; } );
+// add_filter( 'gform_progress_bar_12', 'remove_progress_steps', 10, 3 );
 // add_filter( 'gform_pre_render_12', 'display_choice_result' );
 add_action( 'gform_post_paging_12', 'add_gtm_pagination', 10, 3 );
 add_action( 'gform_post_paging_12', 'add_to_mailchimp', 10, 3 );
@@ -32,6 +33,11 @@ add_action( 'gform_pre_submission_12', 'populate_zone' );
 add_action( 'gform_after_submission_12', 'add_gtm_submission', 10, 2 );
 add_action( 'gform_after_submission_15', 'update_report_entry_meta', 10, 2 );
 // add_action( 'gform_pre_submission_16', 'choose_new_dealer' );
+
+
+function remove_progress_steps( $progress_bar, $form, $confirmation_message ) {
+	// TODO
+}
 
 function check_for_referral_id( ) {
 	if( isset( $_GET['dealer_ref'] ) ) {

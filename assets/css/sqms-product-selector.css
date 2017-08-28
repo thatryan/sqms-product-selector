@@ -53,6 +53,10 @@
 	width: 75%;
 }
 
+#gform_12 .gf_progressbar_title {
+	display: none;
+}
+
 @media only screen and (min-width: 768px) {
 	#top .sqms-zip-search-form p {
 		float: left;
