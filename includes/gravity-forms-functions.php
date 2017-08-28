@@ -282,7 +282,7 @@ function dealer_review_id( $form ) {
  * @param object $form   GF $form object
  */
 function add_note_below_submit( $button, $form ) {
-	return $button .= '<p>*by submitting your contact info to a Payne dealer, you are not committing to a quote or appointment.</p>';
+	return $button .= '<p><b>Note</b>: Our use of your email address will be for delivery of your free estimate AND exclusive homeowner tips & tricks. HVAC Instant Quote will not sell or share your information and we never send spam.</p><p>*by submitting your contact info to a Payne dealer, you are not committing to a quote or appointment.</p>';
 }
 /**
  * Find the dealer email to send the GF notifcation to
