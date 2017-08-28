@@ -414,8 +414,8 @@ function custom_confirmation( $confirmation, $form, $entry, $ajax ) {
 	// Build the HTML that will be displayed in the form field
 	$confirmation .= '<h3>Your System Selection &amp; Quote</h3>';
 	$confirmation .= '<div class="highlight-box cost-wrapper">';
-	$confirmation .= '<h2>Your New HVAC System Equipment Quote is <span>' .  esc_html( $system_price ) . '</span></h2>';
-	$confirmation .= '<h3>And Your Installation Estimate is Between <span>$1,000.00 - $2,500.00</span></h3>';
+	$confirmation .= '<h2>Your New HVAC System Equipment Price is <span>' .  esc_html( $system_price ) . '</span></h2>';
+	$confirmation .= '<h3>Your Installation Estimate is Between <span>$1,000.00 - $2,500.00</span></h3>';
 	$confirmation .= '<p><small>Note: Proper Equipment Selection Will Be Verified On Installation Inspection</small></p>';
 	$confirmation .= '</div>';
 	$confirmation .= '<p>Your total quote is the guaranteed price for your selected system, plus the estimated cost of installation. <a href="https://hvacinstantquote.com/resources/faqs#about-money" target="_blank" title="Factors about cost of installation">Click here for common factors that affect the cost of an installation</a>.</p>';
