@@ -34,7 +34,7 @@ function get_check_zip_form() {
 	if( isset( $_GET['dealer_ref'] ) && is_valid( $_GET['dealer_ref'] ) ) {
 		gravity_form( $selection_form_id, false, false, false, array('market_key'=>$market_zone), true );
 	}
-	elseif( isset( $_GET['spanish'] ) && $_GET['spanish'] === 'true' ) {
+	elseif( isset( $_GET['spanish'] ) ) {
 		gravity_form( $selection_form_id, false, false, false, array('spanish_check'=>'true'), true );
 	}
 	else {
