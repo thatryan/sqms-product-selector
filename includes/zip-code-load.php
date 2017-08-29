@@ -23,6 +23,8 @@ function check_zip_code_register_shortcode() {
 function get_check_zip_form() {
 	$selection_form_id = 12;
 	$market_zone = 'PHX-';
+
+	// spanish_check
 	/**
 	 * Enqueue the scripts and styles for selection form here to get them
 	 * into the page because the form itself is loaded in via ajax.
@@ -31,6 +33,9 @@ function get_check_zip_form() {
 
 	if( isset( $_GET['dealer_ref'] ) && is_valid( $_GET['dealer_ref'] ) ) {
 		gravity_form( $selection_form_id, false, false, false, array('market_key'=>$market_zone), true );
+	}
+	elseif( isset( $_GET['spanish'] ) && $_GET['spanish'] === 'true' ) {
+		gravity_form( $selection_form_id, false, false, false, array('spanish_check'=>'true'), true );
 	}
 	else {
 		$zip_form_params = array(
