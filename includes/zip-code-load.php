@@ -35,7 +35,7 @@ function get_check_zip_form() {
 		gravity_form( $selection_form_id, false, false, false, array('market_key'=>$market_zone), true );
 	}
 	elseif( isset( $_GET['spanish'] ) ) {
-		gravity_form( $selection_form_id, false, false, false, array('market_key'=>$market_zone, 'spanish_check'=>'spanish'), true );
+		gravity_form( $selection_form_id, false, false, false, array('market_key'=>$market_zone, 'spanish_check'=>'yes'), true );
 	}
 	else {
 		$zip_form_params = array(

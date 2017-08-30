@@ -283,9 +283,17 @@ function add_note_below_submit( $button, $form ) {
  */
 function get_dealer_email( $notification, $form, $entry ) {
 
+	$spanish = rgar( $entry, '80' );
+
+	if( 'yes' === $spanish ) {
+		$notification['to'] 	= 'thatryan1@gmail.com';
+	}
+	else {
+		$notification['to'] 	= 'lscherer@siglers.com, KSturm@siglers.com, rolson@sequoiaims.com, jbenbrook@sequoiaims.com, mschwartz@sequoiaims.com';
+	}
+
 	$notification['from'] 	= 'mail@hvacinstantquote.com';
 	$notification['fromName'] 	= 'HVAC Instant Quote ';
-	$notification['to'] 	= 'lscherer@siglers.com, KSturm@siglers.com, rolson@sequoiaims.com, jbenbrook@sequoiaims.com, mschwartz@sequoiaims.com';
 
 
 	return $notification;
@@ -600,15 +608,21 @@ function add_mailchimp_time_list( $entry, $form ) {
 	// $timeframe = rgar( $entry, '77' );
 	$timeframe = rgar( $entry, '79' );
 
-	if( $timeframe == 'Within 30 days' ) {
+	if( 'Within 30 days' === $timeframe ) {
 		$list_id = $list_30;
 	}
-	elseif( $timeframe == '3 months from now' ) {
+	elseif( '3 months from now' === $timeframe ) {
 		$list_id = $list_3;
 	}
 	else {
 		$list_id = $list_default;
 	}
+
+	error_log('Time');
+	error_log( $timeframe );
+
+	error_log('List');
+	error_log( $list_id );
 
 	$data = [
 	    'email'     => $email_address,
