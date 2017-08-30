@@ -12,7 +12,7 @@ add_filter( 'gform_confirmation_anchor_12', function() { return 0; } );
 // add_filter( 'gform_progress_bar_12', 'remove_progress_steps', 10, 3 );
 // add_filter( 'gform_pre_render_12', 'display_choice_result' );
 add_action( 'gform_post_paging_12', 'add_gtm_pagination', 10, 3 );
-add_action( 'gform_post_paging_12', 'add_to_mailchimp', 10, 3 );
+add_action( 'gform_post_paging_12', 'build_product_string', 10, 3 );
 add_filter( 'gform_field_value_zip_check', 'populate_zip_code' );
 // add_filter( 'gform_field_value_dealer_ref', 'check_for_referral_id' );
 add_filter( 'gform_notification_12', 'get_dealer_email', 10, 3 );
@@ -31,6 +31,7 @@ add_filter( 'gform_field_validation_16_12', 'validate_zip_zone', 10, 4 );
 
 // add_action( 'gform_pre_submission_12', 'choose_new_dealer' );
 add_action( 'gform_pre_submission_12', 'populate_zone' );
+add_action( 'gform_after_submission_12', 'add_mailchimp_time_list', 10, 2 );
 add_action( 'gform_after_submission_12', 'add_gtm_submission', 10, 2 );
 add_action( 'gform_after_submission_15', 'update_report_entry_meta', 10, 2 );
 // add_action( 'gform_pre_submission_16', 'choose_new_dealer' );
@@ -177,16 +178,13 @@ function add_gtm_pagination( $form, $source_page_number, $current_page_number ) 
 	<?php
 }
 
-function add_to_mailchimp( $form, $source_page_number, $current_page_number ) {
+function build_product_string( $form, $source_page_number, $current_page_number ) {
 
 	$current_page 		= GFFormDisplay::get_current_page( $form['id'] );
 
 	// After page 7 we have the data to build the string
 	if ( $current_page == 7 ) {
 
-	$first_name = rgpost( 'input_11_3' );
-	$last_name = rgpost( 'input_11_6' );
-	$email_address = rgpost( 'input_12' );
 	$prod_string 			= "";
 	$market_key_field 	= rgpost( 'input_74' );
 
@@ -217,15 +215,6 @@ function add_to_mailchimp( $form, $source_page_number, $current_page_number ) {
 			$field->defaultValue = $prod_string;
 		}
 	}
-
-	$data = [
-	    'email'     => $email_address,
-	    'status'    => 'subscribed',
-	    'firstname' => $first_name,
-	    'lastname'  => $last_name,
-	];
-
-	$result = syncMailchimp($data);
 
 	// error_log('Result');
 	// error_log( print_r( $result, true ) );
@@ -599,6 +588,39 @@ function choose_new_dealer( $form ) {
 	$_POST[$dealer_id_field] = $selected_dealer_id;
 }
 
+function add_mailchimp_time_list() {
+	$time_30_days = 'Within 30 days'; //f5ff357c72
+	$list_30 = 'f5ff357c72';
+	$time_3_months = '3 months from now'; //4665853238
+	$list_3 = '4665853238';
+	$list_default = 'f194b8d22b';
+
+	$first_name = rgar( $entry, '11.3' );
+	$last_name = rgar( $entry, '11.6' );
+	$email_address = rgar( $entry, '12' );
+	$phone = rgar( $entry, '48' );
+	$timeframe = rgar( $entry, '79' );
+
+	if( $timeframe == $time_30_days ) {
+		$list_id = $list_30;
+	}
+	elseif( $timeframe == $time_3_months ) {
+		$list_id = $list_3;
+	}
+	else {
+		$list_id = $list_default;
+	}
+
+	$data = [
+	    'email'     => $email_address,
+	    'status'    => 'subscribed',
+	    'firstname' => $first_name,
+	    'lastname'  => $last_name,
+	    'phone' => $phone,
+	];
+
+	$result = syncMailchimp( $data, $list_id );
+}
 /**
  * Push form submission to dataLayer for GTM tracking
  * @param  object $entry GF $entry object
@@ -606,6 +628,8 @@ function choose_new_dealer( $form ) {
  * @return void        adds script for GTM
  */
 function add_gtm_submission( $entry, $form ) {
+
+
 	setcookie( 'quotesubmitted', 1, strtotime( '+30 days' ), COOKIEPATH, COOKIE_DOMAIN, false, false );
 
 	$event 				= 'quoteFormSubmit';
@@ -856,10 +880,10 @@ function microf_payment_calc( $amount_financed, $term ) {
 
 }
 
-function syncMailchimp($data) {
+function syncMailchimp( $data, $list_id ) {
 
     $apiKey = 'bf70c8feae6656aee33f2d370a31b28f-us15';
-    $listId = 'f194b8d22b';
+    $listId = $list_id;
 
     $dataCenter = substr($apiKey,strpos($apiKey,'-')+1);
     $memberID = md5(strtolower($data['email']));
@@ -870,7 +894,8 @@ function syncMailchimp($data) {
         'status'        => $data['status'], // "subscribed","unsubscribed","cleaned","pending"
         'merge_fields'  => [
             'FNAME'     => $data['firstname'],
-            'LNAME'     => $data['lastname']
+            'LNAME'     => $data['lastname'],
+            'PHONE'     => $data['phone']
         ]
     ]);
 
