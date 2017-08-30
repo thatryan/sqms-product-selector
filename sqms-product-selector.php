@@ -4,7 +4,7 @@
 	Plugin URI: https://github.com/thatryan
 	Description: Register product and handle logic for chooser
 	Author: Ryan Olson
-	Version: 1.1.75
+	Version: 1.1.76
 	Author URI: http://thatryan.com
  */
 
@@ -30,7 +30,7 @@ class Product_Selector {
 	 * @type string
 	 */
 
-	public $plugin_version = '1.1.75';
+	public $plugin_version = '1.1.76';
 
 	/**
 	 * Path to this plugin's directory.

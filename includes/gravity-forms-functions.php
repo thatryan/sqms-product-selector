@@ -25,7 +25,7 @@ add_filter( 'gform_confirmation', 'custom_confirmation', 10, 4 );
 add_filter( 'gform_ajax_spinner_url', 'add_hiq_spinner_image', 10, 2 );
 
 add_filter( 'gform_field_validation_12_11', 'validate_name', 10, 4 );
-add_filter( 'gform_field_validation_12_48', 'validate_phone_number', 10, 4 );
+// add_filter( 'gform_field_validation_12_48', 'validate_phone_number', 10, 4 );
 add_filter( 'gform_field_validation_12_47', 'validate_zip_zone', 10, 4 );
 add_filter( 'gform_field_validation_16_12', 'validate_zip_zone', 10, 4 );
 
@@ -588,10 +588,8 @@ function choose_new_dealer( $form ) {
 	$_POST[$dealer_id_field] = $selected_dealer_id;
 }
 
-function add_mailchimp_time_list() {
-	$time_30_days = 'Within 30 days'; //f5ff357c72
+function add_mailchimp_time_list( $entry, $form ) {
 	$list_30 = 'f5ff357c72';
-	$time_3_months = '3 months from now'; //4665853238
 	$list_3 = '4665853238';
 	$list_default = 'f194b8d22b';
 
@@ -599,12 +597,13 @@ function add_mailchimp_time_list() {
 	$last_name = rgar( $entry, '11.6' );
 	$email_address = rgar( $entry, '12' );
 	$phone = rgar( $entry, '48' );
-	$timeframe = rgar( $entry, '79' );
+	$timeframe = rgar( $entry, '77' );
+	// $timeframe = rgar( $entry, '79' );
 
-	if( $timeframe == $time_30_days ) {
+	if( $timeframe == 'Within 30 days' ) {
 		$list_id = $list_30;
 	}
-	elseif( $timeframe == $time_3_months ) {
+	elseif( $timeframe == '3 months from now' ) {
 		$list_id = $list_3;
 	}
 	else {
