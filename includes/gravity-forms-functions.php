@@ -25,7 +25,7 @@ add_filter( 'gform_confirmation', 'custom_confirmation', 10, 4 );
 add_filter( 'gform_ajax_spinner_url', 'add_hiq_spinner_image', 10, 2 );
 
 add_filter( 'gform_field_validation_12_11', 'validate_name', 10, 4 );
-// add_filter( 'gform_field_validation_12_48', 'validate_phone_number', 10, 4 );
+add_filter( 'gform_field_validation_12_48', 'validate_phone_number', 10, 4 );
 add_filter( 'gform_field_validation_12_47', 'validate_zip_zone', 10, 4 );
 add_filter( 'gform_field_validation_16_12', 'validate_zip_zone', 10, 4 );
 
@@ -597,8 +597,8 @@ function add_mailchimp_time_list( $entry, $form ) {
 	$last_name = rgar( $entry, '11.6' );
 	$email_address = rgar( $entry, '12' );
 	$phone = rgar( $entry, '48' );
-	$timeframe = rgar( $entry, '77' );
-	// $timeframe = rgar( $entry, '79' );
+	// $timeframe = rgar( $entry, '77' );
+	$timeframe = rgar( $entry, '79' );
 
 	if( $timeframe == 'Within 30 days' ) {
 		$list_id = $list_30;
