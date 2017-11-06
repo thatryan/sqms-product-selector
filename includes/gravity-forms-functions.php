@@ -15,13 +15,13 @@ add_action( 'gform_post_paging_12', 'add_gtm_pagination', 10, 3 );
 add_action( 'gform_post_paging_12', 'build_product_string', 10, 3 );
 add_filter( 'gform_field_value_zip_check', 'populate_zip_code' );
 // add_filter( 'gform_field_value_dealer_ref', 'check_for_referral_id' );
-add_filter( 'gform_notification_12', 'get_dealer_email', 10, 3 );
+	add_filter( 'gform_notification_12', 'get_dealer_email', 10, 3 );
 add_filter( 'gform_pre_render_15', 'add_readonly_script' );
 add_filter( 'gform_pre_render_20', 'dealer_review_id' );
-add_filter( 'gform_submit_button_12', 'add_note_below_submit', 10, 2 );
-add_filter( 'gform_notification_16', 'get_dealer_email', 10, 3 );
+	add_filter( 'gform_submit_button_12', 'add_note_below_submit', 10, 2 );
+	add_filter( 'gform_notification_16', 'get_dealer_email', 10, 3 );
 // add_filter( 'gform_replace_merge_tags', 'replace_dealer_notification', 10, 7 );
-add_filter( 'gform_confirmation', 'custom_confirmation', 10, 4 );
+	add_filter( 'gform_confirmation', 'custom_confirmation', 10, 4 );
 add_filter( 'gform_ajax_spinner_url', 'add_hiq_spinner_image', 10, 2 );
 
 add_filter( 'gform_field_validation_12_11', 'validate_name', 10, 4 );
@@ -272,7 +272,14 @@ function dealer_review_id( $form ) {
  * @param object $form   GF $form object
  */
 function add_note_below_submit( $button, $form ) {
-	return $button .= '<p><b>Note</b>: Our use of your email address will be for delivery of your free estimate AND exclusive homeowner tips & tricks. HVAC Instant Quote will not sell or share your information and we never send spam.</p><p>*by submitting your contact info to a Payne dealer, you are not committing to a quote or appointment.</p>';
+
+	if( $form['id'] == 26 ) {
+		return $button .= '<p><b>Nota</b>: Nuestro uso de su dirección de correo electrónico será para la entrega de su presupuesto gratuito y consejos y trucos exclusivos para el propietario. HVAC Cotización Instantánea no venderá ni compartirá su información y nunca enviaremos spam.</p><p>*al enviar su información de contacto a un distribuidor de Payne, no se compromete a un presupuesto o una cita.</p>';
+	}
+	else {
+		return $button .= '<p><b>Note</b>: Our use of your email address will be for delivery of your free estimate AND exclusive homeowner tips & tricks. HVAC Instant Quote will not sell or share your information and we never send spam.</p><p>*by submitting your contact info to a Payne dealer, you are not committing to a quote or appointment.</p>';
+	}
+
 }
 /**
  * Find the dealer email to send the GF notifcation to
@@ -359,6 +366,11 @@ function replace_dealer_notification( $text, $form, $entry, $url_encode, $esc_ht
  * @return string               Rebuil HTML confirmation message
 */
 function custom_confirmation( $confirmation, $form, $entry, $ajax ) {
+	$is_spanish = false;
+
+	if( $form['id'] == 26 ) {
+		$is_spanish = true;
+	}
 	// Product selection form
 	if( $form['id'] == 12 ) {
 		$dealer_id = rgar( $entry, '69' );
@@ -408,15 +420,30 @@ function custom_confirmation( $confirmation, $form, $entry, $ajax ) {
 	$cmb 					= cmb2_get_metabox( 'sqms-product-overview-meta', $product_post_id );
 	$cmb_fields 			= $cmb->prop( 'fields' );
 
-	// Build the HTML that will be displayed in the form field
-	$confirmation .= '<h3>Your System Selection &amp; Quote</h3>';
-	$confirmation .= '<div class="highlight-box cost-wrapper">';
-	$confirmation .= '<h2>Your New HVAC System Equipment Price is <span>' .  esc_html( $system_price ) . '</span></h2>';
-	$confirmation .= '<h3>Your Installation Estimate is Between <span>$1,000.00 - $2,500.00</span></h3>';
-	$confirmation .= '<p><small>Note: Proper Equipment Selection Will Be Verified On Installation Inspection</small></p>';
-	$confirmation .= '</div>';
-	$confirmation .= '<p>Your total quote is the guaranteed price for your selected system, plus the estimated cost of installation. <a href="https://hvacinstantquote.com/resources/faqs#about-money" target="_blank" title="Factors about cost of installation">Click here for common factors that affect the cost of an installation</a>.</p>';
-	$confirmation .= '<div class="financing-box">' . get_finance_options( $system_price, $warranty_price ) . '</div>';
+	if( $is_spanish ) {
+		// SPANISH VERSION Build the HTML that will be displayed in the form field
+		$confirmation .= '<h3>Su selección de sistema y presupuesto</h3>';
+		$confirmation .= '<div class="highlight-box cost-wrapper">';
+		$confirmation .= '<h2>Su precio para un nuevo equipo de sistema HVAC es <span>' .  esc_html( $system_price ) . '</span></h2>';
+		$confirmation .= '<h3>su estimación de instalación es entre <span>$1,000.00 - $2,500.00</span></h3>';
+		$confirmation .= '<p><small>Nota: La selección adecuada del equipo se verificará en la inspección de la instalación</small></p>';
+		$confirmation .= '</div>';
+		$confirmation .= '<p>Su cotización total es el precio garantizado para su sistema seleccionado, más el costo estimado de instalación.</p>';
+		$confirmation .= '<div class="financing-box">' . get_finance_options( $system_price, $warranty_price, $is_spanish ) . '</div>';
+		$confirmation .= '<h4>Un miembro del equipo HVAC Cotización Instantánea se pondrá en contacto con usted dentro de las 24 horas para programar su visita a domicilio.</h4>';
+		$confirmation .= '<p>Una copia de su información de cotización le ha sido enviada por correo electrónico.</p>';
+	}
+	else {
+		// Build the HTML that will be displayed in the form field
+		$confirmation .= '<h3>Your System Selection &amp; Quote</h3>';
+		$confirmation .= '<div class="highlight-box cost-wrapper">';
+		$confirmation .= '<h2>Your New HVAC System Equipment Price is <span>' .  esc_html( $system_price ) . '</span></h2>';
+		$confirmation .= '<h3>Your Installation Estimate is Between <span>$1,000.00 - $2,500.00</span></h3>';
+		$confirmation .= '<p><small>Note: Proper Equipment Selection Will Be Verified On Installation Inspection</small></p>';
+		$confirmation .= '</div>';
+		$confirmation .= '<p>Your total quote is the guaranteed price for your selected system, plus the estimated cost of installation. <a href="https://hvacinstantquote.com/resources/faqs#about-money" target="_blank" title="Factors about cost of installation">Click here for common factors that affect the cost of an installation</a>.</p>';
+		$confirmation .= '<div class="financing-box">' . get_finance_options( $system_price, $warranty_price, $is_spanish ) . '</div>';
+	}
 
 	$conversion_code = '<!-- Google Code for Instant Quote Form Conversion Page --><script type="text/javascript">/* <![CDATA[ */var google_conversion_id = 856718203;var google_conversion_language = "en";var google_conversion_format = "3";var google_conversion_color = "ffffff";var google_conversion_label = "62pkCKSq8m8Q-_bBmAM";var google_remarketing_only = false;/* ]]> */</script><script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js"></script><noscript><div style="display:inline;"><img height="1" width="1" style="border-style:none;" alt="" src="//www.googleadservices.com/pagead/conversion/856718203/?label=62pkCKSq8m8Q-_bBmAM&amp;guid=ON&amp;script=0"/></div></noscript>';
 
@@ -842,7 +869,7 @@ function get_product_data( $product_post_id ) {
  * @param  string $warranty_price Cost of optional warranty
  * @return string                 HTML structure of warranty cost table
  */
-function get_finance_options( $system_price, $warranty_price ) {
+function get_finance_options( $system_price, $warranty_price, $spanish ) {
 
 	$equip_cost 			= str_replace( ',', '', ltrim( $system_price, '$' ) );
 	$install_cost_min 		= 1000.00;
@@ -856,16 +883,28 @@ function get_finance_options( $system_price, $warranty_price ) {
 		59
 		);
 
-	$finance_data = '<h2>Interested in Financing?</h2>';
-	$finance_data .= '<h4>Estimated Monthly Financing Payments, including installation costs, with <a href="https://hvacinstantquote.com/resources/appliance-financing/" target="_blank" title="Microf Financing">Microf Financing</a></h4>';
-	$finance_data .= '<table><thead><tr><th>Payment Amount</th><th>35 monthly payments</th><th>47 monthly payments</th><th>59 monthly payments</th></tr></thead><tbody><tr><td>'.$system_price.' HVAC System + $1,000.00 Install Cost</td>';
+	if( $spanish ) {
+		$finance_data = '<h2>¿Interesado en el financiamiento?</h2>';
+		$finance_data .= '<h4>Pagos estimados de financiamiento mensual, incluidos los costos de instalación, con Microf Financing</h4>';
+		$finance_data .= '<table><thead><tr><th>Monto del Pago</th><th>35 pagos mensuales</th><th>47 pagos mensuales</th><th>59 pagos mensuales</th></tr></thead><tbody><tr><td>'.$system_price.' Sistema HVAC + $ 1,000.00 Costo de instalación</td>';
+	}
+	else {
+		$finance_data = '<h2>Interested in Financing?</h2>';
+		$finance_data .= '<h4>Estimated Monthly Financing Payments, including installation costs, with <a href="https://hvacinstantquote.com/resources/appliance-financing/" target="_blank" title="Microf Financing">Microf Financing</a></h4>';
+		$finance_data .= '<table><thead><tr><th>Payment Amount</th><th>35 monthly payments</th><th>47 monthly payments</th><th>59 monthly payments</th></tr></thead><tbody><tr><td>'.$system_price.' HVAC System + $1,000.00 Install Cost</td>';
 
+	}
 	foreach ($term_options as $term) {
 		$term_payment = microf_payment_calc($total_cost_min, $term);
 		$finance_data .= '<td>$' . $term_payment . '</td>';
 	}
 
-	$finance_data .= '</tr><tr><td>'.$system_price.' HVAC System + $2,500.00 Install Cost</td>';
+	if( $spanish ) {
+		$finance_data .= '</tr><tr><td>'.$system_price.' Sistema HVAC + $ 2,500.00 Costo de instalación</td>';
+	}
+	else {
+		$finance_data .= '</tr><tr><td>'.$system_price.' HVAC System + $2,500.00 Install Cost</td>';
+	}
 
 	foreach ($term_options as $term) {
 		$term_payment = microf_payment_calc($total_cost_max, $term);
@@ -873,7 +912,13 @@ function get_finance_options( $system_price, $warranty_price ) {
 	}
 
 	$finance_data .= '</tr></tbody></table>';
-	$finance_data .= '<p><small>Note: Actual monthly payment based upon actual installation cost provided by your dealer.</small></p>';
+
+	if( $spanish ) {
+		$finance_data .= '<p><small>Nota: El pago mensual real se basa en el costo real de instalación proporcionado por su distribuidor.</small></p>';
+	}
+	else {
+		$finance_data .= '<p><small>Note: Actual monthly payment based upon actual installation cost provided by your dealer.</small></p>';
+	}
 
 	return $finance_data;
 
