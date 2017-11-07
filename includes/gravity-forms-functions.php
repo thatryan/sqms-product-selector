@@ -376,6 +376,7 @@ function custom_confirmation( $confirmation, $form, $entry, $ajax ) {
 
 	if( $form['id'] == '26' ) {
 		$is_spanish = true;
+		$prod_string = rgar( $entry, '56' );
 	}
 	// Product selection form
 	elseif( $form['id'] == '12' ) {
