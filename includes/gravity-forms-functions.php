@@ -370,10 +370,9 @@ function custom_confirmation( $confirmation, $form, $entry, $ajax ) {
 
 	if( $form['id'] == '26' ) {
 		$is_spanish = true;
-		error_log('Spanish Hit');
 	}
 	// Product selection form
-	if( $form['id'] == '12' ) {
+	elseif( $form['id'] == '12' ) {
 		$dealer_id = rgar( $entry, '69' );
 		$prod_string = rgar( $entry, '56' );
 	}
