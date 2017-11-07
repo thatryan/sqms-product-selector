@@ -9,10 +9,13 @@
 
 // Set scroll distance to 0 for selection form
 add_filter( 'gform_confirmation_anchor_12', function() { return 0; } );
+add_filter( 'gform_confirmation_anchor_26', function() { return 0; } );
 // add_filter( 'gform_progress_bar_12', 'remove_progress_steps', 10, 3 );
 // add_filter( 'gform_pre_render_12', 'display_choice_result' );
 add_action( 'gform_post_paging_12', 'add_gtm_pagination', 10, 3 );
+add_action( 'gform_post_paging_26', 'add_gtm_pagination', 10, 3 );
 add_action( 'gform_post_paging_12', 'build_product_string', 10, 3 );
+add_action( 'gform_post_paging_26', 'build_product_string', 10, 3 );
 add_filter( 'gform_field_value_zip_check', 'populate_zip_code' );
 // add_filter( 'gform_field_value_dealer_ref', 'check_for_referral_id' );
 	add_filter( 'gform_notification_12', 'get_dealer_email', 10, 3 );
@@ -25,8 +28,11 @@ add_filter( 'gform_pre_render_20', 'dealer_review_id' );
 add_filter( 'gform_ajax_spinner_url', 'add_hiq_spinner_image', 10, 2 );
 
 add_filter( 'gform_field_validation_12_11', 'validate_name', 10, 4 );
+add_filter( 'gform_field_validation_26_11', 'validate_name', 10, 4 );
 add_filter( 'gform_field_validation_12_48', 'validate_phone_number', 10, 4 );
+add_filter( 'gform_field_validation_26_48', 'validate_phone_number', 10, 4 );
 add_filter( 'gform_field_validation_12_47', 'validate_zip_zone', 10, 4 );
+add_filter( 'gform_field_validation_26_47', 'validate_zip_zone', 10, 4 );
 add_filter( 'gform_field_validation_16_12', 'validate_zip_zone', 10, 4 );
 
 // add_action( 'gform_pre_submission_12', 'choose_new_dealer' );
