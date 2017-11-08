@@ -432,14 +432,12 @@ function custom_confirmation( $confirmation, $form, $entry, $ajax ) {
 		$confirmation .= '<h3>Su selección de sistema y presupuesto</h3>';
 		$confirmation .= '<div class="highlight-box cost-wrapper">';
 		$confirmation .= '<h2>Su precio para un nuevo equipo de sistema HVAC es <span>' .  esc_html( $system_price ) . '</span></h2>';
-		$confirmation .= '<h3>su estimación de instalación es entre <span>$1,000.00 - $2,500.00</span></h3>';
-		$confirmation .= '<p><small>Nota: La selección adecuada del equipo se verificará en la inspección de la instalación</small></p>';
 		$confirmation .= '</div>';
 		$confirmation .= '<p>Su cotización total es el precio garantizado para su sistema seleccionado, más el costo estimado de instalación.</p>';
 		$confirmation .= '<div class="financing-box">' . get_finance_options( $system_price, $warranty_price, $is_spanish ) . '</div>';
 		$confirmation .= '<h4>Un miembro del equipo HVAC Cotización Instantánea se pondrá en contacto con usted dentro de las 24 horas para programar su visita a domicilio.</h4>';
 		$confirmation .= '<p>Una copia de su información de cotización le ha sido enviada por correo electrónico.</p>';
-			$confirmation .= do_shortcode( '[gravitypdf name="Client Copy" id="57a03bc2e0cc7" class="button dealer-pdf" entry='.$entry['id'].' text="Download PDF"]' );
+			$confirmation .= do_shortcode( '[gravitypdf name="Client Copy" id="57a03bc2e0cc7" class="button dealer-pdf" entry='.$entry['id'].' text="Descargar PDF"]' );
 	}
 	else {
 		// Build the HTML that will be displayed in the form field
@@ -894,7 +892,7 @@ function get_finance_options( $system_price, $warranty_price, $spanish ) {
 	if( $spanish ) {
 		$finance_data = '<h2>¿Interesado en el financiamiento?</h2>';
 		$finance_data .= '<h4>Pagos estimados de financiamiento mensual, incluidos los costos de instalación, con Microf Financing</h4>';
-		$finance_data .= '<table><thead><tr><th>Monto del Pago</th><th>35 pagos mensuales</th><th>47 pagos mensuales</th><th>59 pagos mensuales</th></tr></thead><tbody><tr><td>'.$system_price.' Sistema HVAC + $ 1,000.00 Costo de instalación</td>';
+		$finance_data .= '<table><thead><tr><th>Monto del Pago</th><th>35 pagos mensuales</th><th>47 pagos mensuales</th><th>59 pagos mensuales</th></tr></thead><tbody><tr><td>'.$system_price.' Sistema HVAC incluida la instalación</td>';
 	}
 	else {
 		$finance_data = '<h2>Interested in Financing?</h2>';
@@ -908,7 +906,7 @@ function get_finance_options( $system_price, $warranty_price, $spanish ) {
 	}
 
 	if( $spanish ) {
-		$finance_data .= '</tr><tr><td>'.$system_price.' Sistema HVAC + $ 2,500.00 Costo de instalación</td>';
+		$finance_data .= '</tr>';
 	}
 	else {
 		$finance_data .= '</tr><tr><td>'.$system_price.' HVAC System + $2,500.00 Install Cost</td>';

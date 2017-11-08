@@ -391,6 +391,14 @@ function sqms_prodcut_selector_meta() {
 	) );
 
 	$sqms_prod_overview_meta->add_field( array(
+		'name'       => __( 'System Price Spanish', 'sqmsprodsel' ),
+		'id'         => $prefix . 'system-price-spanish',
+		'type'       => 'text',
+		'default'       => '0',
+		'column'       => true,
+	) );
+
+	$sqms_prod_overview_meta->add_field( array(
 		'name'       => __( 'Package Unit Price', 'sqmsprodsel' ),
 		'id'         => $prefix . 'package-unit-price',
 		'type'       => 'text',
