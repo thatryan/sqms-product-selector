@@ -423,6 +423,7 @@ function custom_confirmation( $confirmation, $form, $entry, $ajax ) {
 	$title 					= get_the_title( $product_post_id );
 	$cat 					= get_the_terms ( $product_post_id, 'system_type' );
 	$system_price 		= get_post_meta( $product_post_id, 'sqms-product-system-price', true );
+	$system_price_spanish 		= get_post_meta( $product_post_id, 'sqms-product-system-price-spanish', true );
 	$warranty_price 		= get_post_meta( $product_post_id, 'sqms-product-warranty-price', true );
 	$cmb 					= cmb2_get_metabox( 'sqms-product-overview-meta', $product_post_id );
 	$cmb_fields 			= $cmb->prop( 'fields' );
@@ -431,10 +432,10 @@ function custom_confirmation( $confirmation, $form, $entry, $ajax ) {
 		// SPANISH VERSION Build the HTML that will be displayed in the form field
 		$confirmation .= '<h3>Su selección de sistema y presupuesto</h3>';
 		$confirmation .= '<div class="highlight-box cost-wrapper">';
-		$confirmation .= '<h2>Su precio para un nuevo equipo de sistema HVAC es <span>' .  esc_html( $system_price ) . '</span></h2>';
+		$confirmation .= '<h2>Su precio para un nuevo equipo de sistema HVAC es <span>' .  esc_html( $system_price_spanish ) . '</span></h2>';
 		$confirmation .= '</div>';
 		$confirmation .= '<p>Su cotización total es el precio garantizado para su sistema seleccionado, más el costo estimado de instalación.</p>';
-		$confirmation .= '<div class="financing-box">' . get_finance_options( $system_price, $warranty_price, $is_spanish ) . '</div>';
+		$confirmation .= '<div class="financing-box">' . get_finance_options( $system_price_spanish, $warranty_price, $is_spanish ) . '</div>';
 		$confirmation .= '<h4>Un miembro del equipo HVAC Cotización Instantánea se pondrá en contacto con usted dentro de las 24 horas para programar su visita a domicilio.</h4>';
 		$confirmation .= '<p>Una copia de su información de cotización le ha sido enviada por correo electrónico.</p>';
 			$confirmation .= do_shortcode( '[gravitypdf name="Client Copy" id="57a03bc2e0cc7" class="button dealer-pdf" entry='.$entry['id'].' text="Descargar PDF"]' );
@@ -901,7 +902,12 @@ function get_finance_options( $system_price, $warranty_price, $spanish ) {
 
 	}
 	foreach ($term_options as $term) {
-		$term_payment = microf_payment_calc($total_cost_min, $term);
+		if($is_spanish) {
+			$term_payment = microf_payment_calc($equip_cost, $term);
+		}
+		else {
+			$term_payment = microf_payment_calc($total_cost_min, $term);
+		}
 		$finance_data .= '<td>$' . $term_payment . '</td>';
 	}
 
@@ -910,11 +916,12 @@ function get_finance_options( $system_price, $warranty_price, $spanish ) {
 	}
 	else {
 		$finance_data .= '</tr><tr><td>'.$system_price.' HVAC System + $2,500.00 Install Cost</td>';
-	}
 
-	foreach ($term_options as $term) {
-		$term_payment = microf_payment_calc($total_cost_max, $term);
-		$finance_data .= '<td>$' . $term_payment . '</td>';
+		foreach ($term_options as $term) {
+			$term_payment = microf_payment_calc($total_cost_max, $term);
+			$finance_data .= '<td>$' . $term_payment . '</td>';
+		}
+
 	}
 
 	$finance_data .= '</tr></tbody></table>';
