@@ -439,6 +439,8 @@ function custom_confirmation( $confirmation, $form, $entry, $ajax ) {
 		$confirmation .= '<h4>Un miembro del equipo HVAC Cotización Instantánea se pondrá en contacto con usted dentro de las 24 horas para programar su visita a domicilio.</h4>';
 		$confirmation .= '<p>Una copia de su información de cotización le ha sido enviada por correo electrónico.</p>';
 			$confirmation .= do_shortcode( '[gravitypdf name="Client Copy" id="57a03bc2e0cc7" class="button dealer-pdf" entry='.$entry['id'].' text="Descargar PDF"]' );
+
+			$conversion_code = '<!-- Google Code for Instant Quote Form - Spanish Conversion Page --><script type="text/javascript">/* <![CDATA[ */var google_conversion_id = 856718203;var google_conversion_label = "4d_9CMzM_3gQ-_bBmAM";var google_remarketing_only = false;/* ]]> */</script><script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js"></script><noscript><div style="display:inline;"><img height="1" width="1" style="border-style:none;" alt="" src="//www.googleadservices.com/pagead/conversion/856718203/?label=4d_9CMzM_3gQ-_bBmAM&amp;guid=ON&amp;script=0"/></div></noscript>';
 	}
 	else {
 		// Build the HTML that will be displayed in the form field
@@ -450,9 +452,10 @@ function custom_confirmation( $confirmation, $form, $entry, $ajax ) {
 		$confirmation .= '</div>';
 		$confirmation .= '<p>Your total quote is the guaranteed price for your selected system, plus the estimated cost of installation. <a href="https://hvacinstantquote.com/resources/faqs#about-money" target="_blank" title="Factors about cost of installation">Click here for common factors that affect the cost of an installation</a>.</p>';
 		$confirmation .= '<div class="financing-box">' . get_finance_options( $system_price, $warranty_price, $is_spanish ) . '</div>';
+
+		$conversion_code = '<!-- Google Code for Instant Quote Form Conversion Page --><script type="text/javascript">/* <![CDATA[ */var google_conversion_id = 856718203;var google_conversion_language = "en";var google_conversion_format = "3";var google_conversion_color = "ffffff";var google_conversion_label = "62pkCKSq8m8Q-_bBmAM";var google_remarketing_only = false;/* ]]> */</script><script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js"></script><noscript><div style="display:inline;"><img height="1" width="1" style="border-style:none;" alt="" src="//www.googleadservices.com/pagead/conversion/856718203/?label=62pkCKSq8m8Q-_bBmAM&amp;guid=ON&amp;script=0"/></div></noscript>';
 	}
 
-	$conversion_code = '<!-- Google Code for Instant Quote Form Conversion Page --><script type="text/javascript">/* <![CDATA[ */var google_conversion_id = 856718203;var google_conversion_language = "en";var google_conversion_format = "3";var google_conversion_color = "ffffff";var google_conversion_label = "62pkCKSq8m8Q-_bBmAM";var google_remarketing_only = false;/* ]]> */</script><script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js"></script><noscript><div style="display:inline;"><img height="1" width="1" style="border-style:none;" alt="" src="//www.googleadservices.com/pagead/conversion/856718203/?label=62pkCKSq8m8Q-_bBmAM&amp;guid=ON&amp;script=0"/></div></noscript>';
 
 	if( $form['id'] == '12' ) {
 	$confirmation .= '<h4>You will be contacted by an HVAC Instant Quote team member within 24 hours to schedule your in home visit.</h4>';
